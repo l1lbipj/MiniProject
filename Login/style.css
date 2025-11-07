@@ -1,0 +1,74 @@
+/* Đặt font chữ và căn giữa nội dung trang */
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(120deg, #a1c4fd, #c2e9fb);
+    height: 100vh;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Hộp form đăng nhập */
+.login-box {
+    background-color: white;
+    padding: 25px 30px;
+    border-radius: 10px;
+    width: 320px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Tiêu đề chính */
+.login-box h2 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+/* Label (nhãn của ô nhập) */
+label {
+    display: block;
+    font-weight: bold;
+    margin-top: 10px;
+    color: #333;
+}
+
+/* Ô nhập */
+input {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+/* Nút đăng nhập */
+button {
+    width: 100%;
+    margin-top: 20px;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #4c8bf5;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* Hiệu ứng hover khi di chuột vào nút */
+button:hover {
+    background-color: #3a73db;
+}
+
+/* Ghi chú nhỏ bên dưới */
+.note {
+    text-align: center;
+    margin-top: 15px;
+    font-size: 14px;
+}
+
+.note a {
+    color: #4c8bf5;
+    text-decoration: none;
+}
