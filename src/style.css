@@ -3,27 +3,48 @@
     padding: 0px;
     box-sizing: border-box;
 }
-.Nav{
+/* NAV BAR */
+.nav{
     position: sticky;
     background-color: #005530;
     display: flex;
     justify-content: space-around;
 }
-img{
-    width: 134px;
-}
 
+img{
+    width: 138px;
+    display: block;
+    transition: none;
+}
+a img {
+  display: block;  /* Đảm bảo logo là một block-level element */
+  transition: none;  /* Bỏ hiệu ứng hover */
+}
 .nav-item{
+    justify-content: space-around;
     height: 100%;
     width: 800px;
-    justify-content: space-around;
     align-items: center;
     display: flex;
     list-style-type: none;
-    
+}
+a {
+    color: white;
+    position: relative;
+    text-decoration: none;  /* Bỏ gạch chân mặc định */
 }
 
-a {
-    text-decoration: none;
-    color: white;
+a::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: white;
+    transition: width 0.3s ease;
+}
+
+a:hover::after {
+    width: 100%;
 }
