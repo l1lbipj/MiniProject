@@ -1,0 +1,29 @@
+*{
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+}
+.Nav{
+    position: sticky;
+    background-color: #005530;
+    display: flex;
+    justify-content: space-around;
+}
+img{
+    width: 134px;
+}
+
+.nav-item{
+    height: 100%;
+    width: 800px;
+    justify-content: space-around;
+    align-items: center;
+    display: flex;
+    list-style-type: none;
+    
+}
+
+a {
+    text-decoration: none;
+    color: white;
+}
