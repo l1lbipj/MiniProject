@@ -215,67 +215,112 @@
     </div>
 
     <script>
-        const form = document.getElementById('registerForm');
-        const password = document.getElementById('password');
-        const togglePw = document.getElementById('togglePw');
-        const pwStrength = document.getElementById('pw-strength');
-        const specialCharRegex = /[!@#$%^&*(),.?":{}|<>\[\]\\/~`'\\;:\-+=_]/;
+    const form = document.getElementById('registerForm');
+    const password = document.getElementById('password');
+    const togglePw = document.getElementById('togglePw');
+    const pwStrength = document.getElementById('pw-strength');
 
-        togglePw.addEventListener('click', () => {
-            password.type = password.type === 'password' ? 'text' : 'password';
-            togglePw.textContent = password.type === 'password' ? '👁️' : '🙈';
-        });
+    // Regex yêu cầu:
+    // - ≥ 1 chữ thường
+    // - ≥ 1 chữ hoa
+    // - ≥ 1 số
+    // - ≥ 1 ký tự đặc biệt
+    // - ≥ 8 ký tự
+    const strongPwRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/;
 
-        password.addEventListener('input', () => {
-            const val = password.value;
-            let score = 0;
-            if (val.length >= 8) score++;
-            if (/[A-Z]/.test(val)) score++;
-            if (/[0-9]/.test(val)) score++;
-            if (specialCharRegex.test(val)) score++;
-            const labels = ['Yếu', 'Trung bình', 'Tốt', 'Rất tốt'];
-            pwStrength.textContent = val ? ` | Mật khẩu: ${labels[Math.max(0, Math.min(labels.length - 1, score - 1))]}` : '';
-        });
+    togglePw.addEventListener('click', () => {
+        password.type = password.type === 'password' ? 'text' : 'password';
+        togglePw.textContent = password.type === 'password' ? '👁️' : '🙈';
+    });
 
-        function showError(id, msg) {
-            document.getElementById('err-' + id).textContent = msg || '';
+    // Strength meter (không kiểm tra strongPwRegex)
+    password.addEventListener('input', () => {
+        const val = password.value;
+        let score = 0;
+        if (val.length >= 8) score++;
+        if (/[A-Z]/.test(val)) score++;
+        if (/[0-9]/.test(val)) score++;
+        if (/[^A-Za-z0-9]/.test(val)) score++;
+
+        const labels = ['Yếu', 'Trung bình', 'Tốt', 'Rất tốt'];
+        pwStrength.textContent = val
+            ? ` | Mật khẩu: ${labels[Math.max(0, Math.min(labels.length - 1, score - 1))]}`
+            : '';
+    });
+
+    function showError(id, msg) {
+        document.getElementById('err-' + id).textContent = msg || '';
+    }
+
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        ['fullname', 'username', 'email', 'password', 'phone', 'gender'].forEach(x => showError(x, ''));
+
+        let ok = true;
+        const fullname = form.fullname.value.trim();
+        const username = form.username.value.trim();
+        const email = form.email.value.trim();
+        const phone = form.phone.value.trim();
+        const gender = form.gender.value;
+        const pw = form.password.value;
+
+        if (!fullname) { 
+            showError('fullname', 'Vui lòng nhập họ và tên'); 
+            ok = false; 
         }
 
-        form.addEventListener('submit', (e) => {
-            e.preventDefault();
-            ['fullname', 'username', 'email', 'password', 'phone', 'gender'].forEach(x => showError(x, ''));
+        if (!username || username.length < 3) { 
+            showError('username', 'Tên tài khoản phải có ít nhất 3 ký tự'); 
+            ok = false; 
+        }
 
-            let ok = true;
-            const fullname = form.fullname.value.trim();
-            const username = form.username.value.trim();
-            const email = form.email.value.trim();
-            const phone = form.phone.value.trim();
-            const gender = form.gender.value;
-            const pw = form.password.value;
+        if (!email || !/^\S+@\S+\.\S+$/.test(email)) { 
+            showError('email', 'Email không hợp lệ, vui lòng nhập đúng định dạng'); 
+            ok = false; 
+        }
 
-            if (!fullname) { showError('fullname', 'Vui lòng nhập họ và tên'); ok = false }
-            if (!username || username.length < 3) { showError('username', 'Tên tài khoản tối thiểu 3 ký tự'); ok = false }
-            if (!email || !/^\S+@\S+\.\S+$/.test(email)) { showError('email', 'Email không hợp lệ'); ok = false }
-            if (!pw || pw.length < 8) { showError('password', 'Mật khẩu phải có ít nhất 8 ký tự'); ok = false }
-            else if (!specialCharRegex.test(pw)) { showError('password', 'Mật khẩu phải chứa ít nhất 1 ký tự đặc biệt'); ok = false }
-            if (!phone || !/^\+?\d{7,15}$/.test(phone)) { showError('phone', 'Số điện thoại không hợp lệ'); ok = false }
-            if (!gender) { showError('gender', 'Vui lòng chọn giới tính'); ok = false }
+        // Kiểm tra mật khẩu chuẩn mới
+        if (!pw) {
+            showError('password', 'Vui lòng nhập mật khẩu');
+            ok = false;
+        } else if (pw.length < 8) {
+            showError('password', 'Mật khẩu phải có ít nhất 8 ký tự');
+            ok = false;
+        } else if (!strongPwRegex.test(pw)) {
+            showError(
+                'password',
+                'Mật khẩu phải có: chữ thường, chữ in hoa, số và ký tự đặc biệt'
+            );
+            ok = false;
+        }
 
-            if (!ok) return;
+        if (!phone || !/^\+?\d{7,15}$/.test(phone)) { 
+            showError('phone', 'Số điện thoại không hợp lệ'); 
+            ok = false; 
+        }
 
-            const data = { fullname, username, email, gender, phone };
-            console.log('Đăng ký dữ liệu (gửi lên server):', data);
-            alert('Đăng ký thành công — dữ liệu đã được kiểm tra phía client.');
-            form.reset();
-            pwStrength.textContent = '';
-        });
+        if (!gender) { 
+            showError('gender', 'Vui lòng chọn giới tính'); 
+            ok = false; 
+        }
 
-        document.getElementById('resetBtn').addEventListener('click', () => {
-            form.reset();
-            ['fullname', 'username', 'email', 'password', 'phone', 'gender'].forEach(x => showError(x, ''));
-            pwStrength.textContent = '';
-        });
-    </script>
+        if (!ok) return;
+
+        const data = { fullname, username, email, gender, phone };
+        console.log('Đăng ký dữ liệu (gửi lên server):', data);
+        alert('Đăng ký thành công — dữ liệu đã được kiểm tra phía client!');
+        
+        form.reset();
+        pwStrength.textContent = '';
+    });
+
+    document.getElementById('resetBtn').addEventListener('click', () => {
+        form.reset();
+        ['fullname', 'username', 'email', 'password', 'phone', 'gender'].forEach(x => showError(x, ''));
+        pwStrength.textContent = '';
+    });
+</script>
+
 </body>
 
 </html>
