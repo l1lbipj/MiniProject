@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+/<!DOCTYPE html>
 <html lang="vi">
 <head>
   <meta charset="UTF-8" />
@@ -58,6 +58,10 @@
             </div>
           </li>
         </ul>
+        <a href="#/cart" class="cart-link" id="cartLink" aria-label="Giỏ hàng">
+          <span>Giỏ hàng</span>
+          <span class="badge" id="cartCount">0</span>
+        </a>
       </nav>
     </div>
   </header>
@@ -81,6 +85,23 @@
     </section>
 
     <section id="productGrid" class="grid"></section>
+
+    <!-- Product Detail Modal -->
+    <div class="modal" id="productModal" aria-hidden="true">
+      <div class="dialog" role="dialog" aria-modal="true">
+        <img id="modalImage" alt="product image" />
+        <div class="content">
+          <h2 class="title" id="modalTitle"></h2>
+          <div class="brand" id="modalBrand"></div>
+          <div class="price" id="modalPrice"></div>
+          <div class="desc" id="modalDesc"></div>
+          <div style="display:flex;gap:8px;margin-top:auto">
+            <button class="btn" id="modalAdd">Thêm giỏ</button>
+            <button class="btn secondary" id="modalClose">Đóng</button>
+          </div>
+        </div>
+      </div>
+    </div>
   </main>
 
   <footer class="footer">
