@@ -480,6 +480,15 @@ select.input-field {
 
 /* Responsive */
 @media screen and (max-width: 768px) {
+    .register-container {
+        max-width: 100%;
+        padding: 0 10px;
+    }
+
+    .register-box {
+        padding: 35px 30px;
+    }
+
     .form-row {
         grid-template-columns: 1fr;
         gap: 0;
@@ -487,6 +496,10 @@ select.input-field {
 
     .pw-checklist {
         grid-template-columns: 1fr;
+    }
+
+    .register-title {
+        font-size: 30px;
     }
 }
 
@@ -510,6 +523,42 @@ select.input-field {
 
     .logo-img {
         width: 120px;
+    }
+
+    .register-header {
+        margin-bottom: 25px;
+    }
+
+    .input-group {
+        margin-bottom: 18px;
+    }
+
+    .password-requirements {
+        margin-top: 8px;
+    }
+}
+
+@media screen and (max-width: 360px) {
+    .register-box {
+        padding: 25px 20px;
+    }
+
+    .register-title {
+        font-size: 24px;
+    }
+
+    .logo-img {
+        width: 100px;
+    }
+
+    .input-field {
+        padding: 12px 14px;
+        font-size: 14px;
+    }
+
+    .register-button {
+        padding: 14px;
+        font-size: 15px;
     }
 }
 

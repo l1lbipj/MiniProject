@@ -136,7 +136,7 @@
 }
 
 /* Responsive Design */
-@media screen and (max-width: 968px) {
+@media screen and (max-width: 768px) {
     .nav-container {
         padding: 0 15px;
     }
@@ -146,6 +146,7 @@
     }
     
     .nav-menu {
+        display: none;
         position: fixed;
         left: -100%;
         top: 80px;
@@ -159,9 +160,11 @@
         gap: 0;
         height: calc(100vh - 80px);
         overflow-y: auto;
+        z-index: 999;
     }
     
     .nav-menu.active {
+        display: flex;
         left: 0;
     }
     
@@ -189,6 +192,7 @@
     
     .nav-toggle {
         display: flex;
+        z-index: 1001;
     }
     
     .nav-toggle.active .bar:nth-child(1) {
