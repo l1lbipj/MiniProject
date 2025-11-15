@@ -9,18 +9,38 @@
     <title>Welcome to UniBrand</title>
 </head>
 <body>
-    <div class="nav">
-        <img src="/images/Lacoste_logo.png" alt="logo">
-        <div>
-            <ul class="nav-item">
-                <li><a href="">HOME</a></li>
-                <li><a href="">ABOUT LACOSTE</a></li>
-                <li><a href="">PRODUCTS</a></li>
-                <li><a href="">CONTACT</a></li>
-                <li><a href="">LOGIN</a></li>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="#home">
+                    <img src="/images/Lacoste_logo.png" alt="Lacoste Logo">
+                </a>
+            </div>
+            
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="#home" class="nav-link">HOME</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#about" class="nav-link">ABOUT LACOSTE</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#products" class="nav-link">PRODUCTS</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#contact" class="nav-link">CONTACT</a>
+                </li>
+                <li class="nav-item">
+                    <a href="/Login/login.html" class="nav-link nav-link-login">LOGIN</a>
+                </li>
             </ul>
+            
+            <div class="nav-toggle" id="mobile-menu">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
         </div>
-        <div></div>
-    </div>
+    </nav>
 </body>
 </html>
