@@ -2,6 +2,61 @@
 // Xử lý form đăng ký nâng cao
 // ===========================
 
+// ===========================
+// Utility Functions cho localStorage
+// ===========================
+
+// Lấy danh sách users từ localStorage
+function getUsers() {
+    const users = localStorage.getItem('lacoste_users');
+    return users ? JSON.parse(users) : [];
+}
+
+// Lưu danh sách users vào localStorage
+function saveUsers(users) {
+    localStorage.setItem('lacoste_users', JSON.stringify(users));
+}
+
+// Kiểm tra username đã tồn tại chưa
+function isUsernameExists(username) {
+    const users = getUsers();
+    return users.some(user => user.username.toLowerCase() === username.toLowerCase());
+}
+
+// Kiểm tra email đã tồn tại chưa
+function isEmailExists(email) {
+    const users = getUsers();
+    return users.some(user => user.email.toLowerCase() === email.toLowerCase());
+}
+
+// Thêm user mới vào localStorage
+function addUser(userData) {
+    const users = getUsers();
+    
+    // Kiểm tra username và email đã tồn tại
+    if (isUsernameExists(userData.username)) {
+        return { success: false, message: 'Tên đăng nhập đã tồn tại' };
+    }
+    
+    if (isEmailExists(userData.email)) {
+        return { success: false, message: 'Email đã được sử dụng' };
+    }
+    
+    // Thêm user mới
+    const newUser = {
+        ...userData,
+        createdAt: new Date().toISOString(),
+        id: Date.now().toString()
+    };
+    
+    users.push(newUser);
+    saveUsers(users);
+    
+    return { success: true, user: newUser };
+}
+
+// Đợi DOM load xong
+document.addEventListener('DOMContentLoaded', function() {
 // Lấy các elements
 const form = document.getElementById('registerForm');
 const password = document.getElementById('password');
@@ -99,7 +154,8 @@ function validateFullname(fullname) {
     return '';
 }
 
-function validateUsername(username) {
+// Validation chỉ kiểm tra format (dùng cho blur)
+function validateUsernameFormat(username) {
     if (!username || username.trim() === '') {
         return 'Vui lòng nhập tên tài khoản';
     }
@@ -112,13 +168,40 @@ function validateUsername(username) {
     return '';
 }
 
-function validateEmail(email) {
+// Validation đầy đủ (format + tồn tại) - dùng cho submit
+function validateUsername(username) {
+    const formatError = validateUsernameFormat(username);
+    if (formatError) {
+        return formatError;
+    }
+    // Kiểm tra username đã tồn tại
+    if (isUsernameExists(username)) {
+        return 'Tên đăng nhập đã tồn tại, vui lòng chọn tên khác';
+    }
+    return '';
+}
+
+// Validation chỉ kiểm tra format (dùng cho blur)
+function validateEmailFormat(email) {
     if (!email || email.trim() === '') {
         return 'Vui lòng nhập email';
     }
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
         return 'Email không hợp lệ, vui lòng nhập đúng định dạng';
+    }
+    return '';
+}
+
+// Validation đầy đủ (format + tồn tại) - dùng cho submit
+function validateEmail(email) {
+    const formatError = validateEmailFormat(email);
+    if (formatError) {
+        return formatError;
+    }
+    // Kiểm tra email đã tồn tại
+    if (isEmailExists(email)) {
+        return 'Email đã được sử dụng, vui lòng sử dụng email khác';
     }
     return '';
 }
@@ -184,13 +267,13 @@ document.getElementById('fullname').addEventListener('blur', function() {
 });
 
 document.getElementById('username').addEventListener('blur', function() {
-    const error = validateUsername(this.value);
+    const error = validateUsernameFormat(this.value);
     showError('username', error);
     this.style.borderColor = error ? '#e74c3c' : '#e0e0e0';
 });
 
 document.getElementById('email').addEventListener('blur', function() {
-    const error = validateEmail(this.value);
+    const error = validateEmailFormat(this.value);
     showError('email', error);
     this.style.borderColor = error ? '#e74c3c' : '#e0e0e0';
 });
@@ -249,6 +332,7 @@ form.addEventListener('submit', function(e) {
     const gender = form.gender.value;
     const pw = form.password.value;
     const terms = form.terms.checked;
+    
     
     // Validate all fields
     let isValid = true;
@@ -314,17 +398,36 @@ form.addEventListener('submit', function(e) {
     registerButton.disabled = true;
     registerButton.classList.add('loading');
     
-    // Simulate API call
+    // Lưu user vào localStorage
+    const userData = {
+        fullname,
+        username,
+        email,
+        phone,
+        gender,
+        password: pw // Lưu password (trong thực tế nên hash password)
+    };
+    
+    const result = addUser(userData);
+    
+    // Simulate API call delay
     setTimeout(() => {
-        const data = {
-            fullname,
-            username,
-            email,
-            phone,
-            gender
-        };
+        if (!result.success) {
+            // Hiển thị lỗi nếu username/email đã tồn tại
+            if (result.message.includes('Tên đăng nhập')) {
+                showError('username', result.message);
+                form.username.style.borderColor = '#e74c3c';
+            } else if (result.message.includes('Email')) {
+                showError('email', result.message);
+                form.email.style.borderColor = '#e74c3c';
+            }
+            
+            registerButton.disabled = false;
+            registerButton.classList.remove('loading');
+            return;
+        }
         
-        console.log('Đăng ký dữ liệu (gửi lên server):', data);
+        console.log('Đăng ký thành công! User đã được lưu:', result.user);
         
         // Success animation
         registerButton.classList.remove('loading');
@@ -363,4 +466,6 @@ if (resetBtn && resetBtn.textContent.includes('Đặt lại')) {
         });
     });
 }
+
+}); // End DOMContentLoaded
 

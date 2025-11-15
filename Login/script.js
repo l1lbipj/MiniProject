@@ -2,6 +2,45 @@
 // Xử lý form đăng nhập nâng cao
 // ===========================
 
+// ===========================
+// Utility Functions cho localStorage (đồng bộ với Register)
+// ===========================
+
+// Lấy danh sách users từ localStorage
+function getUsers() {
+    const users = localStorage.getItem('lacoste_users');
+    return users ? JSON.parse(users) : [];
+}
+
+// Tìm user theo username hoặc email
+function findUserByUsernameOrEmail(identifier) {
+    const users = getUsers();
+    return users.find(user => 
+        user.username.toLowerCase() === identifier.toLowerCase() || 
+        user.email.toLowerCase() === identifier.toLowerCase()
+    );
+}
+
+// Lưu thông tin user hiện tại đang đăng nhập
+function setCurrentUser(user) {
+    // Không lưu password trong current user
+    const { password, ...userWithoutPassword } = user;
+    localStorage.setItem('lacoste_current_user', JSON.stringify(userWithoutPassword));
+}
+
+// Lấy thông tin user hiện tại
+function getCurrentUser() {
+    const user = localStorage.getItem('lacoste_current_user');
+    return user ? JSON.parse(user) : null;
+}
+
+// Đăng xuất (xóa current user)
+function logout() {
+    localStorage.removeItem('lacoste_current_user');
+}
+
+// Đợi DOM load xong
+document.addEventListener('DOMContentLoaded', function() {
 // Lấy các elements
 const loginForm = document.getElementById("loginForm");
 const usernameInput = document.getElementById("username");
@@ -34,7 +73,7 @@ if (passwordToggle) {
     });
 }
 
-// Validation real-time
+// Validation real-time (chỉ kiểm tra format, không kiểm tra tồn tại)
 function validateUsername(username) {
     if (username.trim() === "") {
         return "Vui lòng nhập email hoặc tên đăng nhập";
@@ -56,8 +95,8 @@ function validatePassword(password) {
     if (password === "") {
         return "Vui lòng nhập mật khẩu";
     }
-    if (password.length < 6) {
-        return "Mật khẩu phải có ít nhất 6 ký tự";
+    if (password.length < 8) {
+        return "Mật khẩu phải có ít nhất 8 ký tự";
     }
     return "";
 }
@@ -130,12 +169,33 @@ loginForm.addEventListener("submit", function(event) {
         passwordInput.style.borderColor = "#e0e0e0";
     }
 
+    // Tìm user trong localStorage
+    const user = findUserByUsernameOrEmail(username);
+    
+    if (!user) {
+        usernameError.textContent = "Tên đăng nhập hoặc email không tồn tại";
+        usernameInput.style.borderColor = "#e74c3c";
+        usernameInput.focus();
+        return;
+    }
+    
+    // Kiểm tra password
+    if (user.password !== password) {
+        passwordError.textContent = "Mật khẩu không chính xác";
+        passwordInput.style.borderColor = "#e74c3c";
+        passwordInput.focus();
+        return;
+    }
+
     // Disable button và hiển thị loading
     loginButton.disabled = true;
     loginButton.classList.add("loading");
 
     // Simulate API call (thay thế bằng API thật)
     setTimeout(() => {
+        // Lưu thông tin user hiện tại
+        setCurrentUser(user);
+        
         // Lưu thông tin nếu chọn "Ghi nhớ"
         if (rememberMe.checked) {
             localStorage.setItem("rememberedUsername", username);
@@ -151,21 +211,13 @@ loginForm.addEventListener("submit", function(event) {
         // Hiển thị thông báo
         setTimeout(() => {
             // Có thể thay bằng modal đẹp hơn
-            alert(`Đăng nhập thành công! Xin chào ${username} 👋\n\nChào mừng bạn đến với Lacoste!`);
+            const displayName = user.fullname || user.username;
+            alert(`Đăng nhập thành công! Xin chào ${displayName} 👋\n\nChào mừng bạn đến với Lacoste!`);
 
             // Chuyển hướng về trang chủ
             window.location.href = "/src/index.html";
         }, 500);
     }, 1500);
-});
-
-// Load remembered username
-window.addEventListener("DOMContentLoaded", function() {
-    const rememberedUsername = localStorage.getItem("rememberedUsername");
-    if (rememberedUsername) {
-        usernameInput.value = rememberedUsername;
-        rememberMe.checked = true;
-    }
 });
 
 // Enter key để submit
@@ -180,3 +232,14 @@ passwordInput.addEventListener("keypress", function(e) {
         loginForm.dispatchEvent(new Event("submit"));
     }
 });
+
+// Load remembered username
+const rememberedUsername = localStorage.getItem("rememberedUsername");
+if (rememberedUsername && usernameInput) {
+    usernameInput.value = rememberedUsername;
+    if (rememberMe) {
+        rememberMe.checked = true;
+    }
+}
+
+}); // End DOMContentLoaded
