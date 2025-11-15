@@ -1,60 +1,7 @@
-<<<<<<< HEAD
-/* Reset mặc định */
-=======
->>>>>>> main
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-<<<<<<< HEAD
-    font-family: Arial, sans-serif;
-}
-
-/* Căn giữa nội dung giữa màn hình */
-body {
-    background: linear-gradient(to right, #74ebd5, #acb6e5);
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-/* Hộp chứa form */
-.container {
-    background: white;
-    padding: 25px 30px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-    width: 300px;
-    text-align: center;
-}
-
-/* Ô input */
-input {
-    width: 100%;
-    padding: 10px;
-    margin: 8px 0;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    outline: none;
-}
-
-/* Nút đăng nhập */
-button {
-    width: 100%;
-    background-color: #4CAF50;
-    color: white;
-    padding: 10px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-/* Khi hover nút */
-button:hover {
-    background-color: #45a049;
-}
-=======
 }
 
 body {
@@ -90,11 +37,11 @@ body {
     z-index: 0;
 }
 
-.login-container {
+.register-container {
     position: relative;
     z-index: 1;
     width: 100%;
-    max-width: 450px;
+    max-width: 700px;
     animation: fadeInUp 0.6s ease-out;
 }
 
@@ -110,9 +57,9 @@ body {
 }
 
 /* Header */
-.login-header {
+.register-header {
     text-align: center;
-    margin-bottom: 40px;
+    margin-bottom: 30px;
 }
 
 .logo-link {
@@ -131,7 +78,7 @@ body {
     filter: brightness(0) invert(1);
 }
 
-.login-title {
+.register-title {
     color: #ffffff;
     font-size: 32px;
     font-weight: 700;
@@ -139,14 +86,14 @@ body {
     letter-spacing: -0.5px;
 }
 
-.login-subtitle {
+.register-subtitle {
     color: rgba(255, 255, 255, 0.9);
     font-size: 16px;
     font-weight: 400;
 }
 
-/* Login Box */
-.login-box {
+/* Register Box */
+.register-box {
     background: rgba(255, 255, 255, 0.98);
     backdrop-filter: blur(10px);
     border-radius: 20px;
@@ -158,12 +105,23 @@ body {
 }
 
 /* Form */
-.login-form {
+.register-form {
     width: 100%;
 }
 
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 0;
+}
+
 .input-group {
-    margin-bottom: 24px;
+    margin-bottom: 20px;
+}
+
+.input-group.full-width {
+    grid-column: 1 / -1;
 }
 
 .input-label {
@@ -180,6 +138,12 @@ body {
     width: 18px;
     height: 18px;
     color: #005530;
+    flex-shrink: 0;
+}
+
+.required {
+    color: #e74c3c;
+    font-weight: 600;
 }
 
 .input-field {
@@ -206,6 +170,15 @@ body {
 
 .input-field:invalid:not(:placeholder-shown) {
     border-color: #e74c3c;
+}
+
+select.input-field {
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23005530' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 40px;
 }
 
 .password-wrapper {
@@ -237,6 +210,61 @@ body {
     height: 20px;
 }
 
+/* Password Requirements */
+.password-requirements {
+    margin-top: 10px;
+}
+
+.pw-meta {
+    margin-bottom: 10px;
+}
+
+.pw-meta span {
+    font-size: 13px;
+    font-weight: 500;
+    color: #666;
+}
+
+.pw-checklist {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.pw-check-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: #666;
+}
+
+.pw-check-item.valid {
+    color: #27ae60;
+}
+
+.pw-check-item.valid .check-icon {
+    color: #27ae60;
+}
+
+.check-icon {
+    width: 16px;
+    height: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    color: #999;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.pw-check-item.valid .check-icon::before {
+    content: "✓";
+    color: #27ae60;
+}
+
 .input-error {
     display: block;
     color: #e74c3c;
@@ -245,45 +273,40 @@ body {
     min-height: 18px;
 }
 
-/* Form Options */
-.form-options {
+/* Checkbox */
+.checkbox-label {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 28px;
+    align-items: flex-start;
+    gap: 10px;
     font-size: 14px;
-}
-
-.remember-me {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    cursor: pointer;
     color: #666;
+    cursor: pointer;
     user-select: none;
 }
 
-.remember-me input[type="checkbox"] {
+.checkbox-label input[type="checkbox"] {
     width: 18px;
     height: 18px;
     cursor: pointer;
     accent-color: #005530;
+    margin-top: 2px;
+    flex-shrink: 0;
 }
 
-.forgot-password {
+.checkbox-label .link {
     color: #005530;
     text-decoration: none;
     font-weight: 500;
     transition: color 0.3s ease;
 }
 
-.forgot-password:hover {
+.checkbox-label .link:hover {
     color: #007a3d;
     text-decoration: underline;
 }
 
-/* Login Button */
-.login-button {
+/* Register Button */
+.register-button {
     width: 100%;
     padding: 16px;
     background: linear-gradient(135deg, #005530 0%, #007a3d 100%);
@@ -302,18 +325,19 @@ body {
     justify-content: center;
     gap: 10px;
     box-shadow: 0 4px 15px rgba(0, 85, 48, 0.3);
+    margin-top: 10px;
 }
 
-.login-button:hover {
+.register-button:hover {
     transform: translateY(-2px);
     box-shadow: 0 6px 20px rgba(0, 85, 48, 0.4);
 }
 
-.login-button:active {
+.register-button:active {
     transform: translateY(0);
 }
 
-.login-button:disabled {
+.register-button:disabled {
     opacity: 0.7;
     cursor: not-allowed;
     transform: none;
@@ -326,11 +350,11 @@ body {
     display: none;
 }
 
-.login-button.loading .button-text {
+.register-button.loading .button-text {
     opacity: 0;
 }
 
-.login-button.loading .button-loader {
+.register-button.loading .button-loader {
     display: block;
 }
 
@@ -372,8 +396,8 @@ body {
     position: relative;
 }
 
-/* Social Login */
-.social-login {
+/* Social Register */
+.social-register {
     margin-bottom: 24px;
 }
 
@@ -407,22 +431,22 @@ body {
     height: 20px;
 }
 
-/* Signup Note */
-.signup-note {
+/* Login Note */
+.login-note {
     text-align: center;
     font-size: 14px;
     color: #666;
     margin-top: 24px;
 }
 
-.signup-link {
+.login-link {
     color: #005530;
     text-decoration: none;
     font-weight: 600;
     transition: color 0.3s ease;
 }
 
-.signup-link:hover {
+.login-link:hover {
     color: #007a3d;
     text-decoration: underline;
 }
@@ -456,16 +480,25 @@ body {
 
 /* Responsive */
 @media screen and (max-width: 768px) {
-    .login-container {
+    .register-container {
         max-width: 100%;
         padding: 0 10px;
     }
 
-    .login-box {
+    .register-box {
         padding: 35px 30px;
     }
 
-    .login-title {
+    .form-row {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+
+    .pw-checklist {
+        grid-template-columns: 1fr;
+    }
+
+    .register-title {
         font-size: 30px;
     }
 }
@@ -475,16 +508,16 @@ body {
         padding: 15px;
     }
 
-    .login-box {
+    .register-box {
         padding: 30px 24px;
         border-radius: 16px;
     }
 
-    .login-title {
+    .register-title {
         font-size: 28px;
     }
 
-    .login-subtitle {
+    .register-subtitle {
         font-size: 14px;
     }
 
@@ -492,32 +525,40 @@ body {
         width: 120px;
     }
 
-    .form-options {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 12px;
+    .register-header {
+        margin-bottom: 25px;
     }
 
-    .forgot-password {
-        align-self: flex-end;
+    .input-group {
+        margin-bottom: 18px;
     }
 
-    .login-header {
-        margin-bottom: 30px;
+    .password-requirements {
+        margin-top: 8px;
     }
 }
 
 @media screen and (max-width: 360px) {
-    .login-box {
+    .register-box {
         padding: 25px 20px;
     }
 
-    .login-title {
+    .register-title {
         font-size: 24px;
     }
 
     .logo-img {
         width: 100px;
+    }
+
+    .input-field {
+        padding: 12px 14px;
+        font-size: 14px;
+    }
+
+    .register-button {
+        padding: 14px;
+        font-size: 15px;
     }
 }
 
@@ -531,8 +572,8 @@ body {
     }
 }
 
-.login-button.success {
+.register-button.success {
     background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
     animation: successPulse 0.5s ease;
 }
->>>>>>> main
+
