@@ -1,60 +1,7 @@
-<<<<<<< HEAD
-/* Reset mặc định */
-=======
->>>>>>> main
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-<<<<<<< HEAD
-    font-family: Arial, sans-serif;
-}
-
-/* Căn giữa nội dung giữa màn hình */
-body {
-    background: linear-gradient(to right, #74ebd5, #acb6e5);
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-/* Hộp chứa form */
-.container {
-    background: white;
-    padding: 25px 30px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-    width: 300px;
-    text-align: center;
-}
-
-/* Ô input */
-input {
-    width: 100%;
-    padding: 10px;
-    margin: 8px 0;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    outline: none;
-}
-
-/* Nút đăng nhập */
-button {
-    width: 100%;
-    background-color: #4CAF50;
-    color: white;
-    padding: 10px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-/* Khi hover nút */
-button:hover {
-    background-color: #45a049;
-}
-=======
 }
 
 body {
@@ -455,21 +402,6 @@ body {
 }
 
 /* Responsive */
-@media screen and (max-width: 768px) {
-    .login-container {
-        max-width: 100%;
-        padding: 0 10px;
-    }
-
-    .login-box {
-        padding: 35px 30px;
-    }
-
-    .login-title {
-        font-size: 30px;
-    }
-}
-
 @media screen and (max-width: 480px) {
     body {
         padding: 15px;
@@ -501,24 +433,6 @@ body {
     .forgot-password {
         align-self: flex-end;
     }
-
-    .login-header {
-        margin-bottom: 30px;
-    }
-}
-
-@media screen and (max-width: 360px) {
-    .login-box {
-        padding: 25px 20px;
-    }
-
-    .login-title {
-        font-size: 24px;
-    }
-
-    .logo-img {
-        width: 100px;
-    }
 }
 
 /* Success Animation */
@@ -535,4 +449,3 @@ body {
     background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
     animation: successPulse 0.5s ease;
 }
->>>>>>> main
