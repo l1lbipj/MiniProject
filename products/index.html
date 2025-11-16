@@ -1,9 +1,12 @@
-/<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="vi">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Products - Mega Menu</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css" />
   <link rel="icon" href="../images/Fvicon.png" />
 </head>
@@ -18,8 +21,17 @@
       <nav class="nav">
         <ul class="nav-list">
           <li class="nav-item has-mega">
-            <a href="#" class="nav-link">Products</a>
+            <a href="#" class="nav-link">PRODUCTS</a>
             <div class="mega-menu" role="menu">
+              <div class="mega-col mega-main">
+                <h4>Explore</h4>
+                <ul>
+                  <li><a href="#/products">See All Products</a></li>
+                  <li><a href="#/products">New Arrivals</a></li>
+                  <li><a href="#/products">Online Exclusive</a></li>
+                  <li><a href="#/products">Customisation</a></li>
+                </ul>
+              </div>
               <div class="mega-col">
                 <h4>Clothing</h4>
                 <ul>
@@ -48,18 +60,11 @@
                   <li><a href="#" data-category="accessories" data-sub="watches">Watches</a></li>
                 </ul>
               </div>
-              <div class="mega-col highlight">
-                <h4>Featured</h4>
-                <div class="feature">
-                  <img src="../images/LogoNike.png" alt="Featured Brand" />
-                  <p>Latest arrivals and best sellers</p>
-                </div>
-              </div>
             </div>
           </li>
         </ul>
-        <a href="#/cart" class="cart-link" id="cartLink" aria-label="Giỏ hàng">
-          <span>Giỏ hàng</span>
+        <a href="#/cart" class="cart-link" id="cartLink" aria-label="Shopping Cart">
+          <span>Cart</span>
           <span class="badge" id="cartCount">0</span>
         </a>
       </nav>
@@ -69,22 +74,27 @@
   <main class="main container">
     <section class="breadcrumbs" id="breadcrumbs"></section>
 
-    <section class="controls">
-      <div class="search">
-        <input id="searchInput" type="text" placeholder="Tìm sản phẩm..." />
-      </div>
-      <div class="filters">
-        <select id="sortSelect">
-          <option value="relevance">Sắp xếp: Mặc định</option>
-          <option value="priceAsc">Giá tăng dần</option>
-          <option value="priceDesc">Giá giảm dần</option>
-          <option value="nameAsc">Tên A-Z</option>
-          <option value="nameDesc">Tên Z-A</option>
-        </select>
-      </div>
-    </section>
-
-    <section id="productGrid" class="grid"></section>
+    <div class="products-wrapper">
+      <section class="products-main full-width">
+        <div class="products-controls">
+          <div class="controls-left">
+            <h2 id="resultTitle" class="page-title">Products</h2>
+            <p id="resultCount" class="result-count"></p>
+          </div>
+          <div class="controls-right">
+            <input id="searchInput" type="text" placeholder="Search..." class="search-input-top" />
+            <select id="sortSelect" class="sort-select-top">
+              <option value="relevance">Sort: Default</option>
+              <option value="priceAsc">Price: Low to High</option>
+              <option value="priceDesc">Price: High to Low</option>
+              <option value="nameAsc">Name: A-Z</option>
+              <option value="nameDesc">Name: Z-A</option>
+            </select>
+          </div>
+        </div>
+        <section id="productGrid" class="grid"></section>
+      </section>
+    </div>
 
     <!-- Product Detail Modal -->
     <div class="modal" id="productModal" aria-hidden="true">
@@ -96,8 +106,8 @@
           <div class="price" id="modalPrice"></div>
           <div class="desc" id="modalDesc"></div>
           <div style="display:flex;gap:8px;margin-top:auto">
-            <button class="btn" id="modalAdd">Thêm giỏ</button>
-            <button class="btn secondary" id="modalClose">Đóng</button>
+            <button class="btn" id="modalAdd">Add to Cart</button>
+            <button class="btn secondary" id="modalClose">Close</button>
           </div>
         </div>
       </div>

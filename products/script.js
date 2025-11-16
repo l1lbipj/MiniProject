@@ -71,13 +71,15 @@ const state = {
 const els = {
   breadcrumbs: document.getElementById('breadcrumbs'),
   grid: document.getElementById('productGrid'),
-  search: document.getElementById('searchInput'),
-  sort: document.getElementById('sortSelect')
+  search: document.getElementById('searchInput') || document.querySelector('.search-input-top'),
+  sort: document.getElementById('sortSelect') || document.querySelector('.sort-select-top'),
+  resultTitle: document.getElementById('resultTitle'),
+  resultCount: document.getElementById('resultCount')
 };
 
 // Routing-like helpers
 function setCategory(cat, sub=null){
-  state.category = cat; state.sub = sub; render();
+  state.category = cat; state.sub = sub; renderUI();
   const path = ['products'];
   if(cat) path.push(cat);
   if(sub) path.push(sub);
@@ -87,28 +89,35 @@ function setCategory(cat, sub=null){
 function initFromHash(){
   const h = location.hash.replace(/^#\//,'');
   const parts = h.split('/');
-  if(parts[0] !== 'products'){ render(); return; }
+  if(parts[0] !== 'products'){ renderUI(); return; }
   const cat = parts[1] || null;
   const sub = parts[2] || null;
   if(cat && CATALOG[cat]){
     if(sub && CATALOG[cat].subs[sub]) setCategory(cat, sub);
     else setCategory(cat, null);
-  } else render();
+  } else renderUI();
 }
 
 // Rendering
 function renderBreadcrumbs(){
   const toTitle = (k, type) => (type==='cat'? CATALOG[k]?.name : CATALOG[state.category]?.subs[k]?.name) || '';
   const parts = [
-    `<a href="#/products" data-bc="root">Products</a>`
+    `<a href="#/products">Products</a>`
   ];
   if(state.category){
-    parts.push(`<span>/</span><a href="#/products/${state.category}" data-bc="cat">${toTitle(state.category,'cat')}</a>`);
+    parts.push(`<a href="#/products/${state.category}">${toTitle(state.category,'cat')}</a>`);
   }
   if(state.sub){
-    parts.push(`<span>/</span><span>${toTitle(state.sub,'sub')}</span>`);
+    parts.push(`<span>${toTitle(state.sub,'sub')}</span>`);
   }
-  els.breadcrumbs.innerHTML = parts.join(' ');
+  els.breadcrumbs.innerHTML = parts.join('');
+  els.breadcrumbs.addEventListener('click', (e)=>{
+    const a = e.target.closest('a');
+    if(!a) return;
+    e.preventDefault();
+    const href = a.getAttribute('href');
+    location.hash = href;
+  });
 }
 
 function filterAndSort(){
@@ -141,8 +150,8 @@ function productCard(p){
         <h3 class="title"><a href="#/products/${p.category}/${p.sub}/${p.id}" data-view="${p.id}" style="color:inherit;text-decoration:none">${p.title}</a></h3>
         <div class="meta"><span>${p.brand}</span><span class="price">${currency(p.price)}</span></div>
         <div class="actions">
-          <button class="btn" data-add="${p.id}">Thêm giỏ</button>
-          <button class="btn secondary" data-view="${p.id}">Chi tiết</button>
+          <button class="btn" data-add="${p.id}">Add to Cart</button>
+          <button class="btn secondary" data-view="${p.id}">Details</button>
         </div>
       </div>
     </article>
@@ -152,29 +161,73 @@ function productCard(p){
 function renderGrid(){
   const list = filterAndSort();
   els.grid.innerHTML = list.map(productCard).join('');
+  updateResultInfo(list);
 }
 
-function render(){
+function updateResultInfo(list){
+  const catName = state.category ? CATALOG[state.category]?.name : 'All Products';
+  const subName = state.sub ? CATALOG[state.category]?.subs[state.sub]?.name : '';
+  let title = catName;
+  if(subName) title += ` - ${subName}`;
+  els.resultTitle.textContent = title;
+  els.resultCount.textContent = `${list.length} products`;
+}
+
+function renderUI(){
   renderBreadcrumbs();
   renderGrid();
 }
 
-// Event handling
 // Mega-menu click routing
 function bindMegaMenu(){
-  document.querySelectorAll('.mega-menu a[data-category]').forEach(a=>{
-    a.addEventListener('click', (e)=>{
-      e.preventDefault();
-      const cat = a.getAttribute('data-category');
-      const sub = a.getAttribute('data-sub');
-      setCategory(cat, sub || null);
-    });
+  const megaItem = document.querySelector('.has-mega');
+  const navLink = document.querySelector('.nav-link');
+  
+  // Click on Products link to toggle menu
+  navLink.addEventListener('click', (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    megaItem.classList.toggle('open');
   });
+  
+  // Close menu when clicking outside
+  document.addEventListener('click', (e) => {
+    if (megaItem && !megaItem.contains(e.target) && megaItem.classList.contains('open')) {
+      megaItem.classList.remove('open');
+    }
+  }, true);
+  
+  // Handle "See All Products" and other explore links
+  setTimeout(() => {
+    document.querySelectorAll('.mega-main a').forEach(a=>{
+      a.addEventListener('click', (e)=>{
+        e.preventDefault();
+        e.stopPropagation();
+        setCategory(null, null);
+        megaItem.classList.remove('open');
+      });
+    });
+  }, 100);
+  
+  // Handle subcategory clicks - navigate AND close menu
+  setTimeout(() => {
+    document.querySelectorAll('.mega-menu a[data-category]').forEach(a=>{
+      a.addEventListener('click', (e)=>{
+        e.preventDefault();
+        e.stopPropagation();
+        const cat = a.getAttribute('data-category');
+        const sub = a.getAttribute('data-sub');
+        setCategory(cat, sub || null);
+        // Immediately close menu
+        megaItem.classList.remove('open');
+      });
+    });
+  }, 100);
 }
 
 function bindControls(){
-  els.search.addEventListener('input', ()=>{ state.query = els.search.value.trim(); renderGrid(); });
-  els.sort.addEventListener('change', ()=>{ state.sort = els.sort.value; renderGrid(); });
+  if(els.search) els.search.addEventListener('input', ()=>{ state.query = els.search.value.trim(); renderGrid(); });
+  if(els.sort) els.sort.addEventListener('change', ()=>{ state.sort = els.sort.value; renderGrid(); });
 
   els.grid.addEventListener('click', (e)=>{
     const add = e.target.closest('[data-add]');
@@ -187,14 +240,6 @@ function bindControls(){
       const id = view.getAttribute('data-view');
       openProductModal(id);
     }
-  });
-
-  els.breadcrumbs.addEventListener('click', (e)=>{
-    const a = e.target.closest('a');
-    if(!a) return;
-    const root = a.getAttribute('data-bc');
-    if(root==='root'){ e.preventDefault(); setCategory(null,null); }
-    if(root==='cat'){ e.preventDefault(); setCategory(state.category, null); }
   });
 
   window.addEventListener('hashchange', initFromHash);
@@ -211,7 +256,7 @@ function addToCart(id){
   const item = cart.find(i=>i.id===id);
   if(item) item.qty += 1; else cart.push({ id, qty:1 });
   setCart(cart);
-  toast('Đã thêm vào giỏ');
+  toast('✓ Added to cart');
 }
 function updateCartCount(){
   const countEl = document.getElementById('cartCount');
@@ -227,13 +272,12 @@ function toast(msg){
   if(!t){
     t = document.createElement('div');
     t.id='toast';
-    t.style.cssText='position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#0d1117;color:#fff;padding:10px 14px;border:1px solid #222;border-radius:10px;box-shadow:0 10px 20px rgba(0,0,0,.3);z-index:9999';
     document.body.appendChild(t);
   }
   t.textContent = msg;
   t.style.opacity = '1';
   clearTimeout(toastTimer);
-  toastTimer = setTimeout(()=>{ t.style.opacity='0'; }, 1400);
+  toastTimer = setTimeout(()=>{ t.style.opacity='0'; }, 2000);
 }
 
 // Product detail modal logic
@@ -244,11 +288,11 @@ function openProductModal(id){
   document.getElementById('modalImage').src = p.image;
   document.getElementById('modalImage').alt = p.title;
   document.getElementById('modalTitle').textContent = p.title;
-  document.getElementById('modalBrand').textContent = p.brand;
-  document.getElementById('modalPrice').textContent = `${currency(p.price)}`;
-  document.getElementById('modalDesc').textContent = `Mô tả: ${p.title} thuộc danh mục ${CATALOG[p.category].name} - ${CATALOG[p.category].subs[p.sub].name}. Chất lượng cao, thiết kế hiện đại.`;
+  document.getElementById('modalBrand').textContent = `Brand: ${p.brand}`;
+  document.getElementById('modalPrice').textContent = currency(p.price);
+  document.getElementById('modalDesc').textContent = `Premium quality product from ${CATALOG[p.category].name} - ${CATALOG[p.category].subs[p.sub].name} collection.`;
   const addBtn = document.getElementById('modalAdd');
-  addBtn.onclick = ()=> addToCart(p.id);
+  addBtn.onclick = ()=> { addToCart(p.id); closeProductModal(); };
   const close = document.getElementById('modalClose');
   close.onclick = ()=> closeProductModal();
   modal.classList.add('open');
@@ -268,7 +312,7 @@ function currency(n){
 function renderCart(){
   const cart = getCart();
   if(cart.length===0){ 
-    els.grid.innerHTML = '<div class="cart"><div class="cart-header"><h2>Giỏ hàng</h2></div><div class="cart-empty">Giỏ hàng trống</div></div>'; 
+    els.grid.innerHTML = '<div class="cart"><div class="cart-header"><h2>🛒 Shopping Cart</h2></div><div class="cart-empty">Your cart is empty</div></div>'; 
     return; 
   }
   const rows = cart.map(ci=>{
@@ -284,12 +328,12 @@ function renderCart(){
         </div>
         <div class="ci-price">${currency(p.price)}</div>
         <div class="ci-qty">
-          <button class="qty-btn" data-dec="${ci.id}">-</button>
+          <button class="qty-btn" data-dec="${ci.id}">−</button>
           <input class="qty-input" type="number" min="1" value="${ci.qty}" data-qty="${ci.id}" />
           <button class="qty-btn" data-inc="${ci.id}">+</button>
         </div>
         <div class="ci-line">${currency(line)}</div>
-        <button class="ci-remove" aria-label="Xóa" data-del="${ci.id}">✕</button>
+        <button class="ci-remove" aria-label="Remove" data-del="${ci.id}">✕</button>
       </div>
     `;
   }).join('');
@@ -302,10 +346,10 @@ function renderCart(){
   els.grid.innerHTML = `
     <div class="cart">
       <div class="cart-header">
-        <h2>Giỏ hàng</h2>
+        <h2>🛒 Shopping Cart</h2>
         <div style="display:flex;gap:8px">
-          <button class="btn secondary" id="clearCart">Xóa hết</button>
-          <a href="#/products" class="btn secondary">Tiếp tục mua sắm</a>
+          <button class="btn secondary" id="clearCart">Clear Cart</button>
+          <a href="#/products" class="btn secondary">Continue Shopping</a>
         </div>
       </div>
       <div class="cart-content">
@@ -313,12 +357,12 @@ function renderCart(){
           ${rows}
         </div>
         <aside class="cart-summary">
-          <h3>Tóm tắt đơn</h3>
-          <div class="summary-row"><span>Tạm tính</span><span>${currency(subtotal)}</span></div>
-          <div class="summary-row"><span>Vận chuyển</span><span>${shipping? currency(shipping): 'Miễn phí'}</span></div>
-          <div class="summary-row"><span>Giảm giá</span><span>- ${discount? currency(discount): currency(0)}</span></div>
-          <div class="summary-total"><strong>Tổng</strong><strong>${currency(total)}</strong></div>
-          <button class="btn" id="checkoutBtn">Thanh toán</button>
+          <h3>💰 Order Summary</h3>
+          <div class="summary-row"><span>Subtotal</span><span>${currency(subtotal)}</span></div>
+          <div class="summary-row"><span>Shipping</span><span>${shipping? currency(shipping): 'Free'}</span></div>
+          <div class="summary-row"><span>Discount</span><span>− ${discount? currency(discount): currency(0)}</span></div>
+          <div class="summary-total"><strong>💵 Total</strong><strong>${currency(total)}</strong></div>
+          <button class="btn" id="checkoutBtn">💳 Checkout</button>
         </aside>
       </div>
     </div>
@@ -330,9 +374,9 @@ function renderCart(){
   els.grid.querySelectorAll('[data-del]').forEach(b=> b.addEventListener('click', ()=> removeFromCart(b.getAttribute('data-del')) ));
   els.grid.querySelectorAll('[data-qty]').forEach(inp=> inp.addEventListener('change', ()=> setQty(inp.getAttribute('data-qty'), Number(inp.value)||1)) );
   const clear = document.getElementById('clearCart');
-  if(clear) clear.addEventListener('click', ()=> { setCart([]); renderCart(); toast('Đã xóa giỏ hàng'); });
+  if(clear) clear.addEventListener('click', ()=> { setCart([]); renderCart(); toast('✓ Cart cleared'); });
   const checkout = document.getElementById('checkoutBtn');
-  if(checkout) checkout.addEventListener('click', ()=> toast('Chức năng thanh toán demo')); 
+  if(checkout) checkout.addEventListener('click', ()=> toast('Checkout functionality coming soon')); 
 }
 
 function setQty(id, qty){
@@ -359,11 +403,12 @@ function removeFromCart(id){
   const cart = getCart().filter(i=>i.id!==id);
   setCart(cart);
   renderCart();
+  toast('✓ Item removed');
 }
 
 function route(){
   const h = location.hash.replace(/^#\//,'');
-  if(h.startsWith('cart')){ renderBreadcrumbs(); els.breadcrumbs.textContent = 'Giỏ hàng'; renderCart(); return; }
+  if(h.startsWith('cart')){ els.breadcrumbs.textContent = ''; renderCart(); return; }
   initFromHash();
 }
 
@@ -375,3 +420,4 @@ document.addEventListener('DOMContentLoaded', ()=>{
   route();
   window.addEventListener('hashchange', ()=>{ route(); updateCartCount(); });
 });
+
