@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Products - Mega Menu</title>
+  <title>Lacoste Việt Nam | Products</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -11,65 +11,84 @@
   <link rel="icon" href="../images/Fvicon.png" />
 </head>
 <body>
-  <header class="header">
-    <div class="container">
-      <a href="../index.html" class="logo">
-        <img src="../images/Logo.png" alt="Logo" />
-        <span>Store</span>
-      </a>
-
-      <nav class="nav">
-        <ul class="nav-list">
-          <li class="nav-item has-mega">
-            <a href="#" class="nav-link">PRODUCTS</a>
-            <div class="mega-menu" role="menu">
-              <div class="mega-col mega-main">
-                <h4>Explore</h4>
-                <ul>
-                  <li><a href="#/products">See All Products</a></li>
-                  <li><a href="#/products">New Arrivals</a></li>
-                  <li><a href="#/products">Online Exclusive</a></li>
-                  <li><a href="#/products">Customisation</a></li>
-                </ul>
-              </div>
-              <div class="mega-col">
-                <h4>Clothing</h4>
-                <ul>
-                  <li><a href="#" data-category="clothing" data-sub="tshirts">T-Shirts</a></li>
-                  <li><a href="#" data-category="clothing" data-sub="shirts">Shirts</a></li>
-                  <li><a href="#" data-category="clothing" data-sub="hoodies">Hoodies</a></li>
-                  <li><a href="#" data-category="clothing" data-sub="jackets">Jackets</a></li>
-                  <li><a href="#" data-category="clothing" data-sub="pants">Pants</a></li>
-                </ul>
-              </div>
-              <div class="mega-col">
-                <h4>Shoes</h4>
-                <ul>
-                  <li><a href="#" data-category="shoes" data-sub="running">Running</a></li>
-                  <li><a href="#" data-category="shoes" data-sub="basketball">Basketball</a></li>
-                  <li><a href="#" data-category="shoes" data-sub="casual">Casual</a></li>
-                  <li><a href="#" data-category="shoes" data-sub="sandals">Sandals</a></li>
-                </ul>
-              </div>
-              <div class="mega-col">
-                <h4>Accessories</h4>
-                <ul>
-                  <li><a href="#" data-category="accessories" data-sub="hats">Hats</a></li>
-                  <li><a href="#" data-category="accessories" data-sub="bags">Bags</a></li>
-                  <li><a href="#" data-category="accessories" data-sub="socks">Socks</a></li>
-                  <li><a href="#" data-category="accessories" data-sub="watches">Watches</a></li>
-                </ul>
-              </div>
-            </div>
-          </li>
-        </ul>
-        <a href="#/cart" class="cart-link" id="cartLink" aria-label="Shopping Cart">
-          <span>Cart</span>
-          <span class="badge" id="cartCount">0</span>
+  <nav class="navbar">
+    <div class="nav-container">
+      <div class="nav-logo">
+        <a href="../src/index.html#home">
+          <img src="../images/Lacoste_logo.png" alt="Lacoste logo" />
         </a>
-      </nav>
+      </div>
+
+      <ul class="nav-menu">
+        <li class="nav-item">
+          <a href="../src/index.html#home" class="nav-link">HOME</a>
+        </li>
+        <li class="nav-item">
+          <a href="../src/index.html#about" class="nav-link">ABOUT</a>
+        </li>
+        <li class="nav-item has-mega">
+          <a href="#/products" class="nav-link nav-link-products">PRODUCTS</a>
+          <div class="mega-menu" role="menu">
+            <div class="mega-col mega-main">
+              <h4>Explore</h4>
+              <ul>
+                <li><a href="#/products">All Collections</a></li>
+                <li><a href="#/products">New Arrivals</a></li>
+                <li><a href="#/products">Online Exclusive</a></li>
+                <li><a href="#/products">Made-to-Order</a></li>
+              </ul>
+            </div>
+            <div class="mega-col">
+              <h4>Clothing</h4>
+              <ul>
+                <li><a href="#" data-category="clothing" data-sub="tshirts">T-Shirts</a></li>
+                <li><a href="#" data-category="clothing" data-sub="shirts">Shirts</a></li>
+                <li><a href="#" data-category="clothing" data-sub="hoodies">Hoodies</a></li>
+                <li><a href="#" data-category="clothing" data-sub="jackets">Jackets</a></li>
+                <li><a href="#" data-category="clothing" data-sub="pants">Pants</a></li>
+              </ul>
+            </div>
+            <div class="mega-col">
+              <h4>Shoes</h4>
+              <ul>
+                <li><a href="#" data-category="shoes" data-sub="running">Running</a></li>
+                <li><a href="#" data-category="shoes" data-sub="basketball">Court</a></li>
+                <li><a href="#" data-category="shoes" data-sub="casual">Lifestyle</a></li>
+                <li><a href="#" data-category="shoes" data-sub="sandals">Sandals</a></li>
+              </ul>
+            </div>
+            <div class="mega-col">
+              <h4>Accessories</h4>
+              <ul>
+                <li><a href="#" data-category="accessories" data-sub="hats">Caps & Hats</a></li>
+                <li><a href="#" data-category="accessories" data-sub="bags">Bags</a></li>
+                <li><a href="#" data-category="accessories" data-sub="socks">Socks</a></li>
+                <li><a href="#" data-category="accessories" data-sub="watches">Watches</a></li>
+              </ul>
+            </div>
+          </div>
+        </li>
+        <li class="nav-item">
+          <a href="../src/index.html#contact" class="nav-link">CONTACT</a>
+        </li>
+        <li class="nav-item nav-cart">
+          <a href="#/cart" class="nav-link cart-link" id="cartLink" aria-label="Shopping Cart">
+            <span>Cart</span>
+            <span class="badge" id="cartCount">0</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="../Login/login.html" class="nav-link nav-link-login">LOGIN</a>
+        </li>
+      </ul>
+
+      <div class="nav-toggle" id="mobile-menu">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+      </div>
     </div>
-  </header>
+  </nav>
 
   <main class="main container">
     <section class="breadcrumbs" id="breadcrumbs"></section>
@@ -116,7 +135,7 @@
 
   <footer class="footer">
     <div class="container">
-      <p>© 2025 Store. All rights reserved.</p>
+      <p>© 2025 Lacoste Việt Nam. All rights reserved.</p>
     </div>
   </footer>
 
