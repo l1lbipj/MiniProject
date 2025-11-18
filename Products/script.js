@@ -635,7 +635,13 @@ function initFromHash(){
     state.promo = null;
     if(sub && CATALOG[cat].subs[sub]) setCategory(cat, sub);
     else setCategory(cat, null);
-  } else renderUI();
+  } else {
+    // Show all products when just #/products
+    state.category = null;
+    state.sub = null;
+    state.promo = null;
+    renderUI();
+  }
 }
 
 // Rendering
