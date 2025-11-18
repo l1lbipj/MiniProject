@@ -3,59 +3,577 @@ const CATALOG = {
   clothing: {
     name: 'Clothing',
     subs: {
+      sweatshirts: { name: 'Sweatshirts' },
+      polos: { name: 'Polo Shirts' },
+      jackets: { name: 'Jackets & Coats' },
+      tracksuits: { name: 'Tracksuits' },
+      knitwear: { name: 'Knitwear' },
       tshirts: { name: 'T-Shirts' },
+      trousers: { name: 'Trousers & Shorts' },
       shirts: { name: 'Shirts' },
-      hoodies: { name: 'Hoodies' },
-      jackets: { name: 'Jackets' },
-      pants: { name: 'Pants' }
+      swimwear: { name: 'Swimwear' },
+      sportclothing: { name: 'Sport Clothing' },
+      underwear: { name: 'Underwear & Lounge wear' }
     }
   },
   shoes: {
     name: 'Shoes',
     subs: {
-      running: { name: 'Running' },
-      basketball: { name: 'Basketball' },
-      casual: { name: 'Casual' },
-      sandals: { name: 'Sandals' }
+      sneakers: { name: 'Sneakers' },
+      outdoor: { name: 'Outdoor' },
+      performance: { name: 'Performance' },
+      sockshoes: { name: 'Socks' }
     }
   },
   accessories: {
     name: 'Accessories',
     subs: {
-      hats: { name: 'Hats' },
-      bags: { name: 'Bags' },
-      socks: { name: 'Socks' },
-      watches: { name: 'Watches' }
+      caps: { name: 'Caps & Hats' },
+      beanies: { name: 'Beanies' },
+      belts: { name: 'Belts' },
+      watches: { name: 'Watches' },
+      home: { name: 'Home' },
+      sunglasses: { name: 'Sunglasses' },
+      fragrance: { name: 'Fragrance' },
+      iphonecases: { name: 'iPhone Cases' },
+      socks: { name: 'Socks' }
     }
   }
 };
 
 // seed sample products
 const PRODUCTS = [];
+
+// Color palette for product variants
+const COLOR_PALETTE = ['black','white','grey','brown','beige','green','blue','pink','red','navy','yellow','orange'];
+function pickColors(idx){
+  const count = 2 + (idx%3); // 2-4 colors per product
+  const start = idx % (COLOR_PALETTE.length - count);
+  return COLOR_PALETTE.slice(start, start+count);
+}
+
 const price = () => { // generate realistic VND price
   const min = 150000, max = 2500000; // 150k - 2.5m VND
   const step = 10000; // round to 10k
   const raw = Math.floor((Math.random()*(max-min)+min)/step)*step;
   return raw;
 };
-const img = (t) => `https://dummyimage.com/600x600/e9ecef/333&text=${encodeURIComponent(t)}`;
+
+// Real product images from Unsplash (clothing, shoes, accessories)
+// Real product images from Unsplash (clothing, shoes, accessories)
+const lacosteImages = {
+  sweatshirts: [
+    'https://images.unsplash.com/photo-1556821552-7f41c5d440db?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1556821552-7f41c5d440db?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1519904981063-b0cf448d479e?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1556821552-7f41c5d440db?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1519904981063-b0cf448d479e?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1556821552-7f41c5d440db?auto=format&fit=crop&w=600&q=80'
+  ],
+  polos: [
+    'https://images.unsplash.com/photo-1591195853828-11db59a44f6b?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1591195853828-11db59a44f6b?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1591195853828-11db59a44f6b?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1591195853828-11db59a44f6b?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1591195853828-11db59a44f6b?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1591195853828-11db59a44f6b?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1591195853828-11db59a44f6b?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1591195853828-11db59a44f6b?auto=format&fit=crop&w=600&q=80'
+  ],
+  tracksuits: [
+    'https://images.unsplash.com/photo-1519904981063-b0cf448d479e?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1519904981063-b0cf448d479e?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1519904981063-b0cf448d479e?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1519904981063-b0cf448d479e?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1519904981063-b0cf448d479e?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1519904981063-b0cf448d479e?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1519904981063-b0cf448d479e?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1519904981063-b0cf448d479e?auto=format&fit=crop&w=600&q=80'
+  ],
+  knitwear: [
+    'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=600&q=80'
+  ],
+  tshirts: [
+    'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1503217267063-09c0ea89f9fa?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1505330622279-bf7d7fc0001f?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1516859031f2-96e35df759e7?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1519167381010-695e82dd3771?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1556264355-fcd17537b4e0?auto=format&fit=crop&w=600&q=80'
+  ],
+  trousers: [
+    'https://images.unsplash.com/photo-1542272604-787c62d465d1?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1473621038790-b3ece06edee9?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1542272604-787c62d465d1?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1473621038790-b3ece06edee9?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1542272604-787c62d465d1?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1473621038790-b3ece06edee9?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1542272604-787c62d465d1?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1473621038790-b3ece06edee9?auto=format&fit=crop&w=600&q=80'
+  ],
+  shirts: [
+    'https://images.unsplash.com/photo-1551028719-00167b16ebc5?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1551804318-51b4d6ce66c0?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1591195853828-11db59a44f6b?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1580703675133-6efe06c9bab2?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1551028719-00167b16ebc5?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1554568611-207d0ac6dad7?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1578152080444-bcc066f7eca1?auto=format&fit=crop&w=600&q=80'
+  ],
+  swimwear: [
+    'https://images.unsplash.com/photo-1551028719-00167b16ebc5?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1551028719-00167b16ebc5?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1551028719-00167b16ebc5?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1551028719-00167b16ebc5?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1551028719-00167b16ebc5?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1551028719-00167b16ebc5?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1551028719-00167b16ebc5?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1551028719-00167b16ebc5?auto=format&fit=crop&w=600&q=80'
+  ],
+  sportclothing: [
+    'https://images.unsplash.com/photo-1519904981063-b0cf448d479e?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1519904981063-b0cf448d479e?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1519904981063-b0cf448d479e?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1519904981063-b0cf448d479e?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1519904981063-b0cf448d479e?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1519904981063-b0cf448d479e?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1519904981063-b0cf448d479e?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1519904981063-b0cf448d479e?auto=format&fit=crop&w=600&q=80'
+  ],
+  underwear: [
+    'https://images.unsplash.com/photo-1503217267063-09c0ea89f9fa?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1503217267063-09c0ea89f9fa?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1503217267063-09c0ea89f9fa?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1503217267063-09c0ea89f9fa?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1503217267063-09c0ea89f9fa?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1503217267063-09c0ea89f9fa?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1503217267063-09c0ea89f9fa?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1503217267063-09c0ea89f9fa?auto=format&fit=crop&w=600&q=80'
+  ],
+  sneakers: [
+    'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=600&q=80'
+  ],
+  outdoor: [
+    'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=600&q=80'
+  ],
+  performance: [
+    'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=600&q=80'
+  ],
+  sockshoes: [
+    'https://images.unsplash.com/photo-1528148343865-2218efb3211f?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1528148343865-2218efb3211f?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1528148343865-2218efb3211f?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1528148343865-2218efb3211f?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1528148343865-2218efb3211f?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1528148343865-2218efb3211f?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1528148343865-2218efb3211f?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1528148343865-2218efb3211f?auto=format&fit=crop&w=600&q=80'
+  ],
+  caps: [
+    'https://images.unsplash.com/photo-1541185933-ef5342bc8e7f?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1541185933-ef5342bc8e7f?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1541185933-ef5342bc8e7f?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1541185933-ef5342bc8e7f?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1541185933-ef5342bc8e7f?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1541185933-ef5342bc8e7f?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1541185933-ef5342bc8e7f?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1541185933-ef5342bc8e7f?auto=format&fit=crop&w=600&q=80'
+  ],
+  beanies: [
+    'https://images.unsplash.com/photo-1541185933-ef5342bc8e7f?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1541185933-ef5342bc8e7f?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1541185933-ef5342bc8e7f?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1541185933-ef5342bc8e7f?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1541185933-ef5342bc8e7f?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1541185933-ef5342bc8e7f?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1541185933-ef5342bc8e7f?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1541185933-ef5342bc8e7f?auto=format&fit=crop&w=600&q=80'
+  ],
+  belts: [
+    'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=600&q=80'
+  ],
+  watches: [
+    'https://images.unsplash.com/photo-1523293182086-7651a899d37f?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1523293182086-7651a899d37f?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1523293182086-7651a899d37f?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1523293182086-7651a899d37f?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1523293182086-7651a899d37f?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1523293182086-7651a899d37f?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1523293182086-7651a899d37f?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1523293182086-7651a899d37f?auto=format&fit=crop&w=600&q=80'
+  ],
+  home: [
+    'https://images.unsplash.com/photo-1505330622279-bf7d7fc0001f?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1505330622279-bf7d7fc0001f?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1505330622279-bf7d7fc0001f?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1505330622279-bf7d7fc0001f?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1505330622279-bf7d7fc0001f?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1505330622279-bf7d7fc0001f?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1505330622279-bf7d7fc0001f?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1505330622279-bf7d7fc0001f?auto=format&fit=crop&w=600&q=80'
+  ],
+  sunglasses: [
+    'https://images.unsplash.com/photo-1572635196237-14b3f281503f?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1572635196237-14b3f281503f?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1572635196237-14b3f281503f?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1572635196237-14b3f281503f?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1572635196237-14b3f281503f?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1572635196237-14b3f281503f?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1572635196237-14b3f281503f?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1572635196237-14b3f281503f?auto=format&fit=crop&w=600&q=80'
+  ],
+  fragrance: [
+    'https://images.unsplash.com/photo-1516859031f2-96e35df759e7?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1516859031f2-96e35df759e7?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1516859031f2-96e35df759e7?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1516859031f2-96e35df759e7?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1516859031f2-96e35df759e7?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1516859031f2-96e35df759e7?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1516859031f2-96e35df759e7?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1516859031f2-96e35df759e7?auto=format&fit=crop&w=600&q=80'
+  ],
+  iphonecases: [
+    'https://images.unsplash.com/photo-1519167381010-695e82dd3771?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1519167381010-695e82dd3771?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1519167381010-695e82dd3771?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1519167381010-695e82dd3771?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1519167381010-695e82dd3771?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1519167381010-695e82dd3771?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1519167381010-695e82dd3771?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1519167381010-695e82dd3771?auto=format&fit=crop&w=600&q=80'
+  ],
+  socks: [
+    'https://images.unsplash.com/photo-1528148343865-2218efb3211f?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1528148343865-2218efb3211f?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1528148343865-2218efb3211f?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1528148343865-2218efb3211f?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1528148343865-2218efb3211f?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1528148343865-2218efb3211f?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1528148343865-2218efb3211f?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1528148343865-2218efb3211f?auto=format&fit=crop&w=600&q=80'
+  ],
+  jackets: [
+    'https://images.unsplash.com/photo-1551028719-00167b16ebc5?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1539533057592-4d2b7472e0f9?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1551028719-00167b16ebc5?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1539533057592-4d2b7472e0f9?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1551028719-00167b16ebc5?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1539533057592-4d2b7472e0f9?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?auto=format&fit=crop&w=600&q=80'
+  ]
+};
+
+const img = (cat, sub, idx) => {
+  const images = lacosteImages[sub] || [];
+  return images[(idx - 1) % images.length] || 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=600&q=80';
+};
 
 function pushProd(cat, sub, idx, title){
+  const collections = ['sport','classic','lifestyle','live','golf','tennis'];
+  const genders = ['men','women','unisex'];
   PRODUCTS.push({
     id: `${cat}-${sub}-${idx}`,
     category: cat,
     sub,
     title,
     price: price(),
-    brand: ['Nike','Adidas','Puma','Uniqlo','Zara'][idx%5],
-    image: img(title)
+    image: img(cat, sub, idx),
+    colors: pickColors(idx),
+    collection: collections[idx % collections.length],
+    gender: genders[idx % genders.length]
   });
 }
+
+// Real Lacoste product names
+const PRODUCT_NAMES = {
+  sweatshirts: [
+    'Men\'s LACOSTE SPORT Hooded Fleece Sweatshirt',
+    'Men\'s Zippered Stand-Up Collar Sweatshirt', 
+    'Men\'s Crew Neck Cotton Blend Sweatshirt',
+    'Men\'s Contrast Accent Track Jacket',
+    'Men\'s Relaxed Fit Hoodie',
+    'Men\'s Oversized Crewneck Sweatshirt',
+    'Men\'s Classic Hooded Sweatshirt',
+    'Men\'s Sport Cotton Blend Hoodie'
+  ],
+  polos: [
+    'Men\'s Classic L.12.12 Polo',
+    'Men\'s L.12.12 Lacoste Polo',
+    'Men\'s Paris Polo Regular Fit Stretch Piqué',
+    'Men\'s SPORT Lightweight Breathable Piqué Polo',
+    'Men\'s Regular Fit Petit Piqué Polo',
+    'Men\'s Slim Fit Polo',
+    'Men\'s Contrast Collar Piqué Polo',
+    'Men\'s Striped Cotton Piqué Polo'
+  ],
+  jackets: [
+    'Men\'s Quilted Water-Resistant Puffer Jacket',
+    'Men\'s Windbreaker Zip Jacket',
+    'Men\'s Reversible Wool Blend Jacket',
+    'Men\'s Water-Resistant Bomber Jacket',
+    'Men\'s Classic Blazer',
+    'Men\'s Hooded Raincoat',
+    'Men\'s Leather Bomber Jacket',
+    'Men\'s Denim Trucker Jacket'
+  ],
+  tracksuits: [
+    'Men\'s SPORT Tennis Tracksuit',
+    'Men\'s Colorblock Zip Tracksuit',
+    'Men\'s Fleece Tracksuit',
+    'Men\'s Taffeta Tracksuit',
+    'Men\'s Two-Tone Tracksuit',
+    'Men\'s Sport Track Jacket and Pants',
+    'Men\'s Cotton Blend Tracksuit',
+    'Men\'s Relaxed Fit Tracksuit'
+  ],
+  knitwear: [
+    'Men\'s Crew Neck Merino Wool Sweater',
+    'Men\'s V-Neck Cotton Sweater',
+    'Men\'s Cashmere Blend Cardigan',
+    'Men\'s Cable Knit Sweater',
+    'Men\'s Turtleneck Merino Sweater',
+    'Men\'s Striped Cotton Cardigan',
+    'Men\'s Wool Blend Pullover',
+    'Men\'s Half-Zip Knit Sweater'
+  ],
+  tshirts: [
+    'Men\'s Crew Neck Pima Cotton T-shirt',
+    'Men\'s V-Neck Cotton Jersey T-shirt',
+    'Men\'s Lacoste LIVE Loose Fit T-shirt',
+    'Men\'s Striped Cotton T-shirt',
+    'Men\'s Graphic Print T-shirt',
+    'Men\'s Long Sleeve Pima T-shirt',
+    'Men\'s Classic Fit Crew Neck Tee',
+    'Men\'s Pocket T-shirt'
+  ],
+  trousers: [
+    'Men\'s Slim Fit Stretch Chinos',
+    'Men\'s Regular Fit Cotton Gabardine Pants',
+    'Men\'s Pleated Wool Trousers',
+    'Men\'s Cargo Pants',
+    'Men\'s Bermuda Shorts',
+    'Men\'s Tennis Shorts',
+    'Men\'s Jogger Pants',
+    'Men\'s Linen Blend Chinos'
+  ],
+  shirts: [
+    'Men\'s Regular Fit Oxford Cotton Shirt',
+    'Men\'s Slim Fit Poplin Shirt',
+    'Men\'s Linen Shirt',
+    'Men\'s Checked Cotton Shirt',
+    'Men\'s Denim Chambray Shirt',
+    'Men\'s Striped Poplin Shirt',
+    'Men\'s Classic Fit Button-Down Shirt',
+    'Men\'s Short Sleeve Linen Shirt'
+  ],
+  swimwear: [
+    'Men\'s Swimming Trunks',
+    'Men\'s Quick-Dry Swim Shorts',
+    'Men\'s Solid Color Swim Trunks',
+    'Men\'s Striped Swimming Trunks',
+    'Men\'s Long Swim Shorts',
+    'Men\'s Contrast Waistband Swim Shorts',
+    'Men\'s Printed Swim Trunks',
+    'Men\'s Classic Fit Swim Shorts'
+  ],
+  sportclothing: [
+    'Men\'s SPORT Technical Jersey T-shirt',
+    'Men\'s Tennis Performance Polo',
+    'Men\'s Golf Stretch Polo',
+    'Men\'s Training Shorts',
+    'Men\'s Athletic Tank Top',
+    'Men\'s Sport Leggings',
+    'Men\'s Running Jacket',
+    'Men\'s Compression T-shirt'
+  ],
+  underwear: [
+    'Men\'s Cotton Boxer Briefs 3-Pack',
+    'Men\'s Stretch Cotton Trunks',
+    'Men\'s Lounge Pants',
+    'Men\'s Sleep T-shirt',
+    'Men\'s Modal Boxer Briefs',
+    'Men\'s Cotton Jersey Robe',
+    'Men\'s Pajama Set',
+    'Men\'s Thermal Underwear Set'
+  ],
+  sneakers: [
+    'Men\'s Carnaby Evo Leather Sneakers',
+    'Men\'s Lerond Leather Sneakers',
+    'Men\'s Court-Master Sneakers',
+    'Men\'s Explorateur Classic Sneakers',
+    'Men\'s Chaymon Leather Sneakers',
+    'Men\'s Gripshot Canvas Sneakers',
+    'Men\'s Graduate Leather Sneakers',
+    'Men\'s L001 Mesh Sneakers'
+  ],
+  outdoor: [
+    'Men\'s Montbard Leather Boots',
+    'Men\'s Hiking Boots',
+    'Men\'s Chelsea Boots',
+    'Men\'s Desert Boots',
+    'Men\'s Waterproof Trail Shoes',
+    'Men\'s Outdoor Sandals',
+    'Men\'s Trekking Shoes',
+    'Men\'s All-Terrain Sneakers'
+  ],
+  performance: [
+    'Men\'s Court Performance Tennis Shoes',
+    'Men\'s AG-LT 21 Ultra Tennis Shoes',
+    'Men\'s Sport Running Shoes',
+    'Men\'s Training Shoes',
+    'Men\'s Tennis Court Shoes',
+    'Men\'s Indoor Court Sneakers',
+    'Men\'s Basketball Sneakers',
+    'Men\'s Cross-Training Shoes'
+  ],
+  sockshoes: [
+    'Men\'s Cotton Socks 3-Pack',
+    'Men\'s Sport Ankle Socks',
+    'Men\'s Crew Socks',
+    'Men\'s No-Show Socks 5-Pack',
+    'Men\'s Tennis Socks',
+    'Men\'s Wool Blend Socks',
+    'Men\'s Cushioned Athletic Socks',
+    'Men\'s Dress Socks 3-Pack'
+  ],
+  caps: [
+    'Men\'s Classic Gabardine Cap',
+    'Men\'s Crocodile Cap',
+    'Men\'s Sport Tennis Cap',
+    'Men\'s Snapback Cap',
+    'Men\'s Bucket Hat',
+    'Men\'s Visor',
+    'Men\'s Baseball Cap',
+    'Men\'s Golf Cap'
+  ],
+  beanies: [
+    'Men\'s Wool Beanie',
+    'Men\'s Ribbed Knit Beanie',
+    'Men\'s Cashmere Blend Beanie',
+    'Men\'s Sport Beanie',
+    'Men\'s Fleece-Lined Beanie',
+    'Men\'s Classic Knit Hat',
+    'Men\'s Pom-Pom Beanie',
+    'Men\'s Skull Cap'
+  ],
+  belts: [
+    'Men\'s Reversible Leather Belt',
+    'Men\'s Classic Leather Belt',
+    'Men\'s Woven Stretch Belt',
+    'Men\'s Canvas Belt',
+    'Men\'s Engraved Buckle Belt',
+    'Men\'s Braided Leather Belt',
+    'Men\'s Double-Ring Belt',
+    'Men\'s Crocodile Embossed Belt'
+  ],
+  watches: [
+    'Men\'s Lacoste.12.12 Watch',
+    'Men\'s Chronograph Watch',
+    'Men\'s Sport Watch',
+    'Men\'s Classic Analog Watch',
+    'Men\'s Silicone Strap Watch',
+    'Men\'s Stainless Steel Watch',
+    'Men\'s Leather Strap Watch',
+    'Men\'s Digital Sport Watch'
+  ],
+  home: [
+    'Cotton Bath Towel',
+    'Crocodile Beach Towel',
+    'Cotton Bathrobe',
+    'Bed Sheet Set',
+    'Decorative Pillow',
+    'Throw Blanket',
+    'Bath Mat',
+    'Hand Towel Set'
+  ],
+  sunglasses: [
+    'Men\'s Rectangular Sunglasses',
+    'Men\'s Aviator Sunglasses',
+    'Men\'s Polarized Sunglasses',
+    'Men\'s Sport Sunglasses',
+    'Men\'s Classic Wayfarers',
+    'Men\'s Round Frame Sunglasses',
+    'Men\'s Mirrored Sunglasses',
+    'Men\'s Wrap-Around Sunglasses'
+  ],
+  fragrance: [
+    'L\'HOMME LACOSTE Eau de Toilette',
+    'LACOSTE Pour Homme Eau de Toilette',
+    'LACOSTE Blanc Eau de Toilette',
+    'LACOSTE L.12.12 Blanc',
+    'LACOSTE L.12.12 Noir',
+    'LACOSTE Essential',
+    'LACOSTE Red',
+    'LACOSTE Match Point'
+  ],
+  iphonecases: [
+    'Crocodile iPhone 15 Case',
+    'Leather iPhone 14 Case',
+    'Silicone iPhone 13 Case',
+    'Clear iPhone Case',
+    'Card Holder iPhone Case',
+    'MagSafe Compatible Case',
+    'Embossed Logo iPhone Case',
+    'Sport Grip iPhone Case'
+  ],
+  socks: [
+    'Men\'s Cotton Sport Socks 3-Pack',
+    'Men\'s No-Show Socks 5-Pack',
+    'Men\'s Crew Socks',
+    'Men\'s Athletic Ankle Socks',
+    'Men\'s Dress Socks Set',
+    'Men\'s Wool Blend Socks',
+    'Men\'s Tennis Socks',
+    'Men\'s Cushioned Running Socks'
+  ]
+};
 
 Object.entries(CATALOG).forEach(([cat, catObj])=>{
   Object.keys(catObj.subs).forEach((sub, sidx)=>{
     for(let i=1;i<=8;i++){
-      const title = `${catObj.subs[sub].name} ${i}`;
+      const names = PRODUCT_NAMES[sub] || [];
+      const title = names[i-1] || `${catObj.subs[sub].name} ${i}`;
       pushProd(cat, sub, i+sidx*10, title);
     }
   });
@@ -64,9 +582,13 @@ Object.entries(CATALOG).forEach(([cat, catObj])=>{
 const state = {
   category: null,
   sub: null,
+  promo: null,
   query: '',
   sort: 'relevance'
 };
+
+// UI-applied filters
+state.filters = { colors: [], collection: [], genders: [], priceRange: null };
 
 const els = {
   breadcrumbs: document.getElementById('breadcrumbs'),
@@ -91,7 +613,7 @@ function closeMegaMenu(){
 
 // Routing-like helpers
 function setCategory(cat, sub=null){
-  state.category = cat; state.sub = sub; renderUI();
+  state.category = cat; state.sub = sub; state.promo = null; renderUI();
   const path = ['products'];
   if(cat) path.push(cat);
   if(sub) path.push(sub);
@@ -102,9 +624,15 @@ function initFromHash(){
   const h = location.hash.replace(/^#\//,'');
   const parts = h.split('/');
   if(parts[0] !== 'products'){ renderUI(); return; }
+  // support promo routing: #/products/promo/<key>
   const cat = parts[1] || null;
   const sub = parts[2] || null;
+  if(cat === 'promo' && parts[2]){
+    const key = parts[2];
+    state.promo = key; state.category = null; state.sub = null; renderUI(); return;
+  }
   if(cat && CATALOG[cat]){
+    state.promo = null;
     if(sub && CATALOG[cat].subs[sub]) setCategory(cat, sub);
     else setCategory(cat, null);
   } else renderUI();
@@ -116,6 +644,17 @@ function renderBreadcrumbs(){
   const parts = [
     `<a href="#/products">Products</a>`
   ];
+  if(state.promo){
+    const promoTitles = {
+      newin: "New Arrivals",
+      members: "Members' Exclusives",
+      bestsellers: "Bestsellers",
+      runway: "Fall-Winter 2025 Runway Collection"
+    };
+    parts.push(`<span>${promoTitles[state.promo] || state.promo}</span>`);
+    els.breadcrumbs.innerHTML = parts.join('');
+    return;
+  }
   if(state.category){
     parts.push(`<a href="#/products/${state.category}">${toTitle(state.category,'cat')}</a>`);
   }
@@ -132,8 +671,36 @@ function renderBreadcrumbs(){
   });
 }
 
+// Promo definitions: key -> filter function and optional title/desc
+const PROMOS = {
+  newin: {
+    title: "MEN'S NEW ARRIVALS",
+    desc: "Expert craftsmanship. Discover the new Lacoste men's collection and make style your signature.",
+    filter: (list) => list.slice(0, 24)
+  },
+  members: {
+    title: "CLUB LACOSTE MEMBERS' EXCLUSIVES",
+    desc: "Discover pieces available only to members of our loyalty programme.",
+    filter: (list) => list.filter(p => ['polo','tshirts','polos','tshirts'].some(k=>p.sub.includes('t'))).slice(0,24)
+  },
+  bestsellers: {
+    title: "MEN'S BESTSELLERS",
+    desc: "Some pieces naturally stand out. Get inspired with Lacoste men's Bestsellers.",
+    filter: (list) => list.slice().sort((a,b)=> b.price - a.price).slice(0,24)
+  },
+  runway: {
+    title: "FALL-WINTER 2025 RUNWAY COLLECTION",
+    desc: "Step into Lacoste Fall-Winter 2025, a refined collection inspired by off-court lifestyle.",
+    filter: (list) => list.filter(p => ['jackets','knitwear','swimwear','tshirts'].includes(p.sub)).slice(0,24)
+  }
+};
+
 function filterAndSort(){
   let list = PRODUCTS.slice();
+  // if promo is set, use promo filter first
+  if(state.promo && PROMOS[state.promo]){
+    list = PROMOS[state.promo].filter(PRODUCTS);
+  }
   if(state.category){
     list = list.filter(p=>p.category===state.category);
   }
@@ -142,7 +709,24 @@ function filterAndSort(){
   }
   if(state.query){
     const q = state.query.toLowerCase();
-    list = list.filter(p=> p.title.toLowerCase().includes(q) || p.brand.toLowerCase().includes(q));
+    list = list.filter(p=> p.title.toLowerCase().includes(q));
+  }
+  // Apply color filters
+  if(state.filters.colors.length > 0){
+    list = list.filter(p => state.filters.colors.some(c => p.colors.includes(c)));
+  }
+  // Apply collection filters
+  if(state.filters.collection.length > 0){
+    list = list.filter(p => state.filters.collection.includes(p.collection));
+  }
+  // Apply gender filters
+  if(state.filters.genders.length > 0){
+    list = list.filter(p => state.filters.genders.includes(p.gender));
+  }
+  // Apply price range filter
+  if(state.filters.priceRange){
+    const [min, max] = state.filters.priceRange.split('-').map(Number);
+    list = list.filter(p => p.price >= min && p.price <= max);
   }
   switch(state.sort){
     case 'priceAsc': list.sort((a,b)=>a.price-b.price); break;
@@ -154,26 +738,89 @@ function filterAndSort(){
   return list;
 }
 
+// Calculate filter counts for UI
+function calculateFilterCounts(){
+  let baseList = PRODUCTS.slice();
+  if(state.promo && PROMOS[state.promo]){
+    baseList = PROMOS[state.promo].filter(PRODUCTS);
+  }
+  if(state.category) baseList = baseList.filter(p=>p.category===state.category);
+  if(state.sub) baseList = baseList.filter(p=>p.sub===state.sub);
+  
+  const counts = { colors: {}, collection: {}, genders: {} };
+  baseList.forEach(p => {
+    p.colors.forEach(c => counts.colors[c] = (counts.colors[c] || 0) + 1);
+    counts.collection[p.collection] = (counts.collection[p.collection] || 0) + 1;
+    counts.genders[p.gender] = (counts.genders[p.gender] || 0) + 1;
+  });
+  return counts;
+}
+
 function productCard(p){
+  const visible = p.colors.slice(0,3);
+  const more = p.colors.length - visible.length;
+  const swatchesHtml = visible.map(c=> `<span class="swatch-mini" style="background:${colorToCss(c)}${c==='white'?';border:1px solid #ddd':''}"></span>`).join('');
+  const moreHtml = more>0 ? `<span class="more">+ ${more}</span>` : '';
   return `
     <article class="card">
       <a class="thumb" href="#/products/${p.category}/${p.sub}/${p.id}" data-view="${p.id}"><img src="${p.image}" alt="${p.title}"></a>
-      <div class="body">
-        <h3 class="title"><a href="#/products/${p.category}/${p.sub}/${p.id}" data-view="${p.id}" style="color:inherit;text-decoration:none">${p.title}</a></h3>
-        <div class="meta"><span>${p.brand}</span><span class="price">${currency(p.price)}</span></div>
-        <div class="actions">
-          <button class="btn" data-add="${p.id}">Add to Cart</button>
-          <button class="btn secondary" data-view="${p.id}">Details</button>
+      <div class="info-bar">
+        <div class="info-left">
+          <a class="title" href="#/products/${p.category}/${p.sub}/${p.id}" data-view="${p.id}">${p.title}</a>
+          <div class="swatch-row">
+            ${swatchesHtml}
+            ${moreHtml}
+          </div>
+        </div>
+        <div class="info-right">
+          <div class="price">${currency(p.price)}</div>
         </div>
       </div>
     </article>
   `;
 }
 
+function colorToCss(key){
+  switch(key){
+    case 'black': return '#111';
+    case 'grey': return '#7d8180';
+    case 'white': return '#fff';
+    case 'brown': return '#6b4f3b';
+    case 'beige': return '#d6c7b8';
+    case 'green': return 'var(--lacoste-green)';
+    case 'blue': return '#2b6fb3';
+    case 'pink': return '#d66fa6';
+    case 'red': return '#c41e3a';
+    case 'navy': return '#001f3f';
+    case 'yellow': return '#ffd700';
+    case 'orange': return '#ff8c00';
+    default: return '#ccc';
+  }
+}
+
 function renderGrid(){
   const list = filterAndSort();
   els.grid.innerHTML = list.map(productCard).join('');
   updateResultInfo(list);
+}
+
+function renderHero(){
+  const hero = document.getElementById('heroBanner');
+  const titleEl = document.getElementById('promoTitle');
+  const descEl = document.getElementById('promoDesc');
+  if(!hero || !titleEl || !descEl) return;
+  if(state.promo && PROMOS[state.promo]){
+    const p = PROMOS[state.promo];
+    hero.style.display = 'block';
+    hero.setAttribute('aria-hidden','false');
+    titleEl.textContent = p.title;
+    descEl.textContent = p.desc || '';
+  } else {
+    hero.style.display = 'none';
+    hero.setAttribute('aria-hidden','true');
+    titleEl.textContent = '';
+    descEl.textContent = '';
+  }
 }
 
 function updateResultInfo(list){
@@ -188,6 +835,7 @@ function updateResultInfo(list){
 function renderUI(){
   renderBreadcrumbs();
   renderGrid();
+  renderHero();
 }
 
 // Mega-menu click routing
@@ -213,12 +861,18 @@ function bindMegaMenu(){
   }, true);
 
   const attachExploreLinks = () => {
-    megaNavItem.querySelectorAll('.mega-main a').forEach(a=>{
+    // attach to both main explore links and promo links
+    megaNavItem.querySelectorAll('.mega-main a, .mega-promo a').forEach(a=>{
       a.addEventListener('click', (e)=>{
         e.preventDefault();
         e.stopPropagation();
-        const href = a.getAttribute('href') || '#/products';
-        location.hash = href;
+        const promo = a.getAttribute('data-promo');
+        if(promo){
+          location.hash = '#/products/promo/' + promo;
+        } else {
+          const href = a.getAttribute('href') || '#/products';
+          location.hash = href;
+        }
         closeMegaMenu();
       });
     });
@@ -250,7 +904,83 @@ function bindMegaMenu(){
 
 function bindControls(){
   if(els.search) els.search.addEventListener('input', ()=>{ state.query = els.search.value.trim(); renderGrid(); });
-  if(els.sort) els.sort.addEventListener('change', ()=>{ state.sort = els.sort.value; renderGrid(); });
+
+  // Clear all filters button
+  const clearBtn = document.getElementById('clearFilters');
+  if(clearBtn){
+    clearBtn.addEventListener('click', ()=>{
+      state.filters = { colors: [], collection: [], genders: [], priceRange: null };
+      state.sort = 'relevance';
+      document.querySelectorAll('.swatch.active, .filter-option.active').forEach(el => el.classList.remove('active'));
+      renderGrid();
+      toast('✓ Filters cleared');
+    });
+  }
+
+  // Sort by filter options
+  document.querySelectorAll('.filter-option[data-sort]').forEach(el=>{
+    el.addEventListener('click', ()=>{
+      const sortValue = el.getAttribute('data-sort');
+      state.sort = sortValue;
+      document.querySelectorAll('.filter-option[data-sort]').forEach(opt => opt.classList.remove('active'));
+      el.classList.add('active');
+      renderGrid();
+    });
+  });
+
+  // Price range filter
+  document.querySelectorAll('.filter-option[data-price]').forEach(el=>{
+    el.addEventListener('click', ()=>{
+      const priceRange = el.getAttribute('data-price');
+      if(state.filters.priceRange === priceRange){
+        state.filters.priceRange = null;
+        el.classList.remove('active');
+      } else {
+        document.querySelectorAll('.filter-option[data-price]').forEach(opt => opt.classList.remove('active'));
+        state.filters.priceRange = priceRange;
+        el.classList.add('active');
+      }
+      renderGrid();
+    });
+  });
+
+  // filter sidebar interactions
+  document.querySelectorAll('.swatch[data-color]').forEach(el=>{
+    el.addEventListener('click', ()=>{
+      const color = el.getAttribute('data-color');
+      const idx = state.filters.colors.indexOf(color);
+      if(idx===-1) state.filters.colors.push(color);
+      else state.filters.colors.splice(idx,1);
+      el.classList.toggle('active');
+      renderGrid();
+    });
+  });
+  document.querySelectorAll('.filter-option[data-collection]').forEach(el=>{
+    el.addEventListener('click', ()=>{
+      const col = el.getAttribute('data-collection');
+      if(state.filters.collection.includes(col)){
+        state.filters.collection = state.filters.collection.filter(c=>c!==col);
+        el.classList.remove('active');
+      } else {
+        state.filters.collection.push(col);
+        el.classList.add('active');
+      }
+      renderGrid();
+    });
+  });
+  document.querySelectorAll('.filter-option[data-gender]').forEach(el=>{
+    el.addEventListener('click', ()=>{
+      const gender = el.getAttribute('data-gender');
+      if(state.filters.genders.includes(gender)){
+        state.filters.genders = state.filters.genders.filter(g=>g!==gender);
+        el.classList.remove('active');
+      } else {
+        state.filters.genders.push(gender);
+        el.classList.add('active');
+      }
+      renderGrid();
+    });
+  });
 
   els.grid.addEventListener('click', (e)=>{
     const add = e.target.closest('[data-add]');
@@ -346,7 +1076,6 @@ function openProductModal(id){
   document.getElementById('modalImage').src = p.image;
   document.getElementById('modalImage').alt = p.title;
   document.getElementById('modalTitle').textContent = p.title;
-  document.getElementById('modalBrand').textContent = `Brand: ${p.brand}`;
   document.getElementById('modalPrice').textContent = currency(p.price);
   document.getElementById('modalDesc').textContent = `Premium quality product from ${CATALOG[p.category].name} - ${CATALOG[p.category].subs[p.sub].name} collection.`;
   const addBtn = document.getElementById('modalAdd');
@@ -367,16 +1096,12 @@ function closeProductModal(){
 function currency(n){
   return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND', maximumFractionDigits: 0 }).format(n);
 }
-function renderCart(){
+function renderCart(container){
   const cart = getCart();
-  // Update page title/breadcrumbs so previous category doesn't persist
-  if (els.resultTitle) els.resultTitle.textContent = 'Shopping Cart';
-  if (els.resultCount) els.resultCount.textContent = '';
-  // show plain Cart label (remove clickable Products breadcrumb to avoid confusion)
-  if (els.breadcrumbs) els.breadcrumbs.textContent = 'Cart';
+  const targetEl = container || els.grid;
 
   if(cart.length===0){ 
-    els.grid.innerHTML = '<div class="cart"><div class="cart-header"><h2>🛒 Shopping Cart</h2></div><div class="cart-empty">Your cart is empty</div></div>'; 
+    targetEl.innerHTML = '<div class="cart"><div class="cart-header"><h2>🛒 Shopping Cart</h2></div><div class="cart-empty"><p>Your cart is empty</p><a href="#/products" class="btn">Continue Shopping</a></div></div>'; 
     return; 
   }
   const rows = cart.map(ci=>{
@@ -388,7 +1113,7 @@ function renderCart(){
         <img class="ci-thumb" src="${p.image}" alt="${p.title}" />
         <div class="ci-info">
           <div class="ci-title">${p.title}</div>
-          <div class="ci-meta">${p.brand} • ${CATALOG[p.category].name} / ${CATALOG[p.category].subs[p.sub].name}</div>
+          <div class="ci-meta">${CATALOG[p.category].name} / ${CATALOG[p.category].subs[p.sub].name}</div>
         </div>
         <div class="ci-price">${currency(p.price)}</div>
         <div class="ci-qty">
@@ -407,7 +1132,7 @@ function renderCart(){
   const discount = subtotal > 200000 ? subtotal*0.05 : 0;
   const total = subtotal + shipping - discount;
 
-  els.grid.innerHTML = `
+  targetEl.innerHTML = `
     <div class="cart">
       <div class="cart-header">
         <h2>🛒 Shopping Cart</h2>
@@ -433,12 +1158,12 @@ function renderCart(){
   `;
 
   // bind actions
-  els.grid.querySelectorAll('[data-inc]').forEach(b=> b.addEventListener('click', ()=> changeQty(b.getAttribute('data-inc'), 1)) );
-  els.grid.querySelectorAll('[data-dec]').forEach(b=> b.addEventListener('click', ()=> changeQty(b.getAttribute('data-dec'), -1)) );
-  els.grid.querySelectorAll('[data-del]').forEach(b=> b.addEventListener('click', ()=> removeFromCart(b.getAttribute('data-del')) ));
-  els.grid.querySelectorAll('[data-qty]').forEach(inp=> inp.addEventListener('change', ()=> setQty(inp.getAttribute('data-qty'), Number(inp.value)||1)) );
+  targetEl.querySelectorAll('[data-inc]').forEach(b=> b.addEventListener('click', ()=> changeQty(b.getAttribute('data-inc'), 1)) );
+  targetEl.querySelectorAll('[data-dec]').forEach(b=> b.addEventListener('click', ()=> changeQty(b.getAttribute('data-dec'), -1)) );
+  targetEl.querySelectorAll('[data-del]').forEach(b=> b.addEventListener('click', ()=> removeFromCart(b.getAttribute('data-del')) ));
+  targetEl.querySelectorAll('[data-qty]').forEach(inp=> inp.addEventListener('change', ()=> setQty(inp.getAttribute('data-qty'), Number(inp.value)||1)) );
   const clear = document.getElementById('clearCart');
-  if(clear) clear.addEventListener('click', ()=> { setCart([]); renderCart(); toast('✓ Cart cleared'); });
+  if(clear) clear.addEventListener('click', ()=> { setCart([]); renderCart(container); toast('✓ Cart cleared'); });
   const checkout = document.getElementById('checkoutBtn');
   if(checkout) checkout.addEventListener('click', ()=> toast('Checkout functionality coming soon')); 
 }
@@ -449,7 +1174,8 @@ function setQty(id, qty){
   if(!item) return;
   item.qty = Math.max(1, Math.floor(qty));
   setCart(cart);
-  renderCart();
+  const cartContainer = document.getElementById('cartContainer');
+  renderCart(cartContainer);
 }
 function changeQty(id, delta){
   const cart = getCart();
@@ -461,54 +1187,45 @@ function changeQty(id, delta){
     if(idx>-1) cart.splice(idx,1);
   }
   setCart(cart);
-  renderCart();
+  const cartContainer = document.getElementById('cartContainer');
+  renderCart(cartContainer);
 }
 function removeFromCart(id){
   const cart = getCart().filter(i=>i.id!==id);
   setCart(cart);
-  renderCart();
+  const cartContainer = document.getElementById('cartContainer');
+  renderCart(cartContainer);
   toast('✓ Item removed');
 }
 
 function route(){
   const h = location.hash.replace(/^#\//,'');
   const isCart = h.startsWith('cart');
+  const productsWrapper = document.querySelector('.products-wrapper');
+  const main = document.querySelector('.main.container');
+  
   if(isCart){
-    // add a body class so CSS can hide controls on the cart view
+    // Hide the products wrapper (filters + grid)
+    if(productsWrapper) productsWrapper.style.display = 'none';
+    // Create standalone cart container if it doesn't exist
+    let cartContainer = document.getElementById('cartContainer');
+    if(!cartContainer){
+      cartContainer = document.createElement('div');
+      cartContainer.id = 'cartContainer';
+      cartContainer.className = 'cart-standalone';
+      main.appendChild(cartContainer);
+    }
+    cartContainer.style.display = 'block';
     document.body.classList.add('view-cart');
-    // remove the two sort options that shouldn't appear in the cart view
-    if(els.sort && originalSortHTML === null){
-      originalSortHTML = els.sort.innerHTML;
-    }
-    if(els.sort && originalSortHTML !== null){
-      // remove 'priceDesc' (Price: High to Low) and 'nameAsc' (Name: A-Z)
-      ['priceDesc','nameAsc'].forEach(v=>{
-        const o = els.sort.querySelector(`option[value="${v}"]`);
-        if(o) o.remove();
-      });
-      // ensure selected value is valid
-      if(!els.sort.querySelector(`option[value="${els.sort.value}"]`)) els.sort.value = 'relevance';
-    }
-    // hide the entire sort control in cart view (store previous display for restore)
-    if(els.sort && originalSortDisplay === null){
-      originalSortDisplay = els.sort.style.display || '';
-      els.sort.style.display = 'none';
-    }
-    els.breadcrumbs.textContent = '';
-    renderCart();
+    renderCart(cartContainer);
     return;
   } else {
+    // Show products wrapper again
+    if(productsWrapper) productsWrapper.style.display = 'grid';
+    // Hide cart container
+    const cartContainer = document.getElementById('cartContainer');
+    if(cartContainer) cartContainer.style.display = 'none';
     document.body.classList.remove('view-cart');
-    // restore full sort options when leaving cart
-    if(els.sort && originalSortHTML !== null){
-      els.sort.innerHTML = originalSortHTML;
-      originalSortHTML = null;
-    }
-    // restore sort display property
-    if(els.sort && originalSortDisplay !== null){
-      els.sort.style.display = originalSortDisplay;
-      originalSortDisplay = null;
-    }
   }
   initFromHash();
 }

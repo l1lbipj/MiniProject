@@ -29,41 +29,52 @@
         <li class="nav-item has-mega">
           <a href="#/products" class="nav-link nav-link-products">PRODUCTS</a>
           <div class="mega-menu" role="menu">
-            <div class="mega-col mega-main">
-              <h4>Explore</h4>
-              <ul>
-                <li><a href="#/products">All Collections</a></li>
-                <li><a href="#/products">New Arrivals</a></li>
-                <li><a href="#/products">Online Exclusive</a></li>
-                <li><a href="#/products">Made-to-Order</a></li>
-              </ul>
+            <div class="mega-col mega-promo">
+              <h4>See All Men's New In</h4>
+              <nav class="promo-list" aria-label="New In promos">
+                <a class="promo-link" href="#/products/promo/newin" data-promo="newin">New Arrivals</a>
+                <a class="promo-link" href="#/products/promo/members" data-promo="members">Lacoste Members' Exclusives</a>
+                <a class="promo-link" href="#/products/promo/bestsellers" data-promo="bestsellers">Bestsellers</a>
+                <a class="promo-link" href="#/products/promo/runway" data-promo="runway">Fall-Winter 2025 Runway Collection</a>
+              </nav>
             </div>
             <div class="mega-col">
               <h4>Clothing</h4>
               <ul>
+                <li><a href="#" data-category="clothing" data-sub="sweatshirts">Sweatshirts</a></li>
+                <li><a href="#" data-category="clothing" data-sub="polos">Polo Shirts</a></li>
+                <li><a href="#" data-category="clothing" data-sub="jackets">Jackets & Coats</a></li>
+                <li><a href="#" data-category="clothing" data-sub="tracksuits">Tracksuits</a></li>
+                <li><a href="#" data-category="clothing" data-sub="knitwear">Knitwear</a></li>
                 <li><a href="#" data-category="clothing" data-sub="tshirts">T-Shirts</a></li>
+                <li><a href="#" data-category="clothing" data-sub="trousers">Trousers & Shorts</a></li>
                 <li><a href="#" data-category="clothing" data-sub="shirts">Shirts</a></li>
-                <li><a href="#" data-category="clothing" data-sub="hoodies">Hoodies</a></li>
-                <li><a href="#" data-category="clothing" data-sub="jackets">Jackets</a></li>
-                <li><a href="#" data-category="clothing" data-sub="pants">Pants</a></li>
+                <li><a href="#" data-category="clothing" data-sub="swimwear">Swimwear</a></li>
+                <li><a href="#" data-category="clothing" data-sub="sportclothing">Sport Clothing</a></li>
+                <li><a href="#" data-category="clothing" data-sub="underwear">Underwear & Lounge wear</a></li>
               </ul>
             </div>
             <div class="mega-col">
               <h4>Shoes</h4>
               <ul>
-                <li><a href="#" data-category="shoes" data-sub="running">Running</a></li>
-                <li><a href="#" data-category="shoes" data-sub="basketball">Court</a></li>
-                <li><a href="#" data-category="shoes" data-sub="casual">Lifestyle</a></li>
-                <li><a href="#" data-category="shoes" data-sub="sandals">Sandals</a></li>
+                <li><a href="#" data-category="shoes" data-sub="sneakers">Sneakers</a></li>
+                <li><a href="#" data-category="shoes" data-sub="outdoor">Outdoor</a></li>
+                <li><a href="#" data-category="shoes" data-sub="performance">Performance</a></li>
+                <li><a href="#" data-category="shoes" data-sub="sockshoes">Socks</a></li>
               </ul>
             </div>
             <div class="mega-col">
               <h4>Accessories</h4>
               <ul>
-                <li><a href="#" data-category="accessories" data-sub="hats">Caps & Hats</a></li>
-                <li><a href="#" data-category="accessories" data-sub="bags">Bags</a></li>
-                <li><a href="#" data-category="accessories" data-sub="socks">Socks</a></li>
+                <li><a href="#" data-category="accessories" data-sub="caps">Caps & Hats</a></li>
+                <li><a href="#" data-category="accessories" data-sub="beanies">Beanies</a></li>
+                <li><a href="#" data-category="accessories" data-sub="belts">Belts</a></li>
                 <li><a href="#" data-category="accessories" data-sub="watches">Watches</a></li>
+                <li><a href="#" data-category="accessories" data-sub="home">Home</a></li>
+                <li><a href="#" data-category="accessories" data-sub="sunglasses">Sunglasses</a></li>
+                <li><a href="#" data-category="accessories" data-sub="fragrance">Fragrance</a></li>
+                <li><a href="#" data-category="accessories" data-sub="iphonecases">iPhone Cases</a></li>
+                <li><a href="#" data-category="accessories" data-sub="socks">Socks</a></li>
               </ul>
             </div>
           </div>
@@ -94,7 +105,73 @@
     <section class="breadcrumbs" id="breadcrumbs"></section>
 
     <div class="products-wrapper">
-      <section class="products-main full-width">
+      <aside class="filters" id="filters">
+        <div class="filter-inner">
+          <div class="filter-header">
+            <button class="hide-filters">HIDE FILTERS</button>
+            <button class="clear-filters" id="clearFilters">CLEAR ALL</button>
+          </div>
+          <div class="filter-group">
+            <h4>SORT BY</h4>
+            <div class="filter-option" data-sort="relevance">Our selection</div>
+            <div class="filter-option" data-sort="nameAsc">Name (A-Z)</div>
+            <div class="filter-option" data-sort="nameDesc">Name (Z-A)</div>
+            <div class="filter-option" data-sort="priceAsc">Price: Low to High</div>
+            <div class="filter-option" data-sort="priceDesc">Price: High to Low</div>
+          </div>
+          <div class="filter-group" data-filter-group="price">
+            <h4>PRICE RANGE</h4>
+            <div class="filter-option" data-price="0-500000">Under 500.000₫</div>
+            <div class="filter-option" data-price="500000-1000000">500.000₫ - 1.000.000₫</div>
+            <div class="filter-option" data-price="1000000-1500000">1.000.000₫ - 1.500.000₫</div>
+            <div class="filter-option" data-price="1500000-2000000">1.500.000₫ - 2.000.000₫</div>
+            <div class="filter-option" data-price="2000000-999999999">Above 2.000.000₫</div>
+          </div>
+          <div class="filter-group" data-filter-group="colour">
+            <h4>COLOUR</h4>
+            <div class="swatches">
+              <span class="swatch black" data-color="black" title="Black"></span>
+              <span class="swatch grey" data-color="grey" title="Grey"></span>
+              <span class="swatch white" data-color="white" title="White"></span>
+              <span class="swatch brown" data-color="brown" title="Brown"></span>
+              <span class="swatch beige" data-color="beige" title="Beige"></span>
+              <span class="swatch green" data-color="green" title="Green"></span>
+              <span class="swatch blue" data-color="blue" title="Blue"></span>
+              <span class="swatch pink" data-color="pink" title="Pink"></span>
+              <span class="swatch red" data-color="red" title="Red"></span>
+              <span class="swatch navy" data-color="navy" title="Navy"></span>
+              <span class="swatch yellow" data-color="yellow" title="Yellow"></span>
+              <span class="swatch orange" data-color="orange" title="Orange"></span>
+            </div>
+          </div>
+          <div class="filter-group" data-filter-group="collection">
+            <h4>COLLECTION</h4>
+            <div class="filter-option" data-collection="sport">Sport</div>
+            <div class="filter-option" data-collection="classic">Classic</div>
+            <div class="filter-option" data-collection="lifestyle">Lifestyle</div>
+            <div class="filter-option" data-collection="live">Lacoste LIVE</div>
+            <div class="filter-option" data-collection="golf">Golf Collection</div>
+            <div class="filter-option" data-collection="tennis">Tennis Collection</div>
+          </div>
+          <div class="filter-group" data-filter-group="gender">
+            <h4>GENDER</h4>
+            <div class="filter-option" data-gender="men">Men</div>
+            <div class="filter-option" data-gender="women">Women</div>
+            <div class="filter-option" data-gender="unisex">Unisex</div>
+          </div>
+        </div>
+      </aside>
+
+      <section class="products-main">
+        <div class="hero-banner" id="heroBanner" aria-hidden="true">
+          <div class="hero-inner">
+            <div class="hero-text">
+              <h1 id="promoTitle"></h1>
+              <p id="promoDesc"></p>
+            </div>
+          </div>
+        </div>
+
         <div class="products-controls">
           <div class="controls-left">
             <h2 id="resultTitle" class="page-title">Products</h2>
@@ -102,15 +179,9 @@
           </div>
           <div class="controls-right">
             <input id="searchInput" type="text" placeholder="Search..." class="search-input-top" />
-            <select id="sortSelect" class="sort-select-top">
-              <option value="relevance">Sort: Default</option>
-              <option value="priceAsc">Price: Low to High</option>
-              <option value="priceDesc">Price: High to Low</option>
-              <option value="nameAsc">Name: A-Z</option>
-              <option value="nameDesc">Name: Z-A</option>
-            </select>
           </div>
         </div>
+
         <section id="productGrid" class="grid"></section>
       </section>
     </div>
@@ -121,7 +192,6 @@
         <img id="modalImage" alt="product image" />
         <div class="content">
           <h2 class="title" id="modalTitle"></h2>
-          <div class="brand" id="modalBrand"></div>
           <div class="price" id="modalPrice"></div>
           <div class="desc" id="modalDesc"></div>
           <div style="display:flex;gap:8px;margin-top:auto">
