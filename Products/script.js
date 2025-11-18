@@ -351,7 +351,7 @@ function closeMegaMenu(){
 
 // Routing-like helpers
 function setCategory(cat, sub=null){
-  state.category = cat; state.sub = sub; renderUI();
+  state.category = cat; state.sub = sub; state.promo = null; renderUI();
   const path = ['products'];
   if(cat) path.push(cat);
   if(sub) path.push(sub);
@@ -362,9 +362,15 @@ function initFromHash(){
   const h = location.hash.replace(/^#\//,'');
   const parts = h.split('/');
   if(parts[0] !== 'products'){ renderUI(); return; }
+  // support promo routing: #/products/promo/<key>
   const cat = parts[1] || null;
   const sub = parts[2] || null;
+  if(cat === 'promo' && parts[2]){
+    const key = parts[2];
+    state.promo = key; state.category = null; state.sub = null; renderUI(); return;
+  }
   if(cat && CATALOG[cat]){
+    state.promo = null;
     if(sub && CATALOG[cat].subs[sub]) setCategory(cat, sub);
     else setCategory(cat, null);
   } else renderUI();
@@ -475,6 +481,25 @@ function renderGrid(){
   updateResultInfo(list);
 }
 
+function renderHero(){
+  const hero = document.getElementById('heroBanner');
+  const titleEl = document.getElementById('promoTitle');
+  const descEl = document.getElementById('promoDesc');
+  if(!hero || !titleEl || !descEl) return;
+  if(state.promo && PROMOS[state.promo]){
+    const p = PROMOS[state.promo];
+    hero.style.display = 'block';
+    hero.setAttribute('aria-hidden','false');
+    titleEl.textContent = p.title;
+    descEl.textContent = p.desc || '';
+  } else {
+    hero.style.display = 'none';
+    hero.setAttribute('aria-hidden','true');
+    titleEl.textContent = '';
+    descEl.textContent = '';
+  }
+}
+
 function updateResultInfo(list){
   const catName = state.category ? CATALOG[state.category]?.name : 'All Products';
   const subName = state.sub ? CATALOG[state.category]?.subs[state.sub]?.name : '';
@@ -487,6 +512,7 @@ function updateResultInfo(list){
 function renderUI(){
   renderBreadcrumbs();
   renderGrid();
+  renderHero();
 }
 
 // Mega-menu click routing

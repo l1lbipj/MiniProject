@@ -105,7 +105,51 @@
     <section class="breadcrumbs" id="breadcrumbs"></section>
 
     <div class="products-wrapper">
-      <section class="products-main full-width">
+      <aside class="filters" id="filters">
+        <div class="filter-inner">
+          <button class="hide-filters">HIDE FILTERS</button>
+          <div class="filter-group">
+            <h4>SORT BY</h4>
+            <div class="filter-option">Our selection</div>
+            <div class="filter-option">Name (A-Z)</div>
+            <div class="filter-option">Name (Z-A)</div>
+          </div>
+          <div class="filter-group">
+            <h4>COLOUR</h4>
+            <div class="swatches">
+              <span class="swatch black"></span>
+              <span class="swatch grey"></span>
+              <span class="swatch white"></span>
+              <span class="swatch brown"></span>
+              <span class="swatch beige"></span>
+              <span class="swatch green"></span>
+              <span class="swatch blue"></span>
+              <span class="swatch pink"></span>
+            </div>
+          </div>
+          <div class="filter-group">
+            <h4>COLLECTION</h4>
+            <div class="filter-option">Men's Selection</div>
+            <div class="filter-option">Women Selection</div>
+          </div>
+          <div class="filter-group">
+            <h4>GENDER</h4>
+            <div class="filter-option">Men</div>
+            <div class="filter-option">Women</div>
+          </div>
+        </div>
+      </aside>
+
+      <section class="products-main">
+        <div class="hero-banner" id="heroBanner" aria-hidden="true">
+          <div class="hero-inner">
+            <div class="hero-text">
+              <h1 id="promoTitle"></h1>
+              <p id="promoDesc"></p>
+            </div>
+          </div>
+        </div>
+
         <div class="products-controls">
           <div class="controls-left">
             <h2 id="resultTitle" class="page-title">Products</h2>
@@ -122,6 +166,7 @@
             </select>
           </div>
         </div>
+
         <section id="productGrid" class="grid"></section>
       </section>
     </div>
