@@ -81,6 +81,14 @@ const els = {
 let originalSortHTML = null;
 let originalSortDisplay = null;
 
+// mega menu helpers (used by newer main branch)
+let megaNavItem = null;
+function closeMegaMenu(){
+  if(megaNavItem){
+    megaNavItem.classList.remove('open');
+  }
+}
+
 // Routing-like helpers
 function setCategory(cat, sub=null){
   state.category = cat; state.sub = sub; renderUI();
@@ -184,39 +192,40 @@ function renderUI(){
 
 // Mega-menu click routing
 function bindMegaMenu(){
-  const megaItem = document.querySelector('.has-mega');
-  const navLink = document.querySelector('.nav-link');
-  
-  // Click on Products link to toggle menu
-  navLink.addEventListener('click', (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    megaItem.classList.toggle('open');
-  });
-  
-  // Close menu when clicking outside
+  megaNavItem = document.querySelector('.nav-item.has-mega');
+  if(!megaNavItem) return;
+  const navLink = megaNavItem.querySelector('.nav-link-products');
+  const isDesktop = () => window.matchMedia('(min-width: 1025px)').matches;
+
+  if(navLink){
+    navLink.addEventListener('click', (e) => {
+      if(!isDesktop()) { closeMegaMenu(); return; }
+      e.preventDefault();
+      e.stopPropagation();
+      megaNavItem.classList.toggle('open');
+    });
+  }
+
   document.addEventListener('click', (e) => {
-    if (megaItem && !megaItem.contains(e.target) && megaItem.classList.contains('open')) {
-      megaItem.classList.remove('open');
-    }
+    if(!megaNavItem) return;
+    if(megaNavItem.contains(e.target)) return;
+    closeMegaMenu();
   }, true);
-  
-  // Handle "See All Products" and other explore links
-  setTimeout(() => {
-    document.querySelectorAll('.mega-main a').forEach(a=>{
+
+  const attachExploreLinks = () => {
+    megaNavItem.querySelectorAll('.mega-main a').forEach(a=>{
       a.addEventListener('click', (e)=>{
         e.preventDefault();
         e.stopPropagation();
         const href = a.getAttribute('href') || '#/products';
         location.hash = href;
-        megaItem.classList.remove('open');
+        closeMegaMenu();
       });
     });
-  }, 100);
-  
-  // Handle subcategory clicks - navigate AND close menu
-  setTimeout(() => {
-    document.querySelectorAll('.mega-menu a[data-category]').forEach(a=>{
+  };
+
+  const attachSubLinks = () => {
+    megaNavItem.querySelectorAll('.mega-menu a[data-category]').forEach(a=>{
       a.addEventListener('click', (e)=>{
         e.preventDefault();
         e.stopPropagation();
@@ -224,11 +233,19 @@ function bindMegaMenu(){
         const sub = a.getAttribute('data-sub');
         const href = '#/products/' + cat + (sub ? '/' + sub : '');
         location.hash = href;
-        // Immediately close menu
-        megaItem.classList.remove('open');
+        closeMegaMenu();
       });
     });
-  }, 100);
+  };
+
+  attachExploreLinks();
+  attachSubLinks();
+
+  window.addEventListener('scroll', closeMegaMenu);
+  window.addEventListener('hashchange', closeMegaMenu);
+  window.addEventListener('resize', () => {
+    if(!isDesktop()) closeMegaMenu();
+  });
 }
 
 function bindControls(){
@@ -249,6 +266,41 @@ function bindControls(){
   });
 
   window.addEventListener('hashchange', initFromHash);
+}
+
+function initMobileMenu(){
+  const mobileMenu = document.getElementById('mobile-menu');
+  const navMenu = document.querySelector('.nav-menu');
+  if(!mobileMenu || !navMenu) return;
+  const originalOverflow = document.body.style.overflow;
+
+  const closeMenu = () => {
+    navMenu.classList.remove('active');
+    mobileMenu.classList.remove('active');
+    document.body.style.overflow = originalOverflow || '';
+    closeMegaMenu();
+  };
+
+  mobileMenu.addEventListener('click', (e)=>{
+    e.stopPropagation();
+    mobileMenu.classList.toggle('active');
+    navMenu.classList.toggle('active');
+    if(navMenu.classList.contains('active')){
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = originalOverflow || '';
+    }
+  });
+
+  navMenu.querySelectorAll('.nav-link').forEach(link=>{
+    link.addEventListener('click', closeMenu);
+  });
+
+  document.addEventListener('click', (e)=>{
+    if(!navMenu.classList.contains('active')) return;
+    if(mobileMenu.contains(e.target) || navMenu.contains(e.target)) return;
+    closeMenu();
+  });
 }
 
 // Cart with localStorage
@@ -464,9 +516,11 @@ function route(){
 // Init
 document.addEventListener('DOMContentLoaded', ()=>{
   bindMegaMenu();
+  initMobileMenu();
   bindControls();
   updateCartCount();
   route();
   window.addEventListener('hashchange', ()=>{ route(); updateCartCount(); });
 });
+
 
