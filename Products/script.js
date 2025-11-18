@@ -325,10 +325,255 @@ function pushProd(cat, sub, idx, title){
   });
 }
 
+// Real Lacoste product names
+const PRODUCT_NAMES = {
+  sweatshirts: [
+    'Men\'s LACOSTE SPORT Hooded Fleece Sweatshirt',
+    'Men\'s Zippered Stand-Up Collar Sweatshirt', 
+    'Men\'s Crew Neck Cotton Blend Sweatshirt',
+    'Men\'s Contrast Accent Track Jacket',
+    'Men\'s Relaxed Fit Hoodie',
+    'Men\'s Oversized Crewneck Sweatshirt',
+    'Men\'s Classic Hooded Sweatshirt',
+    'Men\'s Sport Cotton Blend Hoodie'
+  ],
+  polos: [
+    'Men\'s Classic L.12.12 Polo',
+    'Men\'s L.12.12 Lacoste Polo',
+    'Men\'s Paris Polo Regular Fit Stretch Piqué',
+    'Men\'s SPORT Lightweight Breathable Piqué Polo',
+    'Men\'s Regular Fit Petit Piqué Polo',
+    'Men\'s Slim Fit Polo',
+    'Men\'s Contrast Collar Piqué Polo',
+    'Men\'s Striped Cotton Piqué Polo'
+  ],
+  jackets: [
+    'Men\'s Quilted Water-Resistant Puffer Jacket',
+    'Men\'s Windbreaker Zip Jacket',
+    'Men\'s Reversible Wool Blend Jacket',
+    'Men\'s Water-Resistant Bomber Jacket',
+    'Men\'s Classic Blazer',
+    'Men\'s Hooded Raincoat',
+    'Men\'s Leather Bomber Jacket',
+    'Men\'s Denim Trucker Jacket'
+  ],
+  tracksuits: [
+    'Men\'s SPORT Tennis Tracksuit',
+    'Men\'s Colorblock Zip Tracksuit',
+    'Men\'s Fleece Tracksuit',
+    'Men\'s Taffeta Tracksuit',
+    'Men\'s Two-Tone Tracksuit',
+    'Men\'s Sport Track Jacket and Pants',
+    'Men\'s Cotton Blend Tracksuit',
+    'Men\'s Relaxed Fit Tracksuit'
+  ],
+  knitwear: [
+    'Men\'s Crew Neck Merino Wool Sweater',
+    'Men\'s V-Neck Cotton Sweater',
+    'Men\'s Cashmere Blend Cardigan',
+    'Men\'s Cable Knit Sweater',
+    'Men\'s Turtleneck Merino Sweater',
+    'Men\'s Striped Cotton Cardigan',
+    'Men\'s Wool Blend Pullover',
+    'Men\'s Half-Zip Knit Sweater'
+  ],
+  tshirts: [
+    'Men\'s Crew Neck Pima Cotton T-shirt',
+    'Men\'s V-Neck Cotton Jersey T-shirt',
+    'Men\'s Lacoste LIVE Loose Fit T-shirt',
+    'Men\'s Striped Cotton T-shirt',
+    'Men\'s Graphic Print T-shirt',
+    'Men\'s Long Sleeve Pima T-shirt',
+    'Men\'s Classic Fit Crew Neck Tee',
+    'Men\'s Pocket T-shirt'
+  ],
+  trousers: [
+    'Men\'s Slim Fit Stretch Chinos',
+    'Men\'s Regular Fit Cotton Gabardine Pants',
+    'Men\'s Pleated Wool Trousers',
+    'Men\'s Cargo Pants',
+    'Men\'s Bermuda Shorts',
+    'Men\'s Tennis Shorts',
+    'Men\'s Jogger Pants',
+    'Men\'s Linen Blend Chinos'
+  ],
+  shirts: [
+    'Men\'s Regular Fit Oxford Cotton Shirt',
+    'Men\'s Slim Fit Poplin Shirt',
+    'Men\'s Linen Shirt',
+    'Men\'s Checked Cotton Shirt',
+    'Men\'s Denim Chambray Shirt',
+    'Men\'s Striped Poplin Shirt',
+    'Men\'s Classic Fit Button-Down Shirt',
+    'Men\'s Short Sleeve Linen Shirt'
+  ],
+  swimwear: [
+    'Men\'s Swimming Trunks',
+    'Men\'s Quick-Dry Swim Shorts',
+    'Men\'s Solid Color Swim Trunks',
+    'Men\'s Striped Swimming Trunks',
+    'Men\'s Long Swim Shorts',
+    'Men\'s Contrast Waistband Swim Shorts',
+    'Men\'s Printed Swim Trunks',
+    'Men\'s Classic Fit Swim Shorts'
+  ],
+  sportclothing: [
+    'Men\'s SPORT Technical Jersey T-shirt',
+    'Men\'s Tennis Performance Polo',
+    'Men\'s Golf Stretch Polo',
+    'Men\'s Training Shorts',
+    'Men\'s Athletic Tank Top',
+    'Men\'s Sport Leggings',
+    'Men\'s Running Jacket',
+    'Men\'s Compression T-shirt'
+  ],
+  underwear: [
+    'Men\'s Cotton Boxer Briefs 3-Pack',
+    'Men\'s Stretch Cotton Trunks',
+    'Men\'s Lounge Pants',
+    'Men\'s Sleep T-shirt',
+    'Men\'s Modal Boxer Briefs',
+    'Men\'s Cotton Jersey Robe',
+    'Men\'s Pajama Set',
+    'Men\'s Thermal Underwear Set'
+  ],
+  sneakers: [
+    'Men\'s Carnaby Evo Leather Sneakers',
+    'Men\'s Lerond Leather Sneakers',
+    'Men\'s Court-Master Sneakers',
+    'Men\'s Explorateur Classic Sneakers',
+    'Men\'s Chaymon Leather Sneakers',
+    'Men\'s Gripshot Canvas Sneakers',
+    'Men\'s Graduate Leather Sneakers',
+    'Men\'s L001 Mesh Sneakers'
+  ],
+  outdoor: [
+    'Men\'s Montbard Leather Boots',
+    'Men\'s Hiking Boots',
+    'Men\'s Chelsea Boots',
+    'Men\'s Desert Boots',
+    'Men\'s Waterproof Trail Shoes',
+    'Men\'s Outdoor Sandals',
+    'Men\'s Trekking Shoes',
+    'Men\'s All-Terrain Sneakers'
+  ],
+  performance: [
+    'Men\'s Court Performance Tennis Shoes',
+    'Men\'s AG-LT 21 Ultra Tennis Shoes',
+    'Men\'s Sport Running Shoes',
+    'Men\'s Training Shoes',
+    'Men\'s Tennis Court Shoes',
+    'Men\'s Indoor Court Sneakers',
+    'Men\'s Basketball Sneakers',
+    'Men\'s Cross-Training Shoes'
+  ],
+  sockshoes: [
+    'Men\'s Cotton Socks 3-Pack',
+    'Men\'s Sport Ankle Socks',
+    'Men\'s Crew Socks',
+    'Men\'s No-Show Socks 5-Pack',
+    'Men\'s Tennis Socks',
+    'Men\'s Wool Blend Socks',
+    'Men\'s Cushioned Athletic Socks',
+    'Men\'s Dress Socks 3-Pack'
+  ],
+  caps: [
+    'Men\'s Classic Gabardine Cap',
+    'Men\'s Crocodile Cap',
+    'Men\'s Sport Tennis Cap',
+    'Men\'s Snapback Cap',
+    'Men\'s Bucket Hat',
+    'Men\'s Visor',
+    'Men\'s Baseball Cap',
+    'Men\'s Golf Cap'
+  ],
+  beanies: [
+    'Men\'s Wool Beanie',
+    'Men\'s Ribbed Knit Beanie',
+    'Men\'s Cashmere Blend Beanie',
+    'Men\'s Sport Beanie',
+    'Men\'s Fleece-Lined Beanie',
+    'Men\'s Classic Knit Hat',
+    'Men\'s Pom-Pom Beanie',
+    'Men\'s Skull Cap'
+  ],
+  belts: [
+    'Men\'s Reversible Leather Belt',
+    'Men\'s Classic Leather Belt',
+    'Men\'s Woven Stretch Belt',
+    'Men\'s Canvas Belt',
+    'Men\'s Engraved Buckle Belt',
+    'Men\'s Braided Leather Belt',
+    'Men\'s Double-Ring Belt',
+    'Men\'s Crocodile Embossed Belt'
+  ],
+  watches: [
+    'Men\'s Lacoste.12.12 Watch',
+    'Men\'s Chronograph Watch',
+    'Men\'s Sport Watch',
+    'Men\'s Classic Analog Watch',
+    'Men\'s Silicone Strap Watch',
+    'Men\'s Stainless Steel Watch',
+    'Men\'s Leather Strap Watch',
+    'Men\'s Digital Sport Watch'
+  ],
+  home: [
+    'Cotton Bath Towel',
+    'Crocodile Beach Towel',
+    'Cotton Bathrobe',
+    'Bed Sheet Set',
+    'Decorative Pillow',
+    'Throw Blanket',
+    'Bath Mat',
+    'Hand Towel Set'
+  ],
+  sunglasses: [
+    'Men\'s Rectangular Sunglasses',
+    'Men\'s Aviator Sunglasses',
+    'Men\'s Polarized Sunglasses',
+    'Men\'s Sport Sunglasses',
+    'Men\'s Classic Wayfarers',
+    'Men\'s Round Frame Sunglasses',
+    'Men\'s Mirrored Sunglasses',
+    'Men\'s Wrap-Around Sunglasses'
+  ],
+  fragrance: [
+    'L\'HOMME LACOSTE Eau de Toilette',
+    'LACOSTE Pour Homme Eau de Toilette',
+    'LACOSTE Blanc Eau de Toilette',
+    'LACOSTE L.12.12 Blanc',
+    'LACOSTE L.12.12 Noir',
+    'LACOSTE Essential',
+    'LACOSTE Red',
+    'LACOSTE Match Point'
+  ],
+  iphonecases: [
+    'Crocodile iPhone 15 Case',
+    'Leather iPhone 14 Case',
+    'Silicone iPhone 13 Case',
+    'Clear iPhone Case',
+    'Card Holder iPhone Case',
+    'MagSafe Compatible Case',
+    'Embossed Logo iPhone Case',
+    'Sport Grip iPhone Case'
+  ],
+  socks: [
+    'Men\'s Cotton Sport Socks 3-Pack',
+    'Men\'s No-Show Socks 5-Pack',
+    'Men\'s Crew Socks',
+    'Men\'s Athletic Ankle Socks',
+    'Men\'s Dress Socks Set',
+    'Men\'s Wool Blend Socks',
+    'Men\'s Tennis Socks',
+    'Men\'s Cushioned Running Socks'
+  ]
+};
+
 Object.entries(CATALOG).forEach(([cat, catObj])=>{
   Object.keys(catObj.subs).forEach((sub, sidx)=>{
     for(let i=1;i<=8;i++){
-      const title = `${catObj.subs[sub].name} ${i}`;
+      const names = PRODUCT_NAMES[sub] || [];
+      const title = names[i-1] || `${catObj.subs[sub].name} ${i}`;
       pushProd(cat, sub, i+sidx*10, title);
     }
   });
