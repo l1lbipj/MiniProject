@@ -325,6 +325,27 @@ body {
     color: var(--lacoste-green);
 }
 
+.mega-col.mega-promo .promo-list{
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+}
+
+.mega-col.mega-promo .promo-link{
+    color: #4b5a50;
+    text-decoration: none;
+    font-size: 14px;
+    line-height: 1.45;
+    padding: 6px 0;
+    display: inline-block;
+    transition: color 0.18s ease, transform .12s ease;
+}
+
+.mega-col.mega-promo .promo-link:hover{
+    color: var(--lacoste-green);
+    transform: translateX(4px);
+}
+
 .mega-col.mega-main {
     border-right: 1px solid #e0e0e0;
     padding-right: 0

@@ -323,6 +323,7 @@ Object.entries(CATALOG).forEach(([cat, catObj])=>{
 const state = {
   category: null,
   sub: null,
+  promo: null,
   query: '',
   sort: 'relevance'
 };
@@ -375,6 +376,17 @@ function renderBreadcrumbs(){
   const parts = [
     `<a href="#/products">Products</a>`
   ];
+  if(state.promo){
+    const promoTitles = {
+      newin: "New Arrivals",
+      members: "Members' Exclusives",
+      bestsellers: "Bestsellers",
+      runway: "Fall-Winter 2025 Runway Collection"
+    };
+    parts.push(`<span>${promoTitles[state.promo] || state.promo}</span>`);
+    els.breadcrumbs.innerHTML = parts.join('');
+    return;
+  }
   if(state.category){
     parts.push(`<a href="#/products/${state.category}">${toTitle(state.category,'cat')}</a>`);
   }
@@ -391,8 +403,36 @@ function renderBreadcrumbs(){
   });
 }
 
+// Promo definitions: key -> filter function and optional title/desc
+const PROMOS = {
+  newin: {
+    title: "MEN'S NEW ARRIVALS",
+    desc: "Expert craftsmanship. Discover the new Lacoste men's collection and make style your signature.",
+    filter: (list) => list.slice(0, 24)
+  },
+  members: {
+    title: "CLUB LACOSTE MEMBERS' EXCLUSIVES",
+    desc: "Discover pieces available only to members of our loyalty programme.",
+    filter: (list) => list.filter(p => ['polo','tshirts','polos','tshirts'].some(k=>p.sub.includes('t'))).slice(0,24)
+  },
+  bestsellers: {
+    title: "MEN'S BESTSELLERS",
+    desc: "Some pieces naturally stand out. Get inspired with Lacoste men's Bestsellers.",
+    filter: (list) => list.slice().sort((a,b)=> b.price - a.price).slice(0,24)
+  },
+  runway: {
+    title: "FALL-WINTER 2025 RUNWAY COLLECTION",
+    desc: "Step into Lacoste Fall-Winter 2025, a refined collection inspired by off-court lifestyle.",
+    filter: (list) => list.filter(p => ['jackets','knitwear','swimwear','tshirts'].includes(p.sub)).slice(0,24)
+  }
+};
+
 function filterAndSort(){
   let list = PRODUCTS.slice();
+  // if promo is set, use promo filter first
+  if(state.promo && PROMOS[state.promo]){
+    list = PROMOS[state.promo].filter(PRODUCTS);
+  }
   if(state.category){
     list = list.filter(p=>p.category===state.category);
   }
@@ -472,12 +512,18 @@ function bindMegaMenu(){
   }, true);
 
   const attachExploreLinks = () => {
-    megaNavItem.querySelectorAll('.mega-main a').forEach(a=>{
+    // attach to both main explore links and promo links
+    megaNavItem.querySelectorAll('.mega-main a, .mega-promo a').forEach(a=>{
       a.addEventListener('click', (e)=>{
         e.preventDefault();
         e.stopPropagation();
-        const href = a.getAttribute('href') || '#/products';
-        location.hash = href;
+        const promo = a.getAttribute('data-promo');
+        if(promo){
+          location.hash = '#/products/promo/' + promo;
+        } else {
+          const href = a.getAttribute('href') || '#/products';
+          location.hash = href;
+        }
         closeMegaMenu();
       });
     });
