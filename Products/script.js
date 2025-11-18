@@ -42,8 +42,16 @@ const CATALOG = {
 };
 
 // seed sample products
-// seed sample products
 const PRODUCTS = [];
+
+// Color palette for product variants
+const COLOR_PALETTE = ['black','white','grey','brown','beige','green','blue','pink'];
+function pickColors(idx){
+  const count = 2 + (idx%3); // 2-4 colors per product
+  const start = idx % (COLOR_PALETTE.length - count);
+  return COLOR_PALETTE.slice(start, start+count);
+}
+
 const price = () => { // generate realistic VND price
   const min = 150000, max = 2500000; // 150k - 2.5m VND
   const step = 10000; // round to 10k
@@ -302,6 +310,8 @@ const img = (cat, sub, idx) => {
 };
 
 function pushProd(cat, sub, idx, title){
+  const collections = ['sport','classic','lifestyle'];
+  const genders = ['men','women','unisex'];
   PRODUCTS.push({
     id: `${cat}-${sub}-${idx}`,
     category: cat,
@@ -310,7 +320,9 @@ function pushProd(cat, sub, idx, title){
     price: price(),
     brand: ['Lacoste'][idx%5],
     image: img(cat, sub, idx),
-    colors: pickColors(idx)
+    colors: pickColors(idx),
+    collection: collections[idx % collections.length],
+    gender: genders[idx % genders.length]
   });
 }
 
@@ -455,6 +467,18 @@ function filterAndSort(){
     const q = state.query.toLowerCase();
     list = list.filter(p=> p.title.toLowerCase().includes(q) || p.brand.toLowerCase().includes(q));
   }
+  // Apply color filters
+  if(state.filters.colors.length > 0){
+    list = list.filter(p => state.filters.colors.some(c => p.colors.includes(c)));
+  }
+  // Apply collection filters
+  if(state.filters.collection.length > 0){
+    list = list.filter(p => state.filters.collection.includes(p.collection));
+  }
+  // Apply gender filters
+  if(state.filters.genders.length > 0){
+    list = list.filter(p => state.filters.genders.includes(p.gender));
+  }
   switch(state.sort){
     case 'priceAsc': list.sort((a,b)=>a.price-b.price); break;
     case 'priceDesc': list.sort((a,b)=>b.price-a.price); break;
@@ -465,10 +489,28 @@ function filterAndSort(){
   return list;
 }
 
+// Calculate filter counts for UI
+function calculateFilterCounts(){
+  let baseList = PRODUCTS.slice();
+  if(state.promo && PROMOS[state.promo]){
+    baseList = PROMOS[state.promo].filter(PRODUCTS);
+  }
+  if(state.category) baseList = baseList.filter(p=>p.category===state.category);
+  if(state.sub) baseList = baseList.filter(p=>p.sub===state.sub);
+  
+  const counts = { colors: {}, collection: {}, genders: {} };
+  baseList.forEach(p => {
+    p.colors.forEach(c => counts.colors[c] = (counts.colors[c] || 0) + 1);
+    counts.collection[p.collection] = (counts.collection[p.collection] || 0) + 1;
+    counts.genders[p.gender] = (counts.genders[p.gender] || 0) + 1;
+  });
+  return counts;
+}
+
 function productCard(p){
   const visible = p.colors.slice(0,3);
   const more = p.colors.length - visible.length;
-  const swatchesHtml = visible.map(c=> `<span class="swatch-mini" style="background:${colorToCss(c)}"></span>`).join('');
+  const swatchesHtml = visible.map(c=> `<span class="swatch-mini" style="background:${colorToCss(c)}${c==='white'?';border:1px solid #ddd':''}"></span>`).join('');
   const moreHtml = more>0 ? `<span class="more">+ ${more}</span>` : '';
   return `
     <article class="card">
@@ -477,10 +519,8 @@ function productCard(p){
         <div class="info-left">
           <a class="title" href="#/products/${p.category}/${p.sub}/${p.id}" data-view="${p.id}">${p.title}</a>
           <div class="swatch-row">
-            <span class="swatch-mini" style="background:#111"></span>
-            <span class="swatch-mini" style="background:#7d8180"></span>
-            <span class="swatch-mini" style="background:#fff;border:1px solid #ddd"></span>
-            <span class="more">+ 6</span>
+            ${swatchesHtml}
+            ${moreHtml}
           </div>
         </div>
         <div class="info-right">
@@ -614,6 +654,17 @@ function bindControls(){
   if(els.search) els.search.addEventListener('input', ()=>{ state.query = els.search.value.trim(); renderGrid(); });
   if(els.sort) els.sort.addEventListener('change', ()=>{ state.sort = els.sort.value; renderGrid(); });
 
+  // Clear all filters button
+  const clearBtn = document.getElementById('clearFilters');
+  if(clearBtn){
+    clearBtn.addEventListener('click', ()=>{
+      state.filters = { colors: [], collection: [], genders: [] };
+      document.querySelectorAll('.swatch.active, .filter-option.active').forEach(el => el.classList.remove('active'));
+      renderGrid();
+      toast('✓ Filters cleared');
+    });
+  }
+
   // filter sidebar interactions
   document.querySelectorAll('.swatch[data-color]').forEach(el=>{
     el.addEventListener('click', ()=>{
@@ -633,6 +684,19 @@ function bindControls(){
         el.classList.remove('active');
       } else {
         state.filters.collection.push(col);
+        el.classList.add('active');
+      }
+      renderGrid();
+    });
+  });
+  document.querySelectorAll('.filter-option[data-gender]').forEach(el=>{
+    el.addEventListener('click', ()=>{
+      const gender = el.getAttribute('data-gender');
+      if(state.filters.genders.includes(gender)){
+        state.filters.genders = state.filters.genders.filter(g=>g!==gender);
+        el.classList.remove('active');
+      } else {
+        state.filters.genders.push(gender);
         el.classList.add('active');
       }
       renderGrid();

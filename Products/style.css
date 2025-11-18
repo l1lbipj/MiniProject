@@ -55,6 +55,7 @@ body {
     overflow: auto;
 }
 .filter-inner{ display:flex; flex-direction:column; gap:14px }
+.filter-header{ display:flex; justify-content:space-between; gap:8px; margin-bottom:4px }
 .hide-filters{
     background: transparent;
     color: var(--lacoste-cream);
@@ -63,11 +64,31 @@ body {
     border-radius: 4px;
     cursor: pointer;
     font-weight:600;
+    font-size: 11px;
+    letter-spacing: 0.5px;
 }
-.filter-group h4{ color: #9fb49a; margin:8px 0 }
-.filter-option{ padding:8px 0; color:#d9e6dd }
+.clear-filters{
+    background: rgba(255,255,255,0.05);
+    color: #ff6b6b;
+    border: 1px solid rgba(255,107,107,0.2);
+    padding: 10px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight:600;
+    font-size: 11px;
+    letter-spacing: 0.5px;
+    transition: all 0.2s ease;
+}
+.clear-filters:hover{
+    background: rgba(255,107,107,0.1);
+    border-color: rgba(255,107,107,0.4);
+}
+.filter-group h4{ color: #9fb49a; margin:8px 0; font-size:12px; letter-spacing:1px }
+.filter-option{ padding:8px 0; color:#d9e6dd; cursor:pointer; transition: all 0.2s ease }
+.filter-option:hover{ color:#fff; padding-left:4px }
 .swatches{ display:flex; flex-wrap:wrap; gap:8px; padding-top:8px }
-.swatch{ width:22px; height:22px; border-radius:3px; border:1px solid rgba(255,255,255,0.06) }
+.swatch{ width:22px; height:22px; border-radius:3px; border:1px solid rgba(255,255,255,0.06); cursor:pointer; transition: all 0.2s ease }
+.swatch:hover{ transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.3) }
 .swatch.black{ background:#000 }
 .swatch.grey{ background:#7d8180 }
 .swatch.white{ background:#fff; border:1px solid #ddd }
@@ -96,9 +117,8 @@ body {
 .card .thumb img{ max-width:100%; max-height:76%; object-fit:contain }
 
 /* Active states for filters */
-.swatch.active{ outline: 2px solid rgba(255,255,255,0.12); transform: translateY(-1px) }
-.filter-option{ cursor:pointer }
-.filter-option.active{ background: rgba(255,255,255,0.02); border-radius:6px; padding:6px 8px }
+.swatch.active{ outline: 3px solid rgba(255,255,255,0.3); outline-offset: 2px; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.4) }
+.filter-option.active{ background: rgba(255,255,255,0.08); border-radius:6px; padding:8px 12px; color:#fff; font-weight:600 }
 
 /* Hero banner for promos */
 .hero-banner{ display:none; background:#111; color:#fff; padding:36px 28px; border-radius:8px; margin-bottom:18px }
