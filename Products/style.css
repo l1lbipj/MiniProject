@@ -997,6 +997,27 @@ body {
     background: rgba(0, 85, 48, 0.05);
     color: #4e5f56;
     font-size: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+}
+
+.cart-empty p {
+    margin: 0;
+    font-size: 16px;
+}
+
+.cart-empty .btn {
+    margin-top: 8px;
+}
+
+/* Standalone cart container */
+.cart-standalone {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px 0;
 }
 
 .cart-empty::before {

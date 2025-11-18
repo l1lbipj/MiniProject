@@ -818,16 +818,12 @@ function closeProductModal(){
 function currency(n){
   return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND', maximumFractionDigits: 0 }).format(n);
 }
-function renderCart(){
+function renderCart(container){
   const cart = getCart();
-  // Update page title/breadcrumbs so previous category doesn't persist
-  if (els.resultTitle) els.resultTitle.textContent = 'Shopping Cart';
-  if (els.resultCount) els.resultCount.textContent = '';
-  // show plain Cart label (remove clickable Products breadcrumb to avoid confusion)
-  if (els.breadcrumbs) els.breadcrumbs.textContent = 'Cart';
+  const targetEl = container || els.grid;
 
   if(cart.length===0){ 
-    els.grid.innerHTML = '<div class="cart"><div class="cart-header"><h2>🛒 Shopping Cart</h2></div><div class="cart-empty">Your cart is empty</div></div>'; 
+    targetEl.innerHTML = '<div class="cart"><div class="cart-header"><h2>🛒 Shopping Cart</h2></div><div class="cart-empty"><p>Your cart is empty</p><a href="#/products" class="btn">Continue Shopping</a></div></div>'; 
     return; 
   }
   const rows = cart.map(ci=>{
@@ -858,7 +854,7 @@ function renderCart(){
   const discount = subtotal > 200000 ? subtotal*0.05 : 0;
   const total = subtotal + shipping - discount;
 
-  els.grid.innerHTML = `
+  targetEl.innerHTML = `
     <div class="cart">
       <div class="cart-header">
         <h2>🛒 Shopping Cart</h2>
@@ -884,12 +880,12 @@ function renderCart(){
   `;
 
   // bind actions
-  els.grid.querySelectorAll('[data-inc]').forEach(b=> b.addEventListener('click', ()=> changeQty(b.getAttribute('data-inc'), 1)) );
-  els.grid.querySelectorAll('[data-dec]').forEach(b=> b.addEventListener('click', ()=> changeQty(b.getAttribute('data-dec'), -1)) );
-  els.grid.querySelectorAll('[data-del]').forEach(b=> b.addEventListener('click', ()=> removeFromCart(b.getAttribute('data-del')) ));
-  els.grid.querySelectorAll('[data-qty]').forEach(inp=> inp.addEventListener('change', ()=> setQty(inp.getAttribute('data-qty'), Number(inp.value)||1)) );
+  targetEl.querySelectorAll('[data-inc]').forEach(b=> b.addEventListener('click', ()=> changeQty(b.getAttribute('data-inc'), 1)) );
+  targetEl.querySelectorAll('[data-dec]').forEach(b=> b.addEventListener('click', ()=> changeQty(b.getAttribute('data-dec'), -1)) );
+  targetEl.querySelectorAll('[data-del]').forEach(b=> b.addEventListener('click', ()=> removeFromCart(b.getAttribute('data-del')) ));
+  targetEl.querySelectorAll('[data-qty]').forEach(inp=> inp.addEventListener('change', ()=> setQty(inp.getAttribute('data-qty'), Number(inp.value)||1)) );
   const clear = document.getElementById('clearCart');
-  if(clear) clear.addEventListener('click', ()=> { setCart([]); renderCart(); toast('✓ Cart cleared'); });
+  if(clear) clear.addEventListener('click', ()=> { setCart([]); renderCart(container); toast('✓ Cart cleared'); });
   const checkout = document.getElementById('checkoutBtn');
   if(checkout) checkout.addEventListener('click', ()=> toast('Checkout functionality coming soon')); 
 }
@@ -900,7 +896,8 @@ function setQty(id, qty){
   if(!item) return;
   item.qty = Math.max(1, Math.floor(qty));
   setCart(cart);
-  renderCart();
+  const cartContainer = document.getElementById('cartContainer');
+  renderCart(cartContainer);
 }
 function changeQty(id, delta){
   const cart = getCart();
@@ -912,54 +909,45 @@ function changeQty(id, delta){
     if(idx>-1) cart.splice(idx,1);
   }
   setCart(cart);
-  renderCart();
+  const cartContainer = document.getElementById('cartContainer');
+  renderCart(cartContainer);
 }
 function removeFromCart(id){
   const cart = getCart().filter(i=>i.id!==id);
   setCart(cart);
-  renderCart();
+  const cartContainer = document.getElementById('cartContainer');
+  renderCart(cartContainer);
   toast('✓ Item removed');
 }
 
 function route(){
   const h = location.hash.replace(/^#\//,'');
   const isCart = h.startsWith('cart');
+  const productsWrapper = document.querySelector('.products-wrapper');
+  const main = document.querySelector('.main.container');
+  
   if(isCart){
-    // add a body class so CSS can hide controls on the cart view
+    // Hide the products wrapper (filters + grid)
+    if(productsWrapper) productsWrapper.style.display = 'none';
+    // Create standalone cart container if it doesn't exist
+    let cartContainer = document.getElementById('cartContainer');
+    if(!cartContainer){
+      cartContainer = document.createElement('div');
+      cartContainer.id = 'cartContainer';
+      cartContainer.className = 'cart-standalone';
+      main.appendChild(cartContainer);
+    }
+    cartContainer.style.display = 'block';
     document.body.classList.add('view-cart');
-    // remove the two sort options that shouldn't appear in the cart view
-    if(els.sort && originalSortHTML === null){
-      originalSortHTML = els.sort.innerHTML;
-    }
-    if(els.sort && originalSortHTML !== null){
-      // remove 'priceDesc' (Price: High to Low) and 'nameAsc' (Name: A-Z)
-      ['priceDesc','nameAsc'].forEach(v=>{
-        const o = els.sort.querySelector(`option[value="${v}"]`);
-        if(o) o.remove();
-      });
-      // ensure selected value is valid
-      if(!els.sort.querySelector(`option[value="${els.sort.value}"]`)) els.sort.value = 'relevance';
-    }
-    // hide the entire sort control in cart view (store previous display for restore)
-    if(els.sort && originalSortDisplay === null){
-      originalSortDisplay = els.sort.style.display || '';
-      els.sort.style.display = 'none';
-    }
-    els.breadcrumbs.textContent = '';
-    renderCart();
+    renderCart(cartContainer);
     return;
   } else {
+    // Show products wrapper again
+    if(productsWrapper) productsWrapper.style.display = 'grid';
+    // Hide cart container
+    const cartContainer = document.getElementById('cartContainer');
+    if(cartContainer) cartContainer.style.display = 'none';
     document.body.classList.remove('view-cart');
-    // restore full sort options when leaving cart
-    if(els.sort && originalSortHTML !== null){
-      els.sort.innerHTML = originalSortHTML;
-      originalSortHTML = null;
-    }
-    // restore sort display property
-    if(els.sort && originalSortDisplay !== null){
-      els.sort.style.display = originalSortDisplay;
-      originalSortDisplay = null;
-    }
   }
   initFromHash();
 }
