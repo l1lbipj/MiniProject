@@ -853,10 +853,23 @@ function bindMegaMenu(){
 
   if(navLink){
     navLink.addEventListener('click', (e) => {
-      if(!isDesktop()) { closeMegaMenu(); return; }
       e.preventDefault();
       e.stopPropagation();
-      megaNavItem.classList.toggle('open');
+      if(!isDesktop()) { 
+        // On mobile, navigate to products page
+        location.hash = '#/products';
+        closeMegaMenu();
+        return;
+      }
+      // On desktop, check if mega menu is already open
+      if(megaNavItem.classList.contains('open')){
+        // If open, navigate to all products
+        location.hash = '#/products';
+        closeMegaMenu();
+      } else {
+        // If closed, open the mega menu
+        megaNavItem.classList.add('open');
+      }
     });
   }
 
