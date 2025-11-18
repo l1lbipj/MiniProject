@@ -45,7 +45,7 @@ const CATALOG = {
 const PRODUCTS = [];
 
 // Color palette for product variants
-const COLOR_PALETTE = ['black','white','grey','brown','beige','green','blue','pink'];
+const COLOR_PALETTE = ['black','white','grey','brown','beige','green','blue','pink','red','navy','yellow','orange'];
 function pickColors(idx){
   const count = 2 + (idx%3); // 2-4 colors per product
   const start = idx % (COLOR_PALETTE.length - count);
@@ -310,7 +310,7 @@ const img = (cat, sub, idx) => {
 };
 
 function pushProd(cat, sub, idx, title){
-  const collections = ['sport','classic','lifestyle'];
+  const collections = ['sport','classic','lifestyle','live','golf','tennis'];
   const genders = ['men','women','unisex'];
   PRODUCTS.push({
     id: `${cat}-${sub}-${idx}`,
@@ -790,6 +790,10 @@ function colorToCss(key){
     case 'green': return 'var(--lacoste-green)';
     case 'blue': return '#2b6fb3';
     case 'pink': return '#d66fa6';
+    case 'red': return '#c41e3a';
+    case 'navy': return '#001f3f';
+    case 'yellow': return '#ffd700';
+    case 'orange': return '#ff8c00';
     default: return '#ccc';
   }
 }
