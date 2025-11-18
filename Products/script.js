@@ -318,7 +318,6 @@ function pushProd(cat, sub, idx, title){
     sub,
     title,
     price: price(),
-    brand: ['Lacoste'][idx%5],
     image: img(cat, sub, idx),
     colors: pickColors(idx),
     collection: collections[idx % collections.length],
@@ -465,7 +464,7 @@ function filterAndSort(){
   }
   if(state.query){
     const q = state.query.toLowerCase();
-    list = list.filter(p=> p.title.toLowerCase().includes(q) || p.brand.toLowerCase().includes(q));
+    list = list.filter(p=> p.title.toLowerCase().includes(q));
   }
   // Apply color filters
   if(state.filters.colors.length > 0){
@@ -529,7 +528,6 @@ function productCard(p){
           </div>
         </div>
         <div class="info-right">
-          <div class="brand">${p.brand}</div>
           <div class="price">${currency(p.price)}</div>
         </div>
       </div>
@@ -829,7 +827,6 @@ function openProductModal(id){
   document.getElementById('modalImage').src = p.image;
   document.getElementById('modalImage').alt = p.title;
   document.getElementById('modalTitle').textContent = p.title;
-  document.getElementById('modalBrand').textContent = `Brand: ${p.brand}`;
   document.getElementById('modalPrice').textContent = currency(p.price);
   document.getElementById('modalDesc').textContent = `Premium quality product from ${CATALOG[p.category].name} - ${CATALOG[p.category].subs[p.sub].name} collection.`;
   const addBtn = document.getElementById('modalAdd');
@@ -867,7 +864,7 @@ function renderCart(container){
         <img class="ci-thumb" src="${p.image}" alt="${p.title}" />
         <div class="ci-info">
           <div class="ci-title">${p.title}</div>
-          <div class="ci-meta">${p.brand} • ${CATALOG[p.category].name} / ${CATALOG[p.category].subs[p.sub].name}</div>
+          <div class="ci-meta">${CATALOG[p.category].name} / ${CATALOG[p.category].subs[p.sub].name}</div>
         </div>
         <div class="ci-price">${currency(p.price)}</div>
         <div class="ci-qty">
