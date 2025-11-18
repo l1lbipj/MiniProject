@@ -77,6 +77,10 @@ const els = {
   resultCount: document.getElementById('resultCount')
 };
 
+// keep original sort HTML so we can restore it when leaving cart view
+let originalSortHTML = null;
+let originalSortDisplay = null;
+
 // Routing-like helpers
 function setCategory(cat, sub=null){
   state.category = cat; state.sub = sub; renderUI();
@@ -316,7 +320,8 @@ function renderCart(){
   // Update page title/breadcrumbs so previous category doesn't persist
   if (els.resultTitle) els.resultTitle.textContent = 'Shopping Cart';
   if (els.resultCount) els.resultCount.textContent = '';
-  if (els.breadcrumbs) els.breadcrumbs.innerHTML = `<a href="#/products">Products</a> <span>Cart</span>`;
+  // show plain Cart label (remove clickable Products breadcrumb to avoid confusion)
+  if (els.breadcrumbs) els.breadcrumbs.textContent = 'Cart';
 
   if(cart.length===0){ 
     els.grid.innerHTML = '<div class="cart"><div class="cart-header"><h2>🛒 Shopping Cart</h2></div><div class="cart-empty">Your cart is empty</div></div>'; 
@@ -415,7 +420,44 @@ function removeFromCart(id){
 
 function route(){
   const h = location.hash.replace(/^#\//,'');
-  if(h.startsWith('cart')){ els.breadcrumbs.textContent = ''; renderCart(); return; }
+  const isCart = h.startsWith('cart');
+  if(isCart){
+    // add a body class so CSS can hide controls on the cart view
+    document.body.classList.add('view-cart');
+    // remove the two sort options that shouldn't appear in the cart view
+    if(els.sort && originalSortHTML === null){
+      originalSortHTML = els.sort.innerHTML;
+    }
+    if(els.sort && originalSortHTML !== null){
+      // remove 'priceDesc' (Price: High to Low) and 'nameAsc' (Name: A-Z)
+      ['priceDesc','nameAsc'].forEach(v=>{
+        const o = els.sort.querySelector(`option[value="${v}"]`);
+        if(o) o.remove();
+      });
+      // ensure selected value is valid
+      if(!els.sort.querySelector(`option[value="${els.sort.value}"]`)) els.sort.value = 'relevance';
+    }
+    // hide the entire sort control in cart view (store previous display for restore)
+    if(els.sort && originalSortDisplay === null){
+      originalSortDisplay = els.sort.style.display || '';
+      els.sort.style.display = 'none';
+    }
+    els.breadcrumbs.textContent = '';
+    renderCart();
+    return;
+  } else {
+    document.body.classList.remove('view-cart');
+    // restore full sort options when leaving cart
+    if(els.sort && originalSortHTML !== null){
+      els.sort.innerHTML = originalSortHTML;
+      originalSortHTML = null;
+    }
+    // restore sort display property
+    if(els.sort && originalSortDisplay !== null){
+      els.sort.style.display = originalSortDisplay;
+      originalSortDisplay = null;
+    }
+  }
   initFromHash();
 }
 

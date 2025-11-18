@@ -928,3 +928,6 @@ body {
         transform: translateX(-50%) translateY(0)
     }
 }
+
+/* Hide product controls (search / sort) when viewing cart */
+/* (Previously hid controls on cart; removed so we can selectively adjust options via JS) */
