@@ -298,6 +298,33 @@ body {
     transform: translateX(2px);
 }
 
+.mega-col.mega-promo {
+    border-right: 1px solid #e0e0e0;
+    padding-right: 0;
+    min-width: 250px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.mega-col.mega-promo h4 {
+    margin-bottom: 0;
+}
+
+.mega-col.mega-promo p {
+    margin: 0;
+    padding: 0;
+    color: #4b5a50;
+    font-size: 14px;
+    line-height: 1.55;
+    transition: color 0.2s ease;
+    cursor: pointer;
+}
+
+.mega-col.mega-promo p:hover {
+    color: var(--lacoste-green);
+}
+
 .mega-col.mega-main {
     border-right: 1px solid #e0e0e0;
     padding-right: 0
