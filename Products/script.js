@@ -344,7 +344,7 @@ const state = {
 };
 
 // UI-applied filters
-state.filters = { colors: [], collection: [], genders: [] };
+state.filters = { colors: [], collection: [], genders: [], priceRange: null };
 
 const els = {
   breadcrumbs: document.getElementById('breadcrumbs'),
@@ -478,6 +478,11 @@ function filterAndSort(){
   // Apply gender filters
   if(state.filters.genders.length > 0){
     list = list.filter(p => state.filters.genders.includes(p.gender));
+  }
+  // Apply price range filter
+  if(state.filters.priceRange){
+    const [min, max] = state.filters.priceRange.split('-').map(Number);
+    list = list.filter(p => p.price >= min && p.price <= max);
   }
   switch(state.sort){
     case 'priceAsc': list.sort((a,b)=>a.price-b.price); break;
@@ -658,12 +663,42 @@ function bindControls(){
   const clearBtn = document.getElementById('clearFilters');
   if(clearBtn){
     clearBtn.addEventListener('click', ()=>{
-      state.filters = { colors: [], collection: [], genders: [] };
+      state.filters = { colors: [], collection: [], genders: [], priceRange: null };
+      state.sort = 'relevance';
       document.querySelectorAll('.swatch.active, .filter-option.active').forEach(el => el.classList.remove('active'));
+      if(els.sort) els.sort.value = 'relevance';
       renderGrid();
       toast('✓ Filters cleared');
     });
   }
+
+  // Sort by filter options
+  document.querySelectorAll('.filter-option[data-sort]').forEach(el=>{
+    el.addEventListener('click', ()=>{
+      const sortValue = el.getAttribute('data-sort');
+      state.sort = sortValue;
+      if(els.sort) els.sort.value = sortValue;
+      document.querySelectorAll('.filter-option[data-sort]').forEach(opt => opt.classList.remove('active'));
+      el.classList.add('active');
+      renderGrid();
+    });
+  });
+
+  // Price range filter
+  document.querySelectorAll('.filter-option[data-price]').forEach(el=>{
+    el.addEventListener('click', ()=>{
+      const priceRange = el.getAttribute('data-price');
+      if(state.filters.priceRange === priceRange){
+        state.filters.priceRange = null;
+        el.classList.remove('active');
+      } else {
+        document.querySelectorAll('.filter-option[data-price]').forEach(opt => opt.classList.remove('active'));
+        state.filters.priceRange = priceRange;
+        el.classList.add('active');
+      }
+      renderGrid();
+    });
+  });
 
   // filter sidebar interactions
   document.querySelectorAll('.swatch[data-color]').forEach(el=>{

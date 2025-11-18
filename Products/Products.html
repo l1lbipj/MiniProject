@@ -113,9 +113,19 @@
           </div>
           <div class="filter-group">
             <h4>SORT BY</h4>
-            <div class="filter-option">Our selection</div>
-            <div class="filter-option">Name (A-Z)</div>
-            <div class="filter-option">Name (Z-A)</div>
+            <div class="filter-option" data-sort="relevance">Our selection</div>
+            <div class="filter-option" data-sort="nameAsc">Name (A-Z)</div>
+            <div class="filter-option" data-sort="nameDesc">Name (Z-A)</div>
+            <div class="filter-option" data-sort="priceAsc">Price: Low to High</div>
+            <div class="filter-option" data-sort="priceDesc">Price: High to Low</div>
+          </div>
+          <div class="filter-group" data-filter-group="price">
+            <h4>PRICE RANGE</h4>
+            <div class="filter-option" data-price="0-500000">Under 500.000₫</div>
+            <div class="filter-option" data-price="500000-1000000">500.000₫ - 1.000.000₫</div>
+            <div class="filter-option" data-price="1000000-1500000">1.000.000₫ - 1.500.000₫</div>
+            <div class="filter-option" data-price="1500000-2000000">1.500.000₫ - 2.000.000₫</div>
+            <div class="filter-option" data-price="2000000-999999999">Above 2.000.000₫</div>
           </div>
           <div class="filter-group" data-filter-group="colour">
             <h4>COLOUR</h4>
