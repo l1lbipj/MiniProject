@@ -312,16 +312,24 @@ const img = (cat, sub, idx) => {
 function pushProd(cat, sub, idx, title){
   const collections = ['sport','classic','lifestyle','live','golf','tennis'];
   const genders = ['men','women','unisex'];
+  const gender = genders[idx % genders.length];
+  
+  // Replace Men's with Women's for women products
+  let finalTitle = title;
+  if(gender === 'women' && title.includes('Men\'s')){
+    finalTitle = title.replace('Men\'s', 'Women\'s');
+  }
+  
   PRODUCTS.push({
     id: `${cat}-${sub}-${idx}`,
     category: cat,
     sub,
-    title,
+    title: finalTitle,
     price: price(),
     image: img(cat, sub, idx),
     colors: pickColors(idx),
     collection: collections[idx % collections.length],
-    gender: genders[idx % genders.length]
+    gender: gender
   });
 }
 
