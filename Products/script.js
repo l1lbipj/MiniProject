@@ -657,7 +657,6 @@ function bindMegaMenu(){
 
 function bindControls(){
   if(els.search) els.search.addEventListener('input', ()=>{ state.query = els.search.value.trim(); renderGrid(); });
-  if(els.sort) els.sort.addEventListener('change', ()=>{ state.sort = els.sort.value; renderGrid(); });
 
   // Clear all filters button
   const clearBtn = document.getElementById('clearFilters');
@@ -666,7 +665,6 @@ function bindControls(){
       state.filters = { colors: [], collection: [], genders: [], priceRange: null };
       state.sort = 'relevance';
       document.querySelectorAll('.swatch.active, .filter-option.active').forEach(el => el.classList.remove('active'));
-      if(els.sort) els.sort.value = 'relevance';
       renderGrid();
       toast('✓ Filters cleared');
     });
@@ -677,7 +675,6 @@ function bindControls(){
     el.addEventListener('click', ()=>{
       const sortValue = el.getAttribute('data-sort');
       state.sort = sortValue;
-      if(els.sort) els.sort.value = sortValue;
       document.querySelectorAll('.filter-option[data-sort]').forEach(opt => opt.classList.remove('active'));
       el.classList.add('active');
       renderGrid();
