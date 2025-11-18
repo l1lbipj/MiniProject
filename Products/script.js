@@ -42,6 +42,7 @@ const CATALOG = {
 };
 
 // seed sample products
+// seed sample products
 const PRODUCTS = [];
 const price = () => { // generate realistic VND price
   const min = 150000, max = 2500000; // 150k - 2.5m VND
@@ -50,6 +51,7 @@ const price = () => { // generate realistic VND price
   return raw;
 };
 
+// Real product images from Unsplash (clothing, shoes, accessories)
 // Real product images from Unsplash (clothing, shoes, accessories)
 const lacosteImages = {
   sweatshirts: [
@@ -306,8 +308,9 @@ function pushProd(cat, sub, idx, title){
     sub,
     title,
     price: price(),
-    brand: ['Nike','Adidas','Puma','Uniqlo','Zara'][idx%5],
-    image: img(cat, sub, idx)
+    brand: ['Lacoste'][idx%5],
+    image: img(cat, sub, idx),
+    colors: pickColors(idx)
   });
 }
 
@@ -327,6 +330,9 @@ const state = {
   query: '',
   sort: 'relevance'
 };
+
+// UI-applied filters
+state.filters = { colors: [], collection: [], genders: [] };
 
 const els = {
   breadcrumbs: document.getElementById('breadcrumbs'),
@@ -460,19 +466,44 @@ function filterAndSort(){
 }
 
 function productCard(p){
+  const visible = p.colors.slice(0,3);
+  const more = p.colors.length - visible.length;
+  const swatchesHtml = visible.map(c=> `<span class="swatch-mini" style="background:${colorToCss(c)}"></span>`).join('');
+  const moreHtml = more>0 ? `<span class="more">+ ${more}</span>` : '';
   return `
     <article class="card">
       <a class="thumb" href="#/products/${p.category}/${p.sub}/${p.id}" data-view="${p.id}"><img src="${p.image}" alt="${p.title}"></a>
-      <div class="body">
-        <h3 class="title"><a href="#/products/${p.category}/${p.sub}/${p.id}" data-view="${p.id}" style="color:inherit;text-decoration:none">${p.title}</a></h3>
-        <div class="meta"><span>${p.brand}</span><span class="price">${currency(p.price)}</span></div>
-        <div class="actions">
-          <button class="btn" data-add="${p.id}">Add to Cart</button>
-          <button class="btn secondary" data-view="${p.id}">Details</button>
+      <div class="info-bar">
+        <div class="info-left">
+          <a class="title" href="#/products/${p.category}/${p.sub}/${p.id}" data-view="${p.id}">${p.title}</a>
+          <div class="swatch-row">
+            <span class="swatch-mini" style="background:#111"></span>
+            <span class="swatch-mini" style="background:#7d8180"></span>
+            <span class="swatch-mini" style="background:#fff;border:1px solid #ddd"></span>
+            <span class="more">+ 6</span>
+          </div>
+        </div>
+        <div class="info-right">
+          <div class="brand">${p.brand}</div>
+          <div class="price">${currency(p.price)}</div>
         </div>
       </div>
     </article>
   `;
+}
+
+function colorToCss(key){
+  switch(key){
+    case 'black': return '#111';
+    case 'grey': return '#7d8180';
+    case 'white': return '#fff';
+    case 'brown': return '#6b4f3b';
+    case 'beige': return '#d6c7b8';
+    case 'green': return 'var(--lacoste-green)';
+    case 'blue': return '#2b6fb3';
+    case 'pink': return '#d66fa6';
+    default: return '#ccc';
+  }
 }
 
 function renderGrid(){
@@ -582,6 +613,31 @@ function bindMegaMenu(){
 function bindControls(){
   if(els.search) els.search.addEventListener('input', ()=>{ state.query = els.search.value.trim(); renderGrid(); });
   if(els.sort) els.sort.addEventListener('change', ()=>{ state.sort = els.sort.value; renderGrid(); });
+
+  // filter sidebar interactions
+  document.querySelectorAll('.swatch[data-color]').forEach(el=>{
+    el.addEventListener('click', ()=>{
+      const color = el.getAttribute('data-color');
+      const idx = state.filters.colors.indexOf(color);
+      if(idx===-1) state.filters.colors.push(color);
+      else state.filters.colors.splice(idx,1);
+      el.classList.toggle('active');
+      renderGrid();
+    });
+  });
+  document.querySelectorAll('.filter-option[data-collection]').forEach(el=>{
+    el.addEventListener('click', ()=>{
+      const col = el.getAttribute('data-collection');
+      if(state.filters.collection.includes(col)){
+        state.filters.collection = state.filters.collection.filter(c=>c!==col);
+        el.classList.remove('active');
+      } else {
+        state.filters.collection.push(col);
+        el.classList.add('active');
+      }
+      renderGrid();
+    });
+  });
 
   els.grid.addEventListener('click', (e)=>{
     const add = e.target.closest('[data-add]');

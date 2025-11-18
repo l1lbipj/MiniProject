@@ -49,6 +49,10 @@ body {
     padding: 18px;
     border-radius: 8px;
     box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+    position: sticky;
+    top: 96px;
+    max-height: calc(100vh - 120px);
+    overflow: auto;
 }
 .filter-inner{ display:flex; flex-direction:column; gap:14px }
 .hide-filters{
@@ -72,6 +76,29 @@ body {
 .swatch.green{ background:var(--lacoste-green) }
 .swatch.blue{ background:#2b6fb3 }
 .swatch.pink{ background:#d66fa6 }
+
+/* size grid inside filters (matches sample) */
+.size-grid{ display:grid; grid-template-columns: repeat(3, 1fr); gap:12px; margin-top:12px }
+.size-box{ border:1px solid rgba(255,255,255,0.06); padding:18px 8px; text-align:center; border-radius:6px; color:#dfe9e2; font-weight:600 }
+.size-box.big{ grid-column: span 3; text-transform:uppercase }
+
+/* Black info bar under product image */
+.card .info-bar{ background:#111; color:#fff; display:flex; align-items:center; justify-content:space-between; padding:12px 14px; gap:12px }
+.card .info-left{ display:flex; flex-direction:column; gap:8px; min-width:0 }
+.card .info-left .title{ color:#fff; font-size:13px; margin:0; display:block; }
+.card .swatch-row{ display:flex; gap:8px; align-items:center }
+.card .swatch-row .swatch-mini{ width:12px; height:12px; border-radius:2px; border:1px solid rgba(255,255,255,0.06) }
+.card .swatch-row .more{ color:#c7c7c7; font-size:12px; margin-left:6px }
+.card .info-right{ text-align:right; min-width:70px }
+.card .info-right .price{ color:#fff; font-weight:600 }
+
+/* Make product image a bit larger to match sample */
+.card .thumb img{ max-width:100%; max-height:76%; object-fit:contain }
+
+/* Active states for filters */
+.swatch.active{ outline: 2px solid rgba(255,255,255,0.12); transform: translateY(-1px) }
+.filter-option{ cursor:pointer }
+.filter-option.active{ background: rgba(255,255,255,0.02); border-radius:6px; padding:6px 8px }
 
 /* Hero banner for promos */
 .hero-banner{ display:none; background:#111; color:#fff; padding:36px 28px; border-radius:8px; margin-bottom:18px }
@@ -445,12 +472,8 @@ body {
     color: #1a1a1a
 }
 
-/* Products layout */
-.products-wrapper {
-    display: flex;
-    flex-direction: column;
-    gap: 30px;
-}
+/* Products layout (kept as grid above for sidebar + main) */
+/* The two-column grid for `.products-wrapper` is defined earlier; avoid overwriting it here. */
 
 .products-main {
     background: #ffffff;
