@@ -45,10 +45,10 @@ const CATALOG = {
 const PRODUCTS = [];
 
 // Color palette for product variants
-const COLOR_PALETTE = ['black','white','grey','brown','beige','green','blue','pink','red','navy','yellow','orange'];
+const COLOR_PALETTE = ['black','white','green'];
 function pickColors(idx){
-  const count = 2 + (idx%3); // 2-4 colors per product
-  const start = idx % (COLOR_PALETTE.length - count);
+  const count = 2; // 2 colors per product
+  const start = idx % (COLOR_PALETTE.length - count + 1);
   return COLOR_PALETTE.slice(start, start+count);
 }
 
@@ -312,16 +312,24 @@ const img = (cat, sub, idx) => {
 function pushProd(cat, sub, idx, title){
   const collections = ['sport','classic','lifestyle','live','golf','tennis'];
   const genders = ['men','women','unisex'];
+  const gender = genders[idx % genders.length];
+  
+  // Replace Men's with Women's for women products
+  let finalTitle = title;
+  if(gender === 'women' && title.includes('Men\'s')){
+    finalTitle = title.replace('Men\'s', 'Women\'s');
+  }
+  
   PRODUCTS.push({
     id: `${cat}-${sub}-${idx}`,
     category: cat,
     sub,
-    title,
+    title: finalTitle,
     price: price(),
     image: img(cat, sub, idx),
     colors: pickColors(idx),
     collection: collections[idx % collections.length],
-    gender: genders[idx % genders.length]
+    gender: gender
   });
 }
 
@@ -571,7 +579,7 @@ const PRODUCT_NAMES = {
 
 Object.entries(CATALOG).forEach(([cat, catObj])=>{
   Object.keys(catObj.subs).forEach((sub, sidx)=>{
-    for(let i=1;i<=8;i++){
+    for(let i=1;i<=2;i++){
       const names = PRODUCT_NAMES[sub] || [];
       const title = names[i-1] || `${catObj.subs[sub].name} ${i}`;
       pushProd(cat, sub, i+sidx*10, title);
@@ -635,7 +643,13 @@ function initFromHash(){
     state.promo = null;
     if(sub && CATALOG[cat].subs[sub]) setCategory(cat, sub);
     else setCategory(cat, null);
-  } else renderUI();
+  } else {
+    // Show all products when just #/products
+    state.category = null;
+    state.sub = null;
+    state.promo = null;
+    renderUI();
+  }
 }
 
 // Rendering
@@ -847,10 +861,23 @@ function bindMegaMenu(){
 
   if(navLink){
     navLink.addEventListener('click', (e) => {
-      if(!isDesktop()) { closeMegaMenu(); return; }
       e.preventDefault();
       e.stopPropagation();
-      megaNavItem.classList.toggle('open');
+      if(!isDesktop()) { 
+        // On mobile, navigate to products page
+        location.hash = '#/products';
+        closeMegaMenu();
+        return;
+      }
+      // On desktop, check if mega menu is already open
+      if(megaNavItem.classList.contains('open')){
+        // If open, navigate to all products
+        location.hash = '#/products';
+        closeMegaMenu();
+      } else {
+        // If closed, open the mega menu
+        megaNavItem.classList.add('open');
+      }
     });
   }
 
@@ -1048,9 +1075,13 @@ function addToCart(id){
 }
 function updateCartCount(){
   const countEl = document.getElementById('cartCount');
-  if(!countEl) return;
+  if(!countEl) {
+    console.warn('Cart count element not found');
+    return;
+  }
   const total = getCart().reduce((s,i)=>s+i.qty,0);
   countEl.textContent = String(total);
+  countEl.style.display = total > 0 ? 'inline-block' : 'inline-block';
 }
 
 // Minimal toast
