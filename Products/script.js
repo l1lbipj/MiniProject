@@ -45,10 +45,10 @@ const CATALOG = {
 const PRODUCTS = [];
 
 // Color palette for product variants
-const COLOR_PALETTE = ['black','white','grey','brown','beige','green','blue','pink','red','navy','yellow','orange'];
+const COLOR_PALETTE = ['black','white','green'];
 function pickColors(idx){
-  const count = 2 + (idx%3); // 2-4 colors per product
-  const start = idx % (COLOR_PALETTE.length - count);
+  const count = 2; // 2 colors per product
+  const start = idx % (COLOR_PALETTE.length - count + 1);
   return COLOR_PALETTE.slice(start, start+count);
 }
 
@@ -579,7 +579,7 @@ const PRODUCT_NAMES = {
 
 Object.entries(CATALOG).forEach(([cat, catObj])=>{
   Object.keys(catObj.subs).forEach((sub, sidx)=>{
-    for(let i=1;i<=8;i++){
+    for(let i=1;i<=2;i++){
       const names = PRODUCT_NAMES[sub] || [];
       const title = names[i-1] || `${catObj.subs[sub].name} ${i}`;
       pushProd(cat, sub, i+sidx*10, title);
@@ -1075,9 +1075,13 @@ function addToCart(id){
 }
 function updateCartCount(){
   const countEl = document.getElementById('cartCount');
-  if(!countEl) return;
+  if(!countEl) {
+    console.warn('Cart count element not found');
+    return;
+  }
   const total = getCart().reduce((s,i)=>s+i.qty,0);
   countEl.textContent = String(total);
+  countEl.style.display = total > 0 ? 'inline-block' : 'inline-block';
 }
 
 // Minimal toast
