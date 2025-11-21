@@ -86,18 +86,15 @@ function priceFor(sub){
   return raw;
 }
 
-// Real product images from Unsplash (clothing, shoes, accessories)
-// Real product images from Unsplash (clothing, shoes, accessories)
+// =====================================================
+// PRODUCT IMAGES
+// Để thêm ảnh của bạn: thay URL bằng đường dẫn ảnh của bạn
+// Ví dụ: '../images/polo1.jpg' hoặc 'https://example.com/image.jpg'
+// =====================================================
 const lacosteImages = {
   sweatshirts: [
-    'https://images.unsplash.com/photo-1556821552-7f41c5d440db?auto=format&fit=crop&w=600&q=80',
-    'https://images.unsplash.com/photo-1556821552-7f41c5d440db?auto=format&fit=crop&w=600&q=80',
-    'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=600&q=80',
-    'https://images.unsplash.com/photo-1519904981063-b0cf448d479e?auto=format&fit=crop&w=600&q=80',
-    'https://images.unsplash.com/photo-1556821552-7f41c5d440db?auto=format&fit=crop&w=600&q=80',
-    'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=600&q=80',
-    'https://images.unsplash.com/photo-1519904981063-b0cf448d479e?auto=format&fit=crop&w=600&q=80',
-    'https://images.unsplash.com/photo-1556821552-7f41c5d440db?auto=format&fit=crop&w=600&q=80'
+    '../images/High Neck Sweatshirt.avif',
+    '../images/High Neck Sweatshirt.avif'
   ],
   polos: [
     'https://images.unsplash.com/photo-1591195853828-11db59a44f6b?auto=format&fit=crop&w=600&q=80',
