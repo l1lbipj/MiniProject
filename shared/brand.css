@@ -244,3 +244,34 @@ ul {
     }
 }
 
+/* FOOTER (standardized across pages) */
+.footer {
+    padding: 60px clamp(24px, 4vw, 80px);
+    background: #041c10;
+    color: #dfece5;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 32px;
+}
+
+.footer img {
+    width: 120px;
+    margin-bottom: 16px;
+}
+
+.footer ul {
+    list-style: none;
+    margin-top: 12px;
+}
+
+.footer a {
+    color: #dfece5;
+    text-decoration: none;
+}
+
+.socials {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+

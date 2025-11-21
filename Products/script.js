@@ -52,12 +52,39 @@ function pickColors(idx){
   return COLOR_PALETTE.slice(start, start+count);
 }
 
-const price = () => { // generate realistic VND price
-  const min = 150000, max = 2500000; // 150k - 2.5m VND
+// Price rules per subcategory for realistic Lacoste VN pricing
+const PRICE_RULES = {
+  polos: [1450000, 3500000],
+  tshirts: [450000, 1500000],
+  sweatshirts: [1200000, 2800000],
+  knitwear: [1500000, 4000000],
+  jackets: [2000000, 6000000],
+  tracksuits: [1200000, 3000000],
+  trousers: [800000, 2500000],
+  shirts: [900000, 2500000],
+  swimwear: [600000, 1800000],
+  sportclothing: [600000, 2200000],
+  underwear: [250000, 900000],
+  sneakers: [1800000, 4000000],
+  outdoor: [1800000, 4200000],
+  performance: [1800000, 4200000],
+  sockshoes: [120000, 400000],
+  caps: [450000, 1200000],
+  beanies: [450000, 1200000],
+  belts: [800000, 2200000],
+  watches: [2000000, 8000000],
+  home: [300000, 1500000],
+  sunglasses: [1500000, 3800000],
+  fragrance: [1200000, 2800000],
+  iphonecases: [400000, 1200000],
+  socks: [120000, 400000]
+};
+function priceFor(sub){
+  const [min, max] = PRICE_RULES[sub] || [150000, 2500000];
   const step = 10000; // round to 10k
   const raw = Math.floor((Math.random()*(max-min)+min)/step)*step;
   return raw;
-};
+}
 
 // Real product images from Unsplash (clothing, shoes, accessories)
 // Real product images from Unsplash (clothing, shoes, accessories)
@@ -317,7 +344,7 @@ function pushProd(cat, sub, idx, title){
     category: cat,
     sub,
     title,
-    price: price(),
+    price: priceFor(sub),
     image: img(cat, sub, idx),
     colors: pickColors(idx),
     collection: collections[idx % collections.length],
@@ -596,7 +623,9 @@ const els = {
   search: document.getElementById('searchInput') || document.querySelector('.search-input-top'),
   sort: document.getElementById('sortSelect') || document.querySelector('.sort-select-top'),
   resultTitle: document.getElementById('resultTitle'),
-  resultCount: document.getElementById('resultCount')
+  resultCount: document.getElementById('resultCount'),
+  activeFilters: document.getElementById('activeFilters'),
+  filtersPanel: document.getElementById('filters')
 };
 
 // keep original sort HTML so we can restore it when leaving cart view
@@ -642,7 +671,7 @@ function initFromHash(){
 function renderBreadcrumbs(){
   const toTitle = (k, type) => (type==='cat'? CATALOG[k]?.name : CATALOG[state.category]?.subs[k]?.name) || '';
   const parts = [
-    `<a href="#/products">Products</a>`
+    `<a href="#/products">Sản phẩm</a>`
   ];
   if(state.promo){
     const promoTitles = {
@@ -674,23 +703,23 @@ function renderBreadcrumbs(){
 // Promo definitions: key -> filter function and optional title/desc
 const PROMOS = {
   newin: {
-    title: "MEN'S NEW ARRIVALS",
-    desc: "Expert craftsmanship. Discover the new Lacoste men's collection and make style your signature.",
+    title: "HÀNG MỚI NAM",
+    desc: "Tinh xảo trong từng chi tiết. Khám phá bộ sưu tập nam Lacoste mới và tạo dấu ấn phong cách của bạn.",
     filter: (list) => list.slice(0, 24)
   },
   members: {
-    title: "CLUB LACOSTE MEMBERS' EXCLUSIVES",
-    desc: "Discover pieces available only to members of our loyalty programme.",
+    title: "ĐẶC QUYỀN THÀNH VIÊN CLUB LACOSTE",
+    desc: "Khám phá các sản phẩm chỉ dành cho thành viên chương trình khách hàng thân thiết.",
     filter: (list) => list.filter(p => ['polo','tshirts','polos','tshirts'].some(k=>p.sub.includes('t'))).slice(0,24)
   },
   bestsellers: {
-    title: "MEN'S BESTSELLERS",
-    desc: "Some pieces naturally stand out. Get inspired with Lacoste men's Bestsellers.",
+    title: "SẢN PHẨM BÁN CHẠY",
+    desc: "Những thiết kế nổi bật được ưa chuộng. Gợi ý phong cách từ các sản phẩm bán chạy của Lacoste.",
     filter: (list) => list.slice().sort((a,b)=> b.price - a.price).slice(0,24)
   },
   runway: {
-    title: "FALL-WINTER 2025 RUNWAY COLLECTION",
-    desc: "Step into Lacoste Fall-Winter 2025, a refined collection inspired by off-court lifestyle.",
+    title: "BỘ SƯU TẬP SÀN DIỄN THU-ĐÔNG 2025",
+    desc: "Khám phá bộ sưu tập Thu-Đông 2025 của Lacoste, lấy cảm hứng từ phong cách ngoài sân đấu.",
     filter: (list) => list.filter(p => ['jackets','knitwear','swimwear','tshirts'].includes(p.sub)).slice(0,24)
   }
 };
@@ -798,10 +827,40 @@ function colorToCss(key){
   }
 }
 
+const COLOR_LABELS = {
+  black: 'Đen',
+  grey: 'Xám',
+  white: 'Trắng',
+  brown: 'Nâu',
+  beige: 'Be',
+  green: 'Xanh lá',
+  blue: 'Xanh dương',
+  pink: 'Hồng',
+  red: 'Đỏ',
+  navy: 'Xanh navy',
+  yellow: 'Vàng',
+  orange: 'Cam'
+};
+
+function getColorLabel(key){
+  return COLOR_LABELS[key] || key;
+}
+
+function formatPriceRange(range){
+  if(!range) return '';
+  const [min, max] = range.split('-').map(Number);
+  if(!Number.isFinite(min)) return '';
+  if(!Number.isFinite(max) || max >= 999999999){
+    return `${currency(min)}+`;
+  }
+  return `${currency(min)} - ${currency(max)}`;
+}
+
 function renderGrid(){
   const list = filterAndSort();
   els.grid.innerHTML = list.map(productCard).join('');
   updateResultInfo(list);
+  renderActiveFilters();
 }
 
 function renderHero(){
@@ -824,18 +883,186 @@ function renderHero(){
 }
 
 function updateResultInfo(list){
-  const catName = state.category ? CATALOG[state.category]?.name : 'All Products';
+  const catName = state.category ? CATALOG[state.category]?.name : 'Tất cả sản phẩm';
   const subName = state.sub ? CATALOG[state.category]?.subs[state.sub]?.name : '';
   let title = catName;
   if(subName) title += ` - ${subName}`;
   els.resultTitle.textContent = title;
-  els.resultCount.textContent = `${list.length} products`;
+  els.resultCount.textContent = `${list.length} sản phẩm`;
+}
+
+function renderActiveFilters(){
+  if(!els.activeFilters) return;
+  const pills = [];
+  if(state.query){
+    pills.push({ type: 'query', value: '', label: `Từ khóa: "${state.query}"` });
+  }
+  if(state.promo){
+    pills.push({ type: 'promo', value: state.promo, label: PROMOS[state.promo]?.title || 'Ưu đãi' });
+  }
+  if(state.category){
+    const label = state.sub ? CATALOG[state.category]?.subs[state.sub]?.name : CATALOG[state.category]?.name;
+    if(label) pills.push({ type: 'category', value: 'category', label });
+  }
+  if(state.filters.priceRange){
+    pills.push({ type: 'price', value: state.filters.priceRange, label: `Giá ${formatPriceRange(state.filters.priceRange)}` });
+  }
+  state.filters.colors.forEach(color=>{
+    pills.push({ type: 'color', value: color, label: `Màu ${getColorLabel(color)}` });
+  });
+  state.filters.collection.forEach(col=>{
+    const nice = col.charAt(0).toUpperCase() + col.slice(1);
+    pills.push({ type: 'collection', value: col, label: `BST ${nice}` });
+  });
+  state.filters.genders.forEach(gen=>{
+    const name = gen === 'men' ? 'Nam' : gen === 'women' ? 'Nữ' : 'Unisex';
+    pills.push({ type: 'gender', value: gen, label: `Giới tính: ${name}` });
+  });
+
+  if(!pills.length){
+    els.activeFilters.innerHTML = '<span class="pill-empty">Bạn chưa áp dụng bộ lọc nào.</span>';
+    return;
+  }
+
+  els.activeFilters.innerHTML = pills.map(pill => `
+    <button class="filter-pill" data-pill-type="${pill.type}" data-pill-value="${pill.value}">
+      <span>${pill.label}</span>
+      <span aria-hidden="true">×</span>
+    </button>
+  `).join('');
+}
+
+function updateQuickFiltersState(){
+  const chips = document.querySelectorAll('[data-chip]');
+  chips.forEach(chip=>{
+    const { promo, category, sub, reset } = chip.dataset;
+    let isActive = false;
+    if(reset === 'all' && !state.category && !state.sub && !state.promo){
+      isActive = true;
+    } else if(promo && state.promo === promo){
+      isActive = true;
+    } else if(category && state.category === category && (state.sub || null) === (sub || null)){
+      isActive = true;
+    }
+    chip.classList.toggle('is-active', isActive);
+  });
+}
+
+function syncSortUI(){
+  if(els.sort){
+    els.sort.value = state.sort;
+  }
+  document.querySelectorAll('.filter-option[data-sort]').forEach(opt=>{
+    opt.classList.toggle('active', opt.getAttribute('data-sort') === state.sort);
+  });
+}
+
+function setSort(value){
+  if(!value) return;
+  state.sort = value;
+  syncSortUI();
+  renderGrid();
 }
 
 function renderUI(){
   renderBreadcrumbs();
   renderGrid();
   renderHero();
+  updateQuickFiltersState();
+  syncSortUI();
+}
+
+function removeFilterPill(type, value){
+  switch(type){
+    case 'query':
+      state.query = '';
+      if(els.search) els.search.value = '';
+      break;
+    case 'promo':
+      state.promo = null;
+      history.replaceState({}, '', '#/products');
+      break;
+    case 'category':
+      state.category = null;
+      state.sub = null;
+      history.replaceState({}, '', '#/products');
+      break;
+    case 'price':
+      state.filters.priceRange = null;
+      document.querySelectorAll('.filter-option[data-price]').forEach(opt => opt.classList.remove('active'));
+      break;
+    case 'color':
+      state.filters.colors = state.filters.colors.filter(c => c !== value);
+      document.querySelector(`.swatch[data-color="${value}"]`)?.classList.remove('active');
+      break;
+    case 'collection':
+      state.filters.collection = state.filters.collection.filter(c => c !== value);
+      document.querySelector(`.filter-option[data-collection="${value}"]`)?.classList.remove('active');
+      break;
+    case 'gender':
+      state.filters.genders = state.filters.genders.filter(g => g !== value);
+      document.querySelector(`.filter-option[data-gender="${value}"]`)?.classList.remove('active');
+      break;
+    default:
+      break;
+  }
+  renderUI();
+}
+
+function clearAllFilters(){
+  state.filters = { colors: [], collection: [], genders: [], priceRange: null };
+  state.sort = 'relevance';
+  state.query = '';
+  if(els.search) els.search.value = '';
+  document.querySelectorAll('.swatch.active, .filter-option.active').forEach(el => el.classList.remove('active'));
+  renderUI();
+  toast('✓ Đã xóa bộ lọc');
+}
+
+function bindQuickFilters(){
+  const chips = document.querySelectorAll('[data-chip]');
+  chips.forEach(chip=>{
+    chip.addEventListener('click', ()=>{
+      const { promo, category, sub, reset } = chip.dataset;
+      if(reset === 'all'){
+        state.promo = null;
+        state.category = null;
+        state.sub = null;
+        history.replaceState({}, '', '#/products');
+        renderUI();
+        return;
+      }
+      if(promo){
+        state.promo = promo;
+        state.category = null;
+        state.sub = null;
+        history.replaceState({}, '', '#/products/promo/' + promo);
+        renderUI();
+        return;
+      }
+      if(category){
+        setCategory(category, sub || null);
+      }
+    });
+  });
+}
+
+function bindFilterPills(){
+  if(!els.activeFilters) return;
+  els.activeFilters.addEventListener('click', (e)=>{
+    const pill = e.target.closest('.filter-pill');
+    if(!pill) return;
+    removeFilterPill(pill.dataset.pillType, pill.dataset.pillValue || '');
+  });
+}
+
+function bindFilterToggle(){
+  const toggleBtn = document.querySelector('[data-toggle-filters]');
+  if(!toggleBtn || !els.filtersPanel) return;
+  toggleBtn.addEventListener('click', ()=>{
+    els.filtersPanel.classList.toggle('is-hidden');
+    toggleBtn.textContent = els.filtersPanel.classList.contains('is-hidden') ? 'Hiện bộ lọc' : 'Ẩn bộ lọc';
+  });
 }
 
 // Mega-menu click routing
@@ -903,28 +1130,26 @@ function bindMegaMenu(){
 }
 
 function bindControls(){
-  if(els.search) els.search.addEventListener('input', ()=>{ state.query = els.search.value.trim(); renderGrid(); });
-
-  // Clear all filters button
-  const clearBtn = document.getElementById('clearFilters');
-  if(clearBtn){
-    clearBtn.addEventListener('click', ()=>{
-      state.filters = { colors: [], collection: [], genders: [], priceRange: null };
-      state.sort = 'relevance';
-      document.querySelectorAll('.swatch.active, .filter-option.active').forEach(el => el.classList.remove('active'));
+  if(els.search){
+    els.search.addEventListener('input', ()=>{
+      state.query = els.search.value.trim();
       renderGrid();
-      toast('✓ Filters cleared');
     });
   }
 
-  // Sort by filter options
+  const clearButtons = document.querySelectorAll('[data-clear-filters]');
+  clearButtons.forEach(btn=>{
+    btn.addEventListener('click', clearAllFilters);
+  });
+
+  if(els.sort){
+    els.sort.addEventListener('change', (e)=> setSort(e.target.value));
+  }
+
   document.querySelectorAll('.filter-option[data-sort]').forEach(el=>{
     el.addEventListener('click', ()=>{
       const sortValue = el.getAttribute('data-sort');
-      state.sort = sortValue;
-      document.querySelectorAll('.filter-option[data-sort]').forEach(opt => opt.classList.remove('active'));
-      el.classList.add('active');
-      renderGrid();
+      setSort(sortValue);
     });
   });
 
@@ -1044,7 +1269,7 @@ function addToCart(id){
   const item = cart.find(i=>i.id===id);
   if(item) item.qty += 1; else cart.push({ id, qty:1 });
   setCart(cart);
-  toast('✓ Added to cart');
+  toast('✓ Đã thêm vào giỏ');
 }
 function updateCartCount(){
   const countEl = document.getElementById('cartCount');
@@ -1077,7 +1302,7 @@ function openProductModal(id){
   document.getElementById('modalImage').alt = p.title;
   document.getElementById('modalTitle').textContent = p.title;
   document.getElementById('modalPrice').textContent = currency(p.price);
-  document.getElementById('modalDesc').textContent = `Premium quality product from ${CATALOG[p.category].name} - ${CATALOG[p.category].subs[p.sub].name} collection.`;
+  document.getElementById('modalDesc').textContent = `Sản phẩm chính hãng thuộc danh mục ${CATALOG[p.category].name} - ${CATALOG[p.category].subs[p.sub].name}. Chất liệu cao cấp, phù hợp nhiều phong cách.`;
   const addBtn = document.getElementById('modalAdd');
   addBtn.onclick = ()=> { addToCart(p.id); closeProductModal(); };
   const close = document.getElementById('modalClose');
@@ -1101,7 +1326,7 @@ function renderCart(container){
   const targetEl = container || els.grid;
 
   if(cart.length===0){ 
-    targetEl.innerHTML = '<div class="cart"><div class="cart-header"><h2>🛒 Shopping Cart</h2></div><div class="cart-empty"><p>Your cart is empty</p><a href="#/products" class="btn">Continue Shopping</a></div></div>'; 
+    targetEl.innerHTML = '<div class="cart"><div class="cart-header"><h2>🛒 Giỏ hàng</h2></div><div class="cart-empty"><p>Giỏ hàng trống</p><a href="#/products" class="btn">Tiếp tục mua sắm</a></div></div>'; 
     return; 
   }
   const rows = cart.map(ci=>{
@@ -1135,10 +1360,10 @@ function renderCart(container){
   targetEl.innerHTML = `
     <div class="cart">
       <div class="cart-header">
-        <h2>🛒 Shopping Cart</h2>
+        <h2>🛒 Giỏ hàng</h2>
         <div style="display:flex;gap:8px">
-          <button class="btn secondary" id="clearCart">Clear Cart</button>
-          <a href="#/products" class="btn secondary">Continue Shopping</a>
+          <button class="btn secondary" id="clearCart">Xóa giỏ hàng</button>
+          <a href="#/products" class="btn secondary">Tiếp tục mua sắm</a>
         </div>
       </div>
       <div class="cart-content">
@@ -1146,12 +1371,12 @@ function renderCart(container){
           ${rows}
         </div>
         <aside class="cart-summary">
-          <h3>💰 Order Summary</h3>
-          <div class="summary-row"><span>Subtotal</span><span>${currency(subtotal)}</span></div>
-          <div class="summary-row"><span>Shipping</span><span>${shipping? currency(shipping): 'Free'}</span></div>
-          <div class="summary-row"><span>Discount</span><span>− ${discount? currency(discount): currency(0)}</span></div>
-          <div class="summary-total"><strong>💵 Total</strong><strong>${currency(total)}</strong></div>
-          <button class="btn" id="checkoutBtn">💳 Checkout</button>
+          <h3>💰 Tóm tắt đơn hàng</h3>
+          <div class="summary-row"><span>Tạm tính</span><span>${currency(subtotal)}</span></div>
+          <div class="summary-row"><span>Vận chuyển</span><span>${shipping? currency(shipping): 'Miễn phí'}</span></div>
+          <div class="summary-row"><span>Giảm giá</span><span>− ${discount? currency(discount): currency(0)}</span></div>
+          <div class="summary-total"><strong>💵 Tổng</strong><strong>${currency(total)}</strong></div>
+          <button class="btn" id="checkoutBtn">💳 Thanh toán</button>
         </aside>
       </div>
     </div>
@@ -1163,9 +1388,9 @@ function renderCart(container){
   targetEl.querySelectorAll('[data-del]').forEach(b=> b.addEventListener('click', ()=> removeFromCart(b.getAttribute('data-del')) ));
   targetEl.querySelectorAll('[data-qty]').forEach(inp=> inp.addEventListener('change', ()=> setQty(inp.getAttribute('data-qty'), Number(inp.value)||1)) );
   const clear = document.getElementById('clearCart');
-  if(clear) clear.addEventListener('click', ()=> { setCart([]); renderCart(container); toast('✓ Cart cleared'); });
+  if(clear) clear.addEventListener('click', ()=> { setCart([]); renderCart(container); toast('✓ Đã xóa giỏ hàng'); });
   const checkout = document.getElementById('checkoutBtn');
-  if(checkout) checkout.addEventListener('click', ()=> toast('Checkout functionality coming soon')); 
+  if(checkout) checkout.addEventListener('click', ()=> toast('Chức năng thanh toán sẽ sớm có')); 
 }
 
 function setQty(id, qty){
@@ -1195,7 +1420,7 @@ function removeFromCart(id){
   setCart(cart);
   const cartContainer = document.getElementById('cartContainer');
   renderCart(cartContainer);
-  toast('✓ Item removed');
+  toast('✓ Đã xóa sản phẩm');
 }
 
 function route(){
@@ -1235,9 +1460,13 @@ document.addEventListener('DOMContentLoaded', ()=>{
   bindMegaMenu();
   initMobileMenu();
   bindControls();
+  bindQuickFilters();
+  bindFilterPills();
+  bindFilterToggle();
   updateCartCount();
   route();
   window.addEventListener('hashchange', ()=>{ route(); updateCartCount(); });
 });
+
 
 
