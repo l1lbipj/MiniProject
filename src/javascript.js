@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initTestimonials();
     initRevealOnScroll();
     handleCTAForm();
+    handleCollectionButtons();
 });
 
 function setupMobileMenu() {
@@ -144,5 +145,23 @@ function handleCTAForm() {
             form.classList.remove('success');
             form.querySelector('button').textContent = 'Đăng ký';
         }, 3000);
+    });
+}
+
+function handleCollectionButtons() {
+    // Xử lý tất cả các nút trong collection cards
+    document.querySelectorAll('.collection-card .btn.text').forEach(button => {
+        button.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.location.href = '../Products/Products.html';
+        });
+    });
+
+    // Xử lý nút "Đặt lịch thử đồ"
+    document.querySelectorAll('.story-actions .btn').forEach(button => {
+        button.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.location.href = '../Contact/contact.html';
+        });
     });
 }
