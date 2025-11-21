@@ -1,16 +1,3 @@
-:root {
-    --lacoste-green: #005530;
-    --lacoste-green-dark: #013820;
-    --lacoste-green-light: #0f7a4b;
-    --lacoste-cream: #f4f7f5;
-    --lacoste-stone: #e1e8e3;
-    --lacoste-text: #132016;
-}
-
-* {
-    box-sizing: border-box;
-}
-
 html,
 body {
     margin: 0;
