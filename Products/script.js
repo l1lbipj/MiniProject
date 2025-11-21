@@ -347,20 +347,18 @@ function pushProd(cat, sub, idx, title){
     finalTitle = title.replace('Men\'s', 'Women\'s');
   }
   
-PRODUCts.push({
+  PRODUCTS.push({
     id: `${cat}-${sub}-${idx}`,
     category: cat,
     sub,
-
-    // Merge both changes here:
-    title,
+    title: finalTitle,
     price: priceFor(sub),
-
     image: img(cat, sub, idx),
     colors: pickColors(idx),
     collection: collections[idx % collections.length],
     gender: gender
-});
+  });
+}
 
 // Real Lacoste product names
 const PRODUCT_NAMES = {
