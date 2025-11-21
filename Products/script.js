@@ -10,8 +10,7 @@ const CATALOG = {
       knitwear: { name: 'Knitwear' },
       tshirts: { name: 'T-Shirts' },
       trousers: { name: 'Trousers & Shorts' },
-      shirts: { name: 'Shirts' },
-      sportclothing: { name: 'Sport Clothing' }
+      shirts: { name: 'Shirts' }
     }
   },
   shoes: {
@@ -30,8 +29,7 @@ const CATALOG = {
       belts: { name: 'Belts' },
       watches: { name: 'Watches' },
       sunglasses: { name: 'Sunglasses' },
-      fragrance: { name: 'Fragrance' },
-      socks: { name: 'Socks' }
+      fragrance: { name: 'Fragrance' }
     }
   }
 };
@@ -57,7 +55,6 @@ const PRICE_RULES = {
   tracksuits: [1200000, 3000000],
   trousers: [800000, 2500000],
   shirts: [900000, 2500000],
-  sportclothing: [600000, 2200000],
   sneakers: [1800000, 4000000],
   outdoor: [1800000, 4200000],
   performance: [1800000, 4200000],
@@ -66,8 +63,7 @@ const PRICE_RULES = {
   belts: [800000, 2200000],
   watches: [2000000, 8000000],
   sunglasses: [1500000, 3800000],
-  fragrance: [1200000, 2800000],
-  socks: [120000, 400000]
+  fragrance: [1200000, 2800000]
 };
 function priceFor(sub){
   const [min, max] = PRICE_RULES[sub] || [150000, 2500000];
@@ -220,23 +216,6 @@ const lacosteImages = {
       grey: '../images/shirt-4-grey.jpg'
     }
   },
-  sportclothing: {
-    1: {
-      black: '../images/sport-1-black.jpg',
-      green: '../images/sport-1-green.jpg',
-      white: '../images/sport-1-white.jpg'
-    },
-    2: {
-      black: '../images/sport-2-black.jpg',
-      red: '../images/sport-2-red.jpg'
-    },
-    3: {
-      green: '../images/sport-3-green.jpg'
-    },
-    4: {
-      white: '../images/sport-4-white.jpg'
-    }
-  },
   sneakers: {
     1: {
       black: '../images/sneaker-1-black.jpg',
@@ -315,14 +294,6 @@ const lacosteImages = {
     },
     2: {
       black: '../images/fragrance-2-black.jpg'
-    }
-  },
-  socks: {
-    1: {
-      black: '../images/sock-1-black.jpg'
-    },
-    2: {
-      black: '../images/sock-2-black.jpg'
     }
   }
 };
@@ -409,12 +380,6 @@ const PRODUCT_NAMES = {
     'Linen Blend Casual Shirt',
     'Checked Flannel Shirt'
   ],
-  sportclothing: [
-    'SPORT Technical Jersey T-shirt',
-    'Tennis Performance Polo',
-    'Breathable Training Top',
-    'Sport Shorts with Pockets'
-  ],
   sneakers: [
     'Carnaby Evo Leather Sneakers',
     'Lerond Leather Sneakers'
@@ -450,10 +415,6 @@ const PRODUCT_NAMES = {
   fragrance: [
     'L\'HOMME LACOSTE Eau de Toilette',
     'LACOSTE Pour Homme Eau de Toilette'
-  ],
-  socks: [
-    'Cotton Sport Socks 3-Pack',
-    'No-Show Socks 5-Pack'
   ]
 };
 
@@ -507,12 +468,6 @@ const PRODUCT_DESCRIPTIONS = {
     'Áo sơ mi linen blend casual với chất vải thoáng mát. Kiểu dáng relaxed, phù hợp mùa hè. Resort vacation style.',
     'Áo sơ mi flannel họa tiết kẻ caro ấm áp. Chất vải cotton chải lông mềm mại. Phong cách outdoor rugged.'
   ],
-  sportclothing: [
-    'Áo thun technical SPORT với chất jersey thoáng khí. Công nghệ Quickdry thấm hút nhanh, chống mùi. Performance tối ưu cho training.',
-    'Áo polo tennis performance với mesh thoáng khí. Chất liệu technical co giãn 4 chiều. Thiết kế cho vận động viên chuyên nghiệp.',
-    'Áo training top breathable với panels lưới thoáng khí. Chất liệu recycled polyester bền vững. Gym & running essential.',
-    'Quần short thể thao với túi khóa kéo tiện lợi. Chất vải nylon chống nước, lớp lót mesh thoáng mát. Multi-sport versatile.'
-  ],
   sneakers: [
     'Giày sneaker Carnaby Evo da thật trắng tinh khiết. Đế cao su vulcanized bền bỉ, lót giày êm ái. Icon minimalist của Lacoste.',
     'Giày Lerond leather với thiết kế tennis court classic. Da mềm cao cấp, đế cupsole thoải mái. Everyday casual sneaker.'
@@ -548,10 +503,6 @@ const PRODUCT_DESCRIPTIONS = {
   fragrance: [
     'Nước hoa L\'HOMME LACOSTE Eau de Toilette 100ml. Hương thơm woody aromatic nam tính. Notes: quýt, tiêu hồng, gỗ tuyết tùng.',
     'LACOSTE Pour Homme EDT với hương thơm fougère classic. Fresh opening, woody dry down. Signature scent for gentlemen.'
-  ],
-  socks: [
-    'Bộ 3 đôi tất thể thao cotton cao cổ. Chất liệu cotton blend thoáng khí, arch support êm ái. Sport training essential.',
-    'Bộ 5 đôi tất no-show siêu mỏng che giấu. Miếng silicon chống tuột, cotton mềm mại. Perfect for sneakers.'
   ]
 };
 
