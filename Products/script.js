@@ -338,17 +338,11 @@ function pushProd(cat, sub, idx, title){
   const genders = ['men','women','unisex'];
   const gender = genders[idx % genders.length];
   
-  // Replace Men's with Women's for women products
-  let finalTitle = title;
-  if(gender === 'women' && title.includes('Men\'s')){
-    finalTitle = title.replace('Men\'s', 'Women\'s');
-  }
-  
   PRODUCTS.push({
     id: `${cat}-${sub}-${idx}`,
     category: cat,
     sub,
-    title: finalTitle,
+    title: title,
     price: priceFor(sub),
     image: img(cat, sub, idx),
     colors: pickColors(idx),
@@ -360,97 +354,88 @@ function pushProd(cat, sub, idx, title){
 // Real Lacoste product names (2 per category to match product count)
 const PRODUCT_NAMES = {
   sweatshirts: [
-    'Men\'s LACOSTE SPORT Hooded Fleece Sweatshirt',
-    'Men\'s Zippered Stand-Up Collar Sweatshirt'
+    'LACOSTE SPORT Hooded Fleece Sweatshirt',
+    'Zippered Stand-Up Collar Sweatshirt'
   ],
   polos: [
-    'Men\'s Classic L.12.12 Polo',
-    'Men\'s L.12.12 Lacoste Polo'
+    'Classic L.12.12 Polo',
+    'L.12.12 Lacoste Polo'
   ],
   jackets: [
-    'Men\'s Quilted Water-Resistant Puffer Jacket',
-    'Men\'s Windbreaker Zip Jacket',
-    'Men\'s Reversible Wool Blend Jacket',
-    'Men\'s Water-Resistant Bomber Jacket',
-    'Men\'s Classic Blazer',
-    'Men\'s Hooded Raincoat',
-    'Men\'s Leather Bomber Jacket',
-  ],
-  jackets: [
-    'Men\'s Quilted Water-Resistant Puffer Jacket',
-    'Men\'s Windbreaker Zip Jacket'
+    'Quilted Water-Resistant Puffer Jacket',
+    'Windbreaker Zip Jacket'
   ],
   tracksuits: [
-    'Men\'s SPORT Tennis Tracksuit',
-    'Men\'s Colorblock Zip Tracksuit'
+    'SPORT Tennis Tracksuit',
+    'Colorblock Zip Tracksuit'
   ],
   knitwear: [
-    'Men\'s Crew Neck Merino Wool Sweater',
-    'Men\'s V-Neck Cotton Sweater'
+    'Crew Neck Merino Wool Sweater',
+    'V-Neck Cotton Sweater'
   ],
   tshirts: [
-    'Men\'s Crew Neck Pima Cotton T-shirt',
-    'Men\'s V-Neck Cotton Jersey T-shirt'
+    'Crew Neck Pima Cotton T-shirt',
+    'V-Neck Cotton Jersey T-shirt'
   ],
   trousers: [
-    'Men\'s Slim Fit Stretch Chinos',
-    'Men\'s Regular Fit Cotton Gabardine Pants'
+    'Slim Fit Stretch Chinos',
+    'Regular Fit Cotton Gabardine Pants'
   ],
   shirts: [
-    'Men\'s Regular Fit Oxford Cotton Shirt',
-    'Men\'s Slim Fit Poplin Shirt'
+    'Regular Fit Oxford Cotton Shirt',
+    'Slim Fit Poplin Shirt'
   ],
   swimwear: [
-    'Men\'s Swimming Trunks',
-    'Men\'s Quick-Dry Swim Shorts'
+    'Swimming Trunks',
+    'Quick-Dry Swim Shorts'
   ],
   sportclothing: [
-    'Men\'s SPORT Technical Jersey T-shirt',
-    'Men\'s Tennis Performance Polo'
+    'SPORT Technical Jersey T-shirt',
+    'Tennis Performance Polo'
   ],
   underwear: [
-    'Men\'s Cotton Boxer Briefs 3-Pack',
-    'Men\'s Stretch Cotton Trunks'
+    'Cotton Boxer Briefs 3-Pack',
+    'Stretch Cotton Trunks'
   ],
   sneakers: [
-    'Men\'s Carnaby Evo Leather Sneakers',
-    'Men\'s Lerond Leather Sneakers'
+    'Carnaby Evo Leather Sneakers',
+    'Lerond Leather Sneakers'
   ],
   outdoor: [
-    'Men\'s Montbard Leather Boots',
-    'Men\'s Hiking Boots'
+    'Montbard Leather Boots',
+    'Hiking Boots'
   ],
   performance: [
-    'Men\'s Court Performance Tennis Shoes',
-    'Men\'s AG-LT 21 Ultra Tennis Shoes'
+    'Court Performance Tennis Shoes',
+    'AG-LT 21 Ultra Tennis Shoes'
   ],
   sockshoes: [
-    'Men\'s Cotton Socks 3-Pack',
-    'Men\'s Sport Ankle Socks'
+    'Cotton Socks 3-Pack',
+    'Sport Ankle Socks'
   ],
   caps: [
-    'Men\'s Classic Gabardine Cap',
-    'Men\'s Crocodile Cap'
+    'Classic Gabardine Cap',
+    'Crocodile Cap'
   ],
   beanies: [
-    'Men\'s Wool Beanie',
-    'Men\'s Ribbed Knit Beanie'
+    'Wool Beanie',
+    'Ribbed Knit Beanie'
   ],
   belts: [
-    'Men\'s Reversible Leather Belt',
-    'Men\'s Classic Leather Belt'
+    'Reversible Leather Belt',
+    'Classic Leather Belt'
   ],
   watches: [
-    'Men\'s Lacoste.12.12 Watch',
-    'Men\'s Chronograph Watch'
+    'Lacoste.12.12 Watch',
+    'Chronograph Watch'
   ],
   home: [
     'Cotton Bath Towel',
     'Crocodile Beach Towel'
   ],
   sunglasses: [
-    'Men\'s Rectangular Sunglasses',
-    'Men\'s Aviator Sunglasses'
+    'Rectangular Sunglasses',
+    'Aviator Sunglasses'
   ],
   fragrance: [
     'L\'HOMME LACOSTE Eau de Toilette',
@@ -462,7 +447,11 @@ const PRODUCT_NAMES = {
   ],
   socks: [
     'Men\'s Cotton Sport Socks 3-Pack',
-    'Men\'s No-Show Socks 5-Pack'
+    'Leather iPhone 14 Case'
+  ],
+  socks: [
+    'Cotton Sport Socks 3-Pack',
+    'No-Show Socks 5-Pack'
   ]
 };
 
