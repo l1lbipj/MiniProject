@@ -614,6 +614,9 @@ Object.entries(CATALOG).forEach(([cat, catObj])=>{
   });
 });
 
+console.log('Total products created:', PRODUCTS.length);
+console.log('Sample product:', PRODUCTS[0]);
+
 const state = {
   category: null,
   sub: null,
