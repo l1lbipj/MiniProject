@@ -819,6 +819,7 @@ function productCard(p){
           <div class="price">${currency(p.price)}</div>
         </div>
       </div>
+      <button class="btn-view-details" data-view="${p.id}">Xem chi tiết</button>
     </article>
   `;
 }

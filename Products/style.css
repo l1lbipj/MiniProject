@@ -240,13 +240,17 @@ body {
 
 /* Black info bar under product image */
 .card .info-bar{ background:#111; color:#fff; display:flex; align-items:center; justify-content:space-between; padding:12px 14px; gap:12px }
-.card .info-left{ display:flex; flex-direction:column; gap:8px; min-width:0 }
-.card .info-left .title{ color:#fff; font-size:13px; margin:0; display:block; }
+.card .info-left{ display:flex; flex-direction:column; gap:8px; min-width:0; flex:1; overflow:hidden }
+.card .info-left .title{ color:#fff; font-size:13px; margin:0; display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis }
 .card .swatch-row{ display:flex; gap:8px; align-items:center }
 .card .swatch-row .swatch-mini{ width:12px; height:12px; border-radius:2px; border:1px solid rgba(255,255,255,0.06) }
 .card .swatch-row .more{ color:#c7c7c7; font-size:12px; margin-left:6px }
-.card .info-right{ text-align:right; min-width:70px }
-.card .info-right .price{ color:#fff; font-weight:600 }
+.card .info-right{ text-align:right; min-width:90px; flex-shrink:0 }
+.card .info-right .price{ color:#fff; font-weight:600; font-size:14px; white-space:nowrap }
+
+/* View Details button */
+.btn-view-details{ width:100%; padding:10px; background:var(--lacoste-green); color:#fff; border:none; font-size:13px; font-weight:600; cursor:pointer; transition:background 0.2s }
+.btn-view-details:hover{ background:#004225 }
 
 /* Make product image a bit larger to match sample */
 .card .thumb img{ max-width:100%; max-height:76%; object-fit:contain }
