@@ -1501,4 +1501,3 @@ document.addEventListener('DOMContentLoaded', ()=>{
   route();
   window.addEventListener('hashchange', ()=>{ route(); updateCartCount(); });
 });
-}
