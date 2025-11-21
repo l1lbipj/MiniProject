@@ -31,7 +31,7 @@
           <a href="../Products/Products.html" class="nav-link nav-link-products is-active">PRODUCTS</a>
           <div class="mega-menu" role="menu">
             <div class="mega-col mega-promo">
-              <h4>See All Men's New In</h4>
+              <h4>Hàng mới về</h4>
               <nav class="promo-list" aria-label="New In promos">
                 <a class="promo-link" href="#/products/promo/newin" data-promo="newin">New Arrivals</a>
                 <a class="promo-link" href="#/products/promo/members" data-promo="members">Lacoste Members' Exclusives</a>
@@ -50,9 +50,7 @@
                 <li><a href="#" data-category="clothing" data-sub="tshirts">Áo thun</a></li>
                 <li><a href="#" data-category="clothing" data-sub="trousers">Quần dài & Quần short</a></li>
                 <li><a href="#" data-category="clothing" data-sub="shirts">Áo sơ mi</a></li>
-                <li><a href="#" data-category="clothing" data-sub="swimwear">Đồ bơi</a></li>
                 <li><a href="#" data-category="clothing" data-sub="sportclothing">Đồ thể thao</a></li>
-                <li><a href="#" data-category="clothing" data-sub="underwear">Đồ lót & Đồ mặc nhà</a></li>
               </ul>
             </div>
             <div class="mega-col">
@@ -134,22 +132,10 @@
               <span class="swatch black" data-color="black" title="Black"></span>
               <span class="swatch white" data-color="white" title="White"></span>
               <span class="swatch green" data-color="green" title="Green"></span>
+              <span class="swatch red" data-color="red" title="Red"></span>
+              <span class="swatch grey" data-color="grey" title="Grey"></span>
+              <span class="swatch blue" data-color="blue" title="Blue"></span>
             </div>
-          </div>
-          <div class="filter-group" data-filter-group="collection">
-            <h4>BỘ SƯU TẬP</h4>
-            <div class="filter-option" data-collection="sport">Thể thao</div>
-            <div class="filter-option" data-collection="classic">Cổ điển</div>
-            <div class="filter-option" data-collection="lifestyle">Phong cách sống</div>
-            <div class="filter-option" data-collection="live">Lacoste LIVE</div>
-            <div class="filter-option" data-collection="golf">Bộ sưu tập Golf</div>
-            <div class="filter-option" data-collection="tennis">Bộ sưu tập Tennis</div>
-          </div>
-          <div class="filter-group" data-filter-group="gender">
-            <h4>GIỚI TÍNH</h4>
-            <div class="filter-option" data-gender="men">Nam</div>
-            <div class="filter-option" data-gender="women">Nữ</div>
-            <div class="filter-option" data-gender="unisex">Unisex</div>
           </div>
         </div>
       </aside>
@@ -234,6 +220,15 @@
         <div class="content">
           <h2 class="title" id="modalTitle"></h2>
           <div class="price" id="modalPrice"></div>
+          
+          <!-- Color Selector -->
+          <div class="color-selector">
+            <p class="color-label"><strong>Màu sắc:</strong> <span id="selectedColorName">Black</span></p>
+            <div class="color-options" id="colorOptions">
+              <!-- Colors will be inserted here by JS -->
+            </div>
+          </div>
+          
           <div class="desc" id="modalDesc"></div>
           <div style="display:flex;gap:8px;margin-top:auto">
             <button class="btn" id="modalAdd">Thêm vào giỏ</button>
