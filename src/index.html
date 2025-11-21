@@ -1,47 +1,284 @@
 
-<!DOCTYPE html> 
-<html lang="en"> 
-<head> 
+<!DOCTYPE html>
+<html lang="en">
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/src/style.css">
-    <link rel="shortcut icon" href="/images/Fvicon.png" type="image/x-icon">
-    <title>Welcome to UniBrand</title>
+    <link rel="stylesheet" href="../shared/brand.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="shortcut icon" href="../images/Fvicon.png" type="image/x-icon">
+    <title>Lacoste | Official Lifestyle Store</title>
 </head>
 <body>
-    <nav class="navbar"> 
-        <div class="nav-container"> 
-            <div class="nav-logo"> 
-                <a href="#home"> 
-                    <img src="/images/Lacoste_logo.png" alt="Lacoste Logo"> 
-                </a> 
-            </div> 
-             
-            <ul class="nav-menu"> 
-                <li class="nav-item"> 
-                    <a href="../src/index.html#home" class="nav-link is-active">HOME</a> 
-                </li> 
-                <li class="nav-item"> 
-                    <a href="../src/index.html#about" class="nav-link">ABOUT</a> 
-                </li> 
-                <li class="nav-item"> 
-                    <a href="../Products/Products.html" class="nav-link">PRODUCTS</a> 
-                </li> 
-                <li class="nav-item"> 
-                    <a href="../Contact/contact.html#contact" class="nav-link">CONTACT</a> 
-                </li> 
-                <li class="nav-item"> 
-                    <a href="../Login/login.html" class="nav-link nav-link-login">LOGIN</a> 
-                </li> 
-            </ul> 
-             
-            <div class="nav-toggle" id="mobile-menu"> 
-                <span class="bar"></span> 
-                <span class="bar"></span> 
-                <span class="bar"></span> 
-            </div> 
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="#home">
+                    <img src="../images/Lacoste_logo.png" alt="Lacoste Logo">
+                </a>
+            </div>
+
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="#home" class="nav-link is-active">HOME</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#about" class="nav-link">ABOUT</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#collections" class="nav-link">COLLECTIONS</a>
+                </li>
+                <li class="nav-item">
+                    <a href="../Products/Products.html" class="nav-link">PRODUCTS</a>
+                </li>
+                <li class="nav-item">
+                    <a href="../Contact/contact.html#contact" class="nav-link">CONTACT</a>
+                </li>
+                <li class="nav-item">
+                    <a href="../Login/login.html" class="nav-link nav-link-login">LOGIN</a>
+                </li>
+            </ul>
+
+            <div class="nav-toggle" id="mobile-menu">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
         </div>
     </nav>
-    <script src="/src/javascript.js"></script>
+
+    <main>
+        <section id="home" class="hero">
+            <div class="hero-content">
+                <p class="eyebrow">NEW SEASON • FW 2025</p>
+                <h1>Elevate Your Every Day with Lacoste</h1>
+                <p class="hero-copy">
+                    Thương hiệu biểu tượng với dòng Polo kinh điển, tái hiện trong
+                    chất liệu cao cấp và thiết kế hiện đại, giúp bạn tự tin trong mọi khoảnh khắc.
+                </p>
+                <div class="hero-cta">
+                    <a href="../Products/Products.html" class="btn primary">Khám phá BST</a>
+                    <a href="#about" class="btn ghost">Câu chuyện Lacoste</a>
+                </div>
+                <div class="hero-stats">
+                    <div>
+                        <span class="stat-number">+85</span>
+                        <span class="stat-label">năm di sản</span>
+                    </div>
+                    <div>
+                        <span class="stat-number">120+</span>
+                        <span class="stat-label">cửa hàng toàn cầu</span>
+                    </div>
+                    <div>
+                        <span class="stat-number">98%</span>
+                        <span class="stat-label">khách hài lòng</span>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-carousel">
+                <div class="hero-slide active" data-bg="https://images.pexels.com/photos/7679469/pexels-photo-7679469.jpeg?auto=compress&cs=tinysrgb&w=1600">
+                    <p>Polo chính hãng với form dáng slim-fit.</p>
+                </div>
+                <div class="hero-slide" data-bg="https://images.pexels.com/photos/5325910/pexels-photo-5325910.jpeg?auto=compress&cs=tinysrgb&w=1600">
+                    <p>Phối đồ linh hoạt từ sân tennis đến đường phố.</p>
+                </div>
+                <div class="hero-slide" data-bg="https://images.pexels.com/photos/7679468/pexels-photo-7679468.jpeg?auto=compress&cs=tinysrgb&w=1600">
+                    <p>Vải pique thoáng khí, chuẩn Lacoste.</p>
+                </div>
+                <div class="hero-dots"></div>
+            </div>
+        </section>
+
+        <section id="about" class="brand-story">
+            <div class="story-media">
+                <img src="https://images.pexels.com/photos/7679467/pexels-photo-7679467.jpeg?auto=compress&cs=tinysrgb&w=1200" alt="Lacoste Lifestyle">
+            </div>
+            <div class="story-content">
+                <p class="eyebrow">Lacoste DNA</p>
+                <h2>Di sản thể thao Pháp chạm tới phong cách sống hiện đại</h2>
+                <p>
+                    René Lacoste đã tạo nên chiếc áo polo đầu tiên vào năm 1933 dành cho các tay vợt đẳng cấp.
+                    Hôm nay, Lacoste tiếp tục truyền lửa tự tin, tinh thần thể thao và sự chỉn chu trong từng đường kim mũi chỉ.
+                </p>
+                <ul>
+                    <li>Chất liệu premium bền vững theo tiêu chuẩn toàn cầu.</li>
+                    <li>Phom dáng đa dạng, tôn lên từng chuyển động.</li>
+                    <li>Kết hợp công nghệ và thẩm mỹ Pháp đặc trưng.</li>
+                </ul>
+                <div class="story-actions">
+                    <button class="btn primary secondary">Đặt lịch thử đồ</button>
+                    <span class="note">Miễn phí tại showroom Lacoste gần bạn.</span>
+                </div>
+            </div>
+        </section>
+
+        <section id="collections" class="collections">
+            <div class="section-heading">
+                <p class="eyebrow">Bộ sưu tập đề xuất</p>
+                <h2>Phong cách nào dành cho bạn?</h2>
+                <p>Mix & match instant với những gợi ý đã được stylist Lacoste tuyển chọn.</p>
+            </div>
+            <div class="collections-grid">
+                <article class="collection-card">
+                    <img src="https://images.pexels.com/photos/7679464/pexels-photo-7679464.jpeg?auto=compress&cs=tinysrgb&w=1200" alt="City Club">
+                    <div class="card-body">
+                        <p class="eyebrow">City Club</p>
+                        <h3>Suit up in Polo</h3>
+                        <p>Gam màu trung tính, dễ dàng phối với blazer & sneakers.</p>
+                        <div class="card-footer">
+                            <span>Từ 2.450.000đ</span>
+                            <button class="btn text">Xem ngay →</button>
+                        </div>
+                    </div>
+                </article>
+                <article class="collection-card">
+                    <img src="https://images.pexels.com/photos/5325774/pexels-photo-5325774.jpeg?auto=compress&cs=tinysrgb&w=1200" alt="Tennis Capsule">
+                    <div class="card-body">
+                        <p class="eyebrow">Tennis Capsule</p>
+                        <h3>Retro Sport</h3>
+                        <p>Logo cá sấu cổ điển kết hợp phom relaxed, chuẩn sân đấu.</p>
+                        <div class="card-footer">
+                            <span>Từ 1.990.000đ</span>
+                            <button class="btn text">Khám phá →</button>
+                        </div>
+                    </div>
+                </article>
+                <article class="collection-card">
+                    <img src="https://images.pexels.com/photos/5325587/pexels-photo-5325587.jpeg?auto=compress&cs=tinysrgb&w=1200" alt="Lifestyle">
+                    <div class="card-body">
+                        <p class="eyebrow">Lifestyle</p>
+                        <h3>Monochrome Ease</h3>
+                        <p>Tối giản mà nổi bật nhờ các điểm nhấn tinh tế.</p>
+                        <div class="card-footer">
+                            <span>Từ 2.250.000đ</span>
+                            <button class="btn text">Đặt trước →</button>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <section class="product-highlight">
+            <div class="section-heading">
+                <p class="eyebrow">Best Seller</p>
+                <h2>L.12.12 Iconic Polo</h2>
+                <p>
+                    Chiếc polo được yêu thích nhất với hàng triệu tín đồ trên toàn thế giới.
+                    Lớp vải pique mềm mịn, form regular dễ mặc và logo cá sấu thêu tinh xảo.
+                </p>
+            </div>
+            <div class="highlight-wrapper">
+                <div class="highlight-gallery">
+                    <img src="https://images.pexels.com/photos/5325757/pexels-photo-5325757.jpeg?auto=compress&cs=tinysrgb&w=1200" alt="Classic white polo">
+                    <img src="https://images.pexels.com/photos/5325808/pexels-photo-5325808.jpeg?auto=compress&cs=tinysrgb&w=1200" alt="Green polo">
+                    <img src="https://images.pexels.com/photos/5325946/pexels-photo-5325946.jpeg?auto=compress&cs=tinysrgb&w=1200" alt="Navy polo">
+                </div>
+                <div class="highlight-info">
+                    <ul class="feature-list">
+                        <li>Vải cotton organic 2 lớp, thoáng khí.</li>
+                        <li>Có 12 gam màu signature.</li>
+                        <li>Cam kết đổi trả trong 30 ngày.</li>
+                        <li>Miễn phí vận chuyển toàn quốc.</li>
+                    </ul>
+                    <div class="price-block">
+                        <span class="price">2.450.000đ</span>
+                        <span class="note">Trả góp 0% với thẻ tín dụng.</span>
+                    </div>
+                    <div class="highlight-actions">
+                        <a class="btn primary" href="../Products/Products.html">Thêm vào giỏ</a>
+                        <button class="btn ghost">Xem video 3D</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="experience">
+            <div class="experience-card">
+                <p class="eyebrow">Trải nghiệm omnichannel</p>
+                <h3>Đặt online, nhận tại cửa hàng</h3>
+                <p>Chọn chi nhánh gần nhất, thử đồ ngay trong ngày với stylist riêng.</p>
+            </div>
+            <div class="experience-card">
+                <p class="eyebrow">Cá nhân hóa</p>
+                <h3>Thêu tên & chọn huy hiệu</h3>
+                <p>Dịch vụ độc quyền giúp chiếc polo mang dấu ấn của chính bạn.</p>
+            </div>
+            <div class="experience-card">
+                <p class="eyebrow">Chăm sóc khách hàng</p>
+                <h3>Đổi size miễn phí</h3>
+                <p>Hỗ trợ 24/7, hoàn tiền trong 48h nếu sản phẩm không như mong muốn.</p>
+            </div>
+        </section>
+
+        <section class="testimonials">
+            <div class="section-heading">
+                <p class="eyebrow">Khách hàng nói gì</p>
+                <h2>Trải nghiệm thực tế</h2>
+            </div>
+            <div class="testimonial-slider">
+                <article class="testimonial-card active">
+                    <p>"Form áo rất chuẩn, chất vải dày nhưng vẫn thoáng. Đặt online hôm trước, hôm sau đã nhận được."</p>
+                    <div class="author">
+                        <strong>Minh Quân</strong>
+                        <span>Doanh nhân</span>
+                    </div>
+                </article>
+                <article class="testimonial-card">
+                    <p>"Stylist tư vấn nhiệt tình, phối cả set đi làm và đi chơi. Điểm cộng lớn là có dịch vụ thêu tên."</p>
+                    <div class="author">
+                        <strong>Linh Đan</strong>
+                        <span>Creative Lead</span>
+                    </div>
+                </article>
+                <article class="testimonial-card">
+                    <p>"Chính sách đổi trả minh bạch. Chỉ cần quét QR trong hộp là được hỗ trợ ngay."</p>
+                    <div class="author">
+                        <strong>Hoàng Nam</strong>
+                        <span>VĐV phong trào</span>
+                    </div>
+                </article>
+            </div>
+            <div class="slider-controls">
+                <button class="slider-btn prev" aria-label="Previous review">←</button>
+                <button class="slider-btn next" aria-label="Next review">→</button>
+            </div>
+        </section>
+
+        <section class="cta">
+            <div class="cta-content">
+                <h2>Gia nhập Lacoste Club</h2>
+                <p>Nhận ưu đãi 15% cho đơn hàng đầu tiên và quyền truy cập sớm vào các BST giới hạn.</p>
+            </div>
+            <form class="cta-form">
+                <input type="email" placeholder="Nhập email của bạn" aria-label="Email">
+                <button type="submit" class="btn primary">Đăng ký</button>
+            </form>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div>
+            <img src="../images/Lacoste_logo.png" alt="Lacoste">
+            <p>Biểu tượng cá sấu từ 1933, luôn đổi mới để phục vụ phong cách sống năng động.</p>
+        </div>
+        <div>
+            <p class="eyebrow">Liên hệ</p>
+            <ul>
+                <li>Hotline: 1900 234 558</li>
+                <li>Email: support@lacoste.vn</li>
+                <li>Showroom: 78 Đồng Khởi, Q.1</li>
+            </ul>
+        </div>
+        <div>
+            <p class="eyebrow">Theo dõi</p>
+            <ul class="socials">
+                <li><a href="#">Instagram</a></li>
+                <li><a href="#">Facebook</a></li>
+                <li><a href="#">TikTok</a></li>
+            </ul>
+        </div>
+    </footer>
+
+    <script src="javascript.js"></script>
 </body>
 </html>
