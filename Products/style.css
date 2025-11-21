@@ -1341,7 +1341,7 @@ body {
 .ci-thumb {
     width: 100px;
     height: 100px;
-    object-fit: contain;
+    object-fit: cover;
     background: #f8f8f8;
     border: 1px solid #f0f0f0;
     border-radius: 6px
