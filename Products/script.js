@@ -139,17 +139,17 @@ const lacosteImages = {
   tracksuits: {
     1: {
       black: '../images/tracksuit-1-black.jpg',
-      white: '../images/tracksuit-1-white.jpg'
+      green: '../images/tracksuit-1-green.jpg'
     },
     2: {
       black: '../images/tracksuit-2-black.jpg',
       green: '../images/tracksuit-2-green.jpg'
     },
     3: {
-      grey: '../images/tracksuit-3-grey.jpg'
+      red: '../images/tracksuit-3-red.jpg'
     },
     4: {
-      green: '../images/tracksuit-4-green.jpg'
+      white: '../images/tracksuit-4-white.jpg'
     }
   },
   knitwear: {
@@ -383,7 +383,7 @@ const PRODUCT_NAMES = {
     'SPORT Tennis Tracksuit',
     'Colorblock Zip Tracksuit',
     'Fleece Jogging Suit',
-    'Performance Training Set'
+    'Diamond Taffeta Sport Tracksuit'
   ],
   knitwear: [
     'Crew Neck Merino Wool Sweater',
@@ -479,9 +479,9 @@ const PRODUCT_DESCRIPTIONS = {
   ],
   tracksuits: [
     'Bộ đồ thể thao tennis SPORT với chất liệu technical cao cấp. Thấm hút mồ hôi tốt, co giãn 4 chiều thoải mái. Logo SPORT phản quang nổi bật.',
-    'Bộ tracksuit colorblock với thiết kế phối màu hiện đại. Áo khoác có khóa kéo toàn phần, quần có túi khóa an toàn. Phong cách streetwear.',
+    'Bộ đồ thể thao lý tưởng cho mọi môn thể thao, từ Lacoste, chuyên gia thể thao từ năm 1933. Với áo khoác trùm đầu và quần đơn sắc, được thiết kế để đồng hành cùng bạn trên chất liệu taffeta nhẹ, thoáng khí và mang tính biểu tượng của chúng tôi. Các chi tiết hoàn thiện tinh tế tạo nên nét thanh lịch cho thiết kế cơ bảnn.',
     'Bộ jogging suit chất liệu fleece mềm mại ấm áp. Bo gấu elastic thoải mái, túi kangaroo tiện dụng. Phù hợp mặc nhà và tập gym.',
-    'Bộ training set hiệu năng cao cho người chơi thể thao. Chất liệu kỹ thuật số thoáng khí, chống nhăn. Thiết kế ergonomic ôm dáng.'
+    'Bộ tracksuit colorblock với thiết kế phối màu hiện đại. Áo khoác có khóa kéo toàn phần, quần có túi khóa an toàn. Phong cách streetwear.'
   ],
   knitwear: [
     'Áo len cổ tròn chất liệu merino wool cao cấp từ New Zealand. Mềm mại, ấm áp mà không gây ngứa. Form regular fit thanh lịch, dễ phối layer.',
