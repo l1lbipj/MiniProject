@@ -22,7 +22,7 @@ body {
     padding: 0 20px;
 }
 
-/* Products layout: sidebar + main */
+/** Bố cục trang sản phẩm: thanh bên + nội dung chính */
 .products-wrapper{
     display: grid;
     grid-template-columns: 280px 1fr;
@@ -233,12 +233,12 @@ body {
 .swatch.yellow{ background:#ffd700; border:1px solid #ddd }
 .swatch.orange{ background:#ff8c00 }
 
-/* size grid inside filters (matches sample) */
+/** Lưới chọn size bên trong bộ lọc */
 .size-grid{ display:grid; grid-template-columns: repeat(3, 1fr); gap:12px; margin-top:12px }
 .size-box{ border:1px solid rgba(255,255,255,0.06); padding:18px 8px; text-align:center; border-radius:6px; color:#dfe9e2; font-weight:600 }
 .size-box.big{ grid-column: span 3; text-transform:uppercase }
 
-/* Black info bar under product image */
+/** Thanh thông tin dưới hình ảnh sản phẩm */
 .card .info-bar{ background:#fff; color:#111; display:flex; align-items:center; justify-content:space-between; padding:12px 14px; gap:12px; border-top:1px solid #e5e5e5 }
 .card .info-left{ display:flex; flex-direction:column; gap:8px; min-width:0; flex:1; overflow:hidden }
 .card .info-left .title{ color:#111; font-size:13px; margin:0; display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis }
@@ -251,24 +251,24 @@ body {
 .card .info-right{ text-align:right; min-width:90px; flex-shrink:0 }
 .card .info-right .price{ color:#111; font-weight:600; font-size:14px; white-space:nowrap }
 
-/* View Details button */
+/** Nút xem chi tiết sản phẩm */
 .btn-view-details{ width:100%; padding:10px; background:var(--lacoste-green); color:#fff; border:none; font-size:13px; font-weight:600; cursor:pointer; transition:background 0.2s }
 .btn-view-details:hover{ background:#004225 }
 
-/* Make product image a bit larger to match sample */
+/** Tăng kích thước hình ảnh sản phẩm phù hợp với thiết kế mẫu */
 .card .thumb img{ max-width:100%; max-height:76%; object-fit:contain }
 
-/* Active states for filters */
+/** Trạng thái kích hoạt cho các bộ lọc */
 .swatch.active{ outline: 3px solid rgba(255,255,255,0.3); outline-offset: 2px; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.4) }
 .filter-option.active{ background: rgba(255,255,255,0.08); border-radius:6px; padding:8px 12px; color:#fff; font-weight:600 }
 
-/* Hero banner for promos */
+/** Banner hero cho các chương trình khuyến mãi */
 .hero-banner{ display:none; background:#111; color:#fff; padding:36px 28px; border-radius:8px; margin-bottom:18px }
 .hero-banner .hero-inner{ max-width:1200px }
 .hero-banner .hero-text h1{ margin:0; font-size:32px; letter-spacing:1px; text-transform:uppercase }
 .hero-banner .hero-text p{ margin-top:10px; color: #d7d7d7 }
 
-/* Product grid and cards */
+/** Lưới hiển thị sản phẩm và thẻ sản phẩm */
 .grid{ display:grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap:18px }
 .card{ background:#fff; border-radius:6px; overflow:hidden; display:flex; flex-direction:column; box-shadow:0 6px 18px rgba(0,0,0,0.06); border:1px solid rgba(0,0,0,0.06) }
 .card .thumb{ display:block; background:#fff }
@@ -279,14 +279,14 @@ body {
 .card .actions{ display:flex; gap:8px; padding:12px 14px }
 .swatch-mini{ width:10px; height:10px; display:inline-block; margin-right:6px; border-radius:2px; }
 
-/* smaller screens: stack filters on top */
+/** Màn hình nhỏ: xếp bộ lọc lên trên */
 @media (max-width: 900px){
   .products-wrapper{ grid-template-columns: 1fr; }
   .filters{ order:2 }
   .hero-banner{ padding:20px }
 }
 
-/* Primary navigation */
+/** Thanh điều hướng chính */
 .navbar {
     position: sticky;
     top: 0;
@@ -483,7 +483,7 @@ body {
     }
 }
 
-/* Mega menu */
+/** Menu mega (menu thả xuống lớn) */
 .has-mega:hover .mega-menu,
 .has-mega:focus-within .mega-menu {
     opacity: 1;
@@ -608,7 +608,7 @@ body {
     color: var(--lacoste-text);
 }
 
-/* Main content */
+/** Nội dung chính */
 .main {
     padding: 60px 0 80px;
     min-height: calc(100vh - 280px);
@@ -635,8 +635,8 @@ body {
     color: #1a1a1a
 }
 
-/* Products layout (kept as grid above for sidebar + main) */
-/* The two-column grid for `.products-wrapper` is defined earlier; avoid overwriting it here. */
+/** Bố cục sản phẩm (giữ dạng lưới cho thanh bên + nội dung chính) */
+/** Lưới hai cột cho `.products-wrapper` đã được định nghĩa trước đó */
 
 .products-main {
     background: #ffffff;
@@ -870,7 +870,7 @@ body {
     cursor: not-allowed
 }
 
-/* Collection hero & toolbar */
+/** Phần hero bộ sưu tập và thanh công cụ */
 .products-main{
     background: #ffffff;
     border: 1px solid #e3ece5;
@@ -947,7 +947,7 @@ body {
     }
 }
 
-/* Modal */
+/** Cửa sổ modal chi tiết sản phẩm */
 .modal {
     position: fixed;
     inset: 0;
@@ -1030,7 +1030,7 @@ body {
     font-size: 13px
 }
 
-/* Color Selector in Modal */
+/** Bộ chọn màu trong modal */
 .color-selector {
     margin: 16px 0;
     padding: 16px 0;
@@ -1192,7 +1192,7 @@ body {
     }
 }
 
-/* Footer */
+/** Chân trang */
 .footer {
     background: var(--lacoste-green-dark);
     color: rgba(255, 255, 255, 0.9);
@@ -1224,7 +1224,7 @@ body {
     font-weight: 600;
 }
 
-/* Cart badge */
+/** Huy hiệu số lượng giỏ hàng */
 .nav-cart {
     position: relative;
 }
@@ -1272,7 +1272,7 @@ body {
     transform: scale(1.1);
 }
 
-/* Cart page */
+/** Trang giỏ hàng */
 .cart {
     display: grid;
     gap: 32px
@@ -1327,7 +1327,7 @@ body {
     margin-top: 8px;
 }
 
-/* Standalone cart container */
+/** Container giỏ hàng độc lập */
 .cart-standalone {
     width: 100%;
     max-width: 1200px;
@@ -1530,7 +1530,7 @@ body {
     }
 }
 
-/* Toast notification */
+/** Thông báo dạng toast */
 #toast {
     position: fixed;
     left: 50%;
@@ -1561,5 +1561,5 @@ body {
     }
 }
 
-/* Hide product controls (search / sort) when viewing cart */
-/* (Previously hid controls on cart; removed so we can selectively adjust options via JS) */
+/** Ẩn các điều khiển sản phẩm (tìm kiếm/sắp xếp) khi xem giỏ hàng */
+/** (Trước đây đã ẩn, giờ loại bỏ để có thể điều chỉnh tùy chọn qua JS) */
