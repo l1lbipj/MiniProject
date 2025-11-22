@@ -1,4 +1,7 @@
-// Data model: categories -> subcategories -> products
+/**
+ * Cấu trúc dữ liệu danh mục sản phẩm
+ * Phân cấp: Danh mục chính → Danh mục phụ → Sản phẩm
+ */
 const CATALOG = {
   clothing: {
     name: 'Clothing',
@@ -34,18 +37,25 @@ const CATALOG = {
   }
 };
 
-// seed sample products
+/**
+ * Mảng chứa toàn bộ sản phẩm được khởi tạo
+ */
 const PRODUCTS = [];
 
-// Color palette for product variants
+/**
+ * Bảng màu cho các biến thể sản phẩm
+ */
 const COLOR_PALETTE = ['black','white','green','red','grey','blue'];
 function pickColors(idx){
-  const count = 2; // 2 colors per product
+  const count = 2; /** Mỗi sản phẩm có 2 màu */
   const start = idx % (COLOR_PALETTE.length - count + 1);
   return COLOR_PALETTE.slice(start, start+count);
 }
 
-// Price rules per subcategory for realistic Lacoste VN pricing
+/**
+ * Quy định khoảng giá theo từng danh mục phụ
+ * Áp dụng mức giá thực tế của Lacoste tại Việt Nam
+ */
 const PRICE_RULES = {
   polos: [1450000, 3500000],
   tshirts: [450000, 1500000],
@@ -67,22 +77,24 @@ const PRICE_RULES = {
 };
 function priceFor(sub){
   const [min, max] = PRICE_RULES[sub] || [150000, 2500000];
-  const step = 10000; // round to 10k
+  const step = 10000; /** Làm tròn đến 10.000₫ */
   const raw = Math.floor((Math.random()*(max-min)+min)/step)*step;
   return raw;
 }
 
-// =====================================================
-// =====================================================
-// PRODUCT IMAGES - Mỗi sản phẩm, mỗi màu có ảnh riêng
-// Chỉ cần thêm màu nào có ảnh, không cần đủ 3 màu
-// =====================================================
+/**
+ * =================================================================
+ * QUẢN LÝ HÌNH ẢNH SẢN PHẨM
+ * =================================================================
+ * Cấu trúc: Mỗi sản phẩm có thể có nhiều màu khác nhau
+ * Chỉ cần định nghĩa màu nào có ảnh, không bắt buộc đủ tất cả màu
+ */
 const lacosteImages = {
   sweatshirts: {
-    1: { // High Neck Zipped - chỉ có màu đen
+    1: { /** Áo nỉ cổ cao có khóa kéo - chỉ màu đen */
       black: '../images/sweatshirt-1-black.jpg'
     },
-    2: { // Zip-Up Fleece - có cả 3 màu
+    2: { /** Áo hoodie có khóa - đầy đủ 3 màu */
       white: '../images/sweatshirt-2-white.jpg',
       green: '../images/sweatshirt-2-green.jpg',
       black: '../images/sweatshirt-2-black.jpg'
@@ -306,15 +318,15 @@ const img = (cat, sub, productIndex, color = 'black') => {
 
 function pushProd(cat, sub, idx, title){
   const collections = ['sport','classic','lifestyle','live','golf','tennis'];
-  // For clothing: productIndex cycles 1-4, for others: 1-2
+  /** Quần áo: chu kỳ index 1-4, các mục khác: 1-2 */
   const maxIndex = cat === 'clothing' ? 4 : 2;
   const productIndex = ((idx - 1) % maxIndex) + 1;
   
-  // Get available colors for this specific product
+  /** Lấy danh sách màu sẵn có cho sản phẩm cụ thể */
   const productImages = lacosteImages[sub]?.[productIndex] || {};
   const availableColors = Object.keys(productImages);
   
-  // Use available colors, fallback to pickColors if no images defined
+  /** Ưu tiên màu có sẵn, dự phòng dùng hàm pickColors nếu chưa định nghĩa */
   const colors = availableColors.length > 0 ? availableColors : pickColors(idx);
   
   PRODUCTS.push({
@@ -323,14 +335,17 @@ function pushProd(cat, sub, idx, title){
     sub,
     title: title,
     price: priceFor(sub),
-    image: img(cat, sub, productIndex, colors[0]), // Use first available color as default
+    image: img(cat, sub, productIndex, colors[0]), /** Màu đầu tiên làm mặc định */
     colors: colors,
     collection: collections[idx % collections.length],
-    productIndex: productIndex // Store for later use
+    productIndex: productIndex /** Lưu index để sử dụng sau */
   });
 }
 
-// Real Lacoste product names (4 per clothing category, 2 per other categories)
+/**
+ * Tên sản phẩm chính hãng Lacoste
+ * Quần áo: 4 sản phẩm/danh mục, các mục khác: 2 sản phẩm/danh mục
+ */
 const PRODUCT_NAMES = {
   sweatshirts: [
     'High Neck Zipped Fleece Sweatshirt',
@@ -418,7 +433,9 @@ const PRODUCT_NAMES = {
   ]
 };
 
-// Product descriptions for modal details
+/**
+ * Mô tả chi tiết sản phẩm hiển thị trong modal
+ */
 const PRODUCT_DESCRIPTIONS = {
   sweatshirts: [
     'Áo nỉ cổ cao với khóa kéo toàn phần, chất liệu fleece mềm mại giữ ấm tốt. Thiết kế thể thao năng động, phù hợp mặc hàng ngày hoặc tập luyện.',
@@ -529,7 +546,7 @@ const state = {
   sort: 'relevance'
 };
 
-// UI-applied filters
+/** Bộ lọc áp dụng trên giao diện */
 state.filters = { colors: [], priceRange: null };
 
 const els = {
@@ -543,11 +560,11 @@ const els = {
   filtersPanel: document.getElementById('filters')
 };
 
-// keep original sort HTML so we can restore it when leaving cart view
+/** Lưu trữ HTML gốc của dropdown sắp xếp để khôi phục khi rời khỏi giỏ hàng */
 let originalSortHTML = null;
 let originalSortDisplay = null;
 
-// mega menu helpers (used by newer main branch)
+/** Quản lý menu mega (dùng cho nhánh chính mới) */
 let megaNavItem = null;
 function closeMegaMenu(){
   if(megaNavItem){
@@ -555,7 +572,9 @@ function closeMegaMenu(){
   }
 }
 
-// Routing-like helpers
+/**
+ * Hệ thống điều hướng (routing)
+ */
 function setCategory(cat, sub=null){
   state.category = cat; state.sub = sub; state.promo = null; renderUI();
   const path = ['products'];
@@ -568,7 +587,7 @@ function initFromHash(){
   const h = location.hash.replace(/^#\//,'');
   const parts = h.split('/');
   if(parts[0] !== 'products'){ renderUI(); return; }
-  // support promo routing: #/products/promo/<key>
+  /** Hỗ trợ routing cho khuyến mãi: #/products/promo/<key> */
   const cat = parts[1] || null;
   const sub = parts[2] || null;
   if(cat === 'promo' && parts[2]){
@@ -580,7 +599,7 @@ function initFromHash(){
     if(sub && CATALOG[cat].subs[sub]) setCategory(cat, sub);
     else setCategory(cat, null);
   } else {
-    // Show all products when just #/products
+    /** Hiển thị toàn bộ sản phẩm khi truy cập #/products */
     state.category = null;
     state.sub = null;
     state.promo = null;
@@ -588,7 +607,11 @@ function initFromHash(){
   }
 }
 
-// Rendering
+/**
+ * ===================================
+ * PHẦN RENDER GIAO DIỆN
+ * ===================================
+ */
 function renderBreadcrumbs(){
   const toTitle = (k, type) => (type==='cat'? CATALOG[k]?.name : CATALOG[state.category]?.subs[k]?.name) || '';
   const parts = [
@@ -621,7 +644,10 @@ function renderBreadcrumbs(){
   });
 }
 
-// Promo definitions: key -> filter function and optional title/desc
+/**
+ * Định nghĩa các chương trình khuyến mãi
+ * Mỗi promo có: hàm lọc, tiêu đề và mô tả (tuỳ chọn)
+ */
 const PROMOS = {
   newin: {
     title: "HÀNG MỚI NAM",
@@ -647,7 +673,7 @@ const PROMOS = {
 
 function filterAndSort(){
   let list = PRODUCTS.slice();
-  // if promo is set, use promo filter first
+  /** Nếu có promo, áp dụng bộ lọc promo trước tiên */
   if(state.promo && PROMOS[state.promo]){
     list = PROMOS[state.promo].filter(PRODUCTS);
   }
@@ -661,11 +687,11 @@ function filterAndSort(){
     const q = state.query.toLowerCase();
     list = list.filter(p=> p.title.toLowerCase().includes(q));
   }
-  // Apply color filters
+  /** Áp dụng bộ lọc màu sắc */
   if(state.filters.colors.length > 0){
     list = list.filter(p => state.filters.colors.some(c => p.colors.includes(c)));
   }
-  // Apply price range filter
+  /** Áp dụng bộ lọc khoảng giá */
   if(state.filters.priceRange){
     const [min, max] = state.filters.priceRange.split('-').map(Number);
     list = list.filter(p => p.price >= min && p.price <= max);
@@ -680,7 +706,9 @@ function filterAndSort(){
   return list;
 }
 
-// Calculate filter counts for UI
+/**
+ * Tính toán số lượng cho mỗi bộ lọc để hiển thị trên UI
+ */
 function calculateFilterCounts(){
   let baseList = PRODUCTS.slice();
   if(state.promo && PROMOS[state.promo]){
@@ -963,7 +991,9 @@ function bindFilterToggle(){
   });
 }
 
-// Mega-menu click routing
+/**
+ * Xử lý điều hướng khi click vào mega menu
+ */
 function bindMegaMenu(){
   megaNavItem = document.querySelector('.nav-item.has-mega');
   if(!megaNavItem) return;
@@ -975,18 +1005,18 @@ function bindMegaMenu(){
       e.preventDefault();
       e.stopPropagation();
       if(!isDesktop()) { 
-        // On mobile, navigate to products page
+        /** Trên mobile: chuyển đến trang sản phẩm */
         location.hash = '#/products';
         closeMegaMenu();
         return;
       }
-      // On desktop, check if mega menu is already open
+      /** Trên desktop: kiểm tra xem mega menu đã mở chưa */
       if(megaNavItem.classList.contains('open')){
-        // If open, navigate to all products
+        /** Nếu đã mở: điều hướng đến tất cả sản phẩm */
         location.hash = '#/products';
         closeMegaMenu();
       } else {
-        // If closed, open the mega menu
+        /** Nếu đóng: mở mega menu */
         megaNavItem.classList.add('open');
       }
     });
@@ -999,7 +1029,7 @@ function bindMegaMenu(){
   }, true);
 
   const attachExploreLinks = () => {
-    // attach to both main explore links and promo links
+    /** Gắn sự kiện cho cả link khám phá chính và link khuyến mãi */
     megaNavItem.querySelectorAll('.mega-main a, .mega-promo a').forEach(a=>{
       a.addEventListener('click', (e)=>{
         e.preventDefault();
@@ -1080,7 +1110,7 @@ function bindControls(){
     });
   });
 
-  // filter sidebar interactions
+  /** Tương tác với thanh bên bộ lọc */
   document.querySelectorAll('.swatch[data-color]').forEach(el=>{
     el.addEventListener('click', ()=>{
       const color = el.getAttribute('data-color');
@@ -1104,14 +1134,14 @@ function bindControls(){
       const product = PRODUCTS.find(p => p.id === productId);
       
       if(product && product.colors.includes(color)){
-        // Update the product image
+        /** Cập nhật hình ảnh sản phẩm */
         const card = swatch.closest('.card');
         const productImg = card.querySelector('.product-img');
         if(productImg){
           productImg.src = img(product.category, product.sub, product.productIndex, color);
         }
         
-        // Update active state of swatches
+        /** Cập nhật trạng thái active của các mẫu màu */
         const allSwatches = card.querySelectorAll('.swatch-mini.clickable');
         allSwatches.forEach(s => s.classList.remove('active'));
         swatch.classList.add('active');
@@ -1164,7 +1194,11 @@ function initMobileMenu(){
   });
 }
 
-// Cart with localStorage
+/**
+ * ===================================
+ * QUẢN LÝ GIỎ HÀNG VỚI LOCALSTORAGE
+ * ===================================
+ */
 const CART_KEY = 'mp_cart_v1';
 function getCart(){
   try{ return JSON.parse(localStorage.getItem(CART_KEY)) || []; }catch{ return []; }
@@ -1188,7 +1222,9 @@ function updateCartCount(){
   countEl.style.display = total > 0 ? 'inline-block' : 'inline-block';
 }
 
-// Minimal toast
+/**
+ * Hệ thống thông báo tối giản (toast)
+ */
 let toastTimer;
 function toast(msg){
   let t = document.getElementById('toast');
@@ -1203,26 +1239,30 @@ function toast(msg){
   toastTimer = setTimeout(()=>{ t.style.opacity='0'; }, 2000);
 }
 
-// Product detail modal logic
+/**
+ * ===================================
+ * XỬ LÝ MODAL CHI TIẾT SẢN PHẨM
+ * ===================================
+ */
 function findProductById(id){ return PRODUCTS.find(p=>p.id===id); }
 function openProductModal(id){
   const p = findProductById(id); if(!p) return;
   const modal = document.getElementById('productModal');
-  let selectedColor = p.colors[0]; // Default to first color
+  let selectedColor = p.colors[0]; /** Mặc định chọn màu đầu tiên */
   
-  // Set initial image and info
+  /** Thiết lập hình ảnh và thông tin ban đầu */
   document.getElementById('modalImage').src = img(p.category, p.sub, p.productIndex, selectedColor);
   document.getElementById('modalImage').alt = p.title;
   document.getElementById('modalTitle').textContent = p.title;
   document.getElementById('modalPrice').textContent = currency(p.price);
   
-  // Get product description from PRODUCT_DESCRIPTIONS
+  /** Lấy mô tả sản phẩm từ PRODUCT_DESCRIPTIONS */
   const descriptions = PRODUCT_DESCRIPTIONS[p.sub] || [];
   const descIndex = (p.productIndex - 1) % descriptions.length;
   const description = descriptions[descIndex] || `Sản phẩm chính hãng thuộc danh mục ${CATALOG[p.category].name} - ${CATALOG[p.category].subs[p.sub].name}. Chất liệu cao cấp, phù hợp nhiều phong cách.`;
   document.getElementById('modalDesc').textContent = description;
   
-  // Render color options
+  /** Render các tuỳ chọn màu sắc */
   const colorOptions = document.getElementById('colorOptions');
   const selectedColorName = document.getElementById('selectedColorName');
   selectedColorName.textContent = getColorLabel(selectedColor);
@@ -1235,22 +1275,22 @@ function openProductModal(id){
     </div>
   `).join('');
   
-  // Color selection handler
+  /** Xử lý khi chọn màu */
   colorOptions.addEventListener('click', (e) => {
     const option = e.target.closest('.color-option');
     if (!option) return;
     
     selectedColor = option.dataset.color;
     
-    // Update selected state
+    /** Cập nhật trạng thái đã chọn */
     colorOptions.querySelectorAll('.color-option').forEach(opt => {
       opt.classList.toggle('selected', opt.dataset.color === selectedColor);
     });
     
-    // Update image
+    /** Cập nhật hình ảnh */
     document.getElementById('modalImage').src = img(p.category, p.sub, p.productIndex, selectedColor);
     
-    // Update color name
+    /** Cập nhật tên màu */
     selectedColorName.textContent = getColorLabel(selectedColor);
   });
   
@@ -1268,7 +1308,9 @@ function closeProductModal(){
   modal.setAttribute('aria-hidden','true');
 }
 
-// Simple cart view routing
+/**
+ * Điều hướng và hiển thị giỏ hàng đơn giản
+ */
 function currency(n){
   return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND', maximumFractionDigits: 0 }).format(n);
 }
@@ -1381,9 +1423,9 @@ function route(){
   const main = document.querySelector('.main.container');
   
   if(isCart){
-    // Hide the products wrapper (filters + grid)
+    /** Ẩn phần hiển thị sản phẩm (bộ lọc + lưới) */
     if(productsWrapper) productsWrapper.style.display = 'none';
-    // Create standalone cart container if it doesn't exist
+    /** Tạo container giỏ hàng độc lập nếu chưa tồn tại */
     let cartContainer = document.getElementById('cartContainer');
     if(!cartContainer){
       cartContainer = document.createElement('div');
@@ -1396,9 +1438,9 @@ function route(){
     renderCart(cartContainer);
     return;
   } else {
-    // Show products wrapper again
+    /** Hiển thị lại phần sản phẩm */
     if(productsWrapper) productsWrapper.style.display = 'grid';
-    // Hide cart container
+    /** Ẩn container giỏ hàng */
     const cartContainer = document.getElementById('cartContainer');
     if(cartContainer) cartContainer.style.display = 'none';
     document.body.classList.remove('view-cart');
@@ -1406,7 +1448,11 @@ function route(){
   initFromHash();
 }
 
-// Init
+/**
+ * ===================================
+ * KHỞI TẠO ỨNG DỤNG
+ * ===================================
+ */
 document.addEventListener('DOMContentLoaded', ()=>{
   bindMegaMenu();
   initMobileMenu();
